@@ -1,0 +1,312 @@
+/* ========================================
+   HueViVu — Shared UI Components
+   ======================================== */
+
+/* --- Page App Overrides --- */
+.page-app {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* --- Scrollable Content --- */
+.page-scroll {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 90px;
+}
+
+/* --- Sticky Page Header --- */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  padding-top: max(12px, env(safe-area-inset-top, 12px));
+  background: rgba(255, 249, 247, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(26, 29, 59, 0.04);
+  transition: box-shadow 0.3s var(--ease-out);
+}
+
+.page-header.scrolled {
+  box-shadow: 0 2px 20px rgba(26, 29, 59, 0.06);
+}
+
+.page-header-title {
+  flex: 1;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+
+.page-header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  color: var(--navy);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  flex-shrink: 0;
+}
+
+.page-header-btn:hover {
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-header-btn:active {
+  transform: scale(0.93);
+}
+
+/* --- Sections --- */
+.section {
+  padding: 0 20px;
+  margin-top: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s var(--ease-out);
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.section-title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+
+.see-all {
+  border: none;
+  background: none;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--coral);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.3s;
+}
+
+.see-all:hover {
+  color: var(--warm-orange);
+}
+
+/* --- Bottom Navigation --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 8px 12px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(26, 29, 59, 0.06);
+  box-shadow: 0 -4px 20px rgba(26, 29, 59, 0.06);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  padding: 4px 8px;
+  transition: all 0.3s var(--ease-out);
+  color: var(--gray-soft);
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-item span {
+  font-size: 0.625rem;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.nav-item svg {
+  transition: all 0.3s var(--ease-out);
+}
+
+.nav-item:hover {
+  color: var(--navy-muted);
+}
+
+.nav-item.active {
+  color: var(--coral);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+/* --- Center AI Nav Button --- */
+.nav-center {
+  position: relative;
+  margin-top: -16px;
+}
+
+.nav-ai-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 6px 24px rgba(255, 127, 107, 0.4);
+  transition: all 0.3s var(--ease-out);
+}
+
+.nav-center:hover .nav-ai-btn {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 32px rgba(255, 127, 107, 0.5);
+}
+
+.nav-center:active .nav-ai-btn {
+  transform: scale(0.92);
+}
+
+.nav-center.active::after {
+  display: none;
+}
+
+.fab-ai-icon {
+  display: inline-block;
+  animation: sparkleRotate 3s linear infinite;
+}
+
+@keyframes sparkleRotate {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(10deg) scale(1.1); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(-10deg) scale(1.1); }
+}
+
+/* --- Empty State --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-emoji {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.empty-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.empty-desc {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--gray-soft);
+  max-width: 260px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* --- Shared Card Patterns --- */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s var(--ease-out);
+}
+
+.glass-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* --- Tag/Chip Pattern --- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tag-coral {
+  background: linear-gradient(135deg, rgba(255,127,107,0.1), rgba(255,154,92,0.08));
+  color: var(--coral);
+}
+
+.tag-green {
+  background: rgba(74, 222, 128, 0.1);
+  color: #22C55E;
+}
+
+.tag-blue {
+  background: rgba(96, 165, 250, 0.1);
+  color: #3B82F6;
+}
+
+.tag-purple {
+  background: rgba(167, 139, 250, 0.1);
+  color: #8B5CF6;
+}

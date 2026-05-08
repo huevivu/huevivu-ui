@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — AI Travel Companion for Huế</title>
+  <meta name="description" content="Let AI plan your perfect Hue journey. Personalized travel plans." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div id="app" class="app-container">
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <header class="onboarding-header" id="header">
+      <div class="logo-group">
+        <div class="logo-icon" id="logo-icon">
+          <img src="assets/logo.png" alt="HueViVu Logo" />
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">HueViVu</span>
+          <span class="logo-tagline">AI Travel Companion</span>
+        </div>
+      </div>
+      <div class="language-pill" id="lang-toggle">
+        <span class="lang-active">EN</span>
+        <span class="lang-divider">|</span>
+        <span class="lang-inactive">VI</span>
+      </div>
+    </header>
+
+    <section class="hero-section" id="hero-section">
+      <div class="hero-image-container">
+        <div class="hero-image-wrapper">
+          <img src="assets/hero.png" alt="Hue Vietnam travel" class="hero-image" id="hero-image" />
+          <div class="hero-image-overlay"></div>
+        </div>
+        <div class="floating-card card-itinerary" id="card-1">
+          <div class="card-icon">📍</div>
+          <div class="card-content">
+            <span class="card-label">AI Itinerary</span>
+            <span class="card-value">3-day plan ready</span>
+          </div>
+        </div>
+        <div class="floating-card card-food" id="card-2">
+          <div class="card-icon">🍜</div>
+          <div class="card-content">
+            <span class="card-label">Food Discovery</span>
+            <span class="card-value">Bún bò Huế trail</span>
+          </div>
+        </div>
+        <div class="floating-card card-budget" id="card-3">
+          <div class="card-icon">✨</div>
+          <div class="card-content">
+            <span class="card-label">Smart Budget</span>
+            <span class="card-value">$45/day avg</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="content-section">
+      <div class="ai-badge" id="ai-badge">
+        <span class="ai-badge-dot"></span>
+        <span class="ai-badge-text">Powered by AI</span>
+      </div>
+      <h1 class="headline" id="headline">
+        Let AI plan your<br />
+        <span class="headline-accent">Huế journey</span>
+      </h1>
+      <p class="subtext" id="subtext">
+        Personalized travel plans based on your style, budget, food preferences, and travel goals.
+      </p>
+      <div class="cta-group" id="cta-group">
+        <button class="btn-primary" id="btn-start-planning">
+          <span class="btn-sparkle">✨</span>
+          <span class="btn-text">Start Planning</span>
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="btn-secondary" id="btn-explore">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-text">Explore Manually</span>
+        </button>
+      </div>
+      <div class="trust-signal" id="trust-signal">
+        <span>🔒 No account required · Start exploring instantly</span>
+      </div>
+    </section>
+
+    <div class="bottom-decoration">
+      <div class="scroll-indicator">
+        <div class="scroll-dot"></div>
+        <div class="scroll-dot active"></div>
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

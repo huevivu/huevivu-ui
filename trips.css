@@ -1,0 +1,441 @@
+/* ========================================
+   HueViVu — Trips Page Styles
+   ======================================== */
+
+/* --- Tab Switcher --- */
+.trips-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 20px;
+  margin-top: 12px;
+  background: rgba(26, 29, 59, 0.03);
+  border-radius: var(--radius-full);
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 4px;
+}
+
+.trips-tab {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--navy-muted);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  text-align: center;
+}
+
+.trips-tab:hover {
+  color: var(--navy);
+}
+
+.trips-tab.active {
+  background: white;
+  color: var(--coral);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- Tab Content --- */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeSlideUp 0.4s var(--ease-out);
+}
+
+/* --- Current Trip Card --- */
+.current-trip-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.ct-img {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+}
+
+.ct-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ct-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(26, 29, 59, 0.1) 0%, rgba(26, 29, 59, 0.4) 100%);
+}
+
+.ct-status {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: white;
+}
+
+.ct-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ADE80;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.ct-body {
+  padding: 20px;
+}
+
+.ct-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.ct-subtitle {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--gray-soft);
+  margin-bottom: 16px;
+}
+
+.ct-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ct-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  background: linear-gradient(135deg, rgba(255, 127, 107, 0.05), rgba(255, 154, 92, 0.03));
+  border-radius: var(--radius-sm);
+}
+
+.ct-stat-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ct-stat-label {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--gray-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ct-progress-row {
+  margin-bottom: 16px;
+}
+
+.ct-progress-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--navy-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.ct-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--peach-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.ct-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--coral), var(--warm-orange));
+  border-radius: var(--radius-full);
+  transition: width 1s var(--ease-out);
+}
+
+.ct-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  color: white;
+  font-family: var(--font);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s var(--ease-out);
+  text-decoration: none;
+}
+
+.ct-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(255, 127, 107, 0.4);
+}
+
+/* --- Today Timeline --- */
+.today-timeline {
+  display: flex;
+  flex-direction: column;
+  margin-top: 14px;
+}
+
+.today-item {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+.today-time {
+  width: 44px;
+  flex-shrink: 0;
+  padding-top: 16px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--coral);
+  text-align: right;
+}
+
+.today-dot-line {
+  width: 28px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.today-dot-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--peach-light);
+  transform: translateX(-50%);
+}
+
+.today-item:last-child .today-dot-line::before {
+  bottom: 50%;
+}
+
+.today-dot {
+  position: relative;
+  z-index: 2;
+  margin-top: 18px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--peach-light);
+  box-shadow: 0 0 0 4px rgba(255, 221, 210, 0.3);
+  transition: all 0.3s;
+}
+
+.today-dot.done {
+  background: #4ADE80;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.15);
+}
+
+.today-dot.active {
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  box-shadow: 0 0 0 4px rgba(255, 127, 107, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.today-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid rgba(26, 29, 59, 0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.today-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.today-card.done {
+  opacity: 0.6;
+}
+
+.today-card.current {
+  border-color: var(--coral-light);
+  box-shadow: 0 4px 20px rgba(255, 127, 107, 0.12);
+}
+
+.today-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.today-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.today-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.today-meta {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--gray-soft);
+}
+
+/* --- Trip List --- */
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: white;
+  border: 1px solid rgba(26, 29, 59, 0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  text-decoration: none;
+}
+
+.trip-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--peach);
+}
+
+.trip-past { opacity: 0.7; }
+.trip-past:hover { opacity: 1; }
+
+.trip-item-img {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.trip-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trip-item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trip-item-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.trip-item-date {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-soft);
+}
+
+.trip-item-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.trip-item-arrow {
+  font-size: 1.125rem;
+  color: var(--gray-soft);
+  flex-shrink: 0;
+}
+
+/* --- Memories Grid --- */
+.memories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.memory-item {
+  position: relative;
+  height: 120px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.memory-item:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-lg);
+}
+
+.memory-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memory-date {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+}

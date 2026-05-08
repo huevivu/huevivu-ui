@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Your Huế Journey</title>
+  <meta name="description" content="Your AI-generated personalized Huế travel itinerary." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <div id="app" class="app-container hub-app">
+    <!-- Ambient -->
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+    </div>
+
+    <!-- Hub Header -->
+    <header class="hub-header" id="hub-header">
+      <button class="hub-back" id="hub-back" aria-label="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <span class="hub-header-title">Your Journey</span>
+      <button class="hub-share" id="hub-share" aria-label="Share">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+      </button>
+    </header>
+
+    <!-- Scrollable Content -->
+    <div class="hub-scroll" id="hub-scroll">
+
+      <!-- Hero Summary Card -->
+      <section class="hero-card" id="hero-card">
+        <div class="hero-card-img">
+          <img src="assets/hero-hub.png" alt="Huế panorama" />
+          <div class="hero-card-overlay"></div>
+          <div class="hero-card-badge">
+            <span class="hcb-dot"></span> AI Generated
+          </div>
+        </div>
+        <div class="hero-card-body">
+          <h1 class="hero-card-title">3-Day Food & Culture Journey</h1>
+          <p class="hero-card-sub">Personalized based on your preferences</p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hs-icon">📅</span>
+              <span class="hs-val">3 Days</span>
+              <span class="hs-label">Duration</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hs-icon">💰</span>
+              <span class="hs-val">~$150</span>
+              <span class="hs-label">Est. Budget</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hs-icon">🌤️</span>
+              <span class="hs-val">28°C</span>
+              <span class="hs-label">Weather</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hs-icon">📍</span>
+              <span class="hs-val">12</span>
+              <span class="hs-label">Locations</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Smart Insights -->
+      <section class="insights-section" id="insights-section">
+        <h3 class="section-label">🧠 AI Smart Insights</h3>
+        <div class="insights-scroll">
+          <div class="insight-chip insight-sun">
+            <span class="ic-icon">☀️</span>
+            <span class="ic-text">Morning route optimized to avoid midday heat</span>
+          </div>
+          <div class="insight-chip insight-rain">
+            <span class="ic-icon">🌧️</span>
+            <span class="ic-text">Rain likely at 3 PM — indoor café suggested</span>
+          </div>
+          <div class="insight-chip insight-sunset">
+            <span class="ic-icon">🌅</span>
+            <span class="ic-text">Best sunset at 17:45 from Thiên Mụ Pagoda</span>
+          </div>
+          <div class="insight-chip insight-walk">
+            <span class="ic-icon">🚶</span>
+            <span class="ic-text">~8,500 steps today · moderate walking</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timeline -->
+      <section class="timeline-section" id="timeline-section">
+
+        <!-- Day 1 -->
+        <div class="day-block" data-day="1">
+          <div class="day-pill">
+            <span class="day-pill-num">Day 1</span>
+            <span class="day-pill-theme">Imperial Heritage</span>
+          </div>
+
+          <div class="timeline">
+            <div class="tl-item" id="tl-1-1" data-loc="bun-bo">
+              <div class="tl-time">08:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🍜</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Bún bò Huế at Bà Tuyết</span>
+                    <span class="tl-cat">Local Breakfast · Street Food</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Iconic spicy beef noodle soup — the quintessential Huế experience. This family-run spot has been serving since 1972.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.8</span>
+                  <span class="tl-tag">💰 40k VND</span>
+                  <span class="tl-tag">⏱ 45 min</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-item" id="tl-1-2" data-loc="citadel">
+              <div class="tl-time">10:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🏛️</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Imperial Citadel</span>
+                    <span class="tl-cat">UNESCO Heritage · Culture</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Explore the magnificent 19th-century fortress. AI recommends starting from Ngọ Môn Gate for optimal flow.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.9</span>
+                  <span class="tl-tag">💰 200k VND</span>
+                  <span class="tl-tag">⏱ 2.5 hrs</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-item" id="tl-1-3" data-loc="cafe">
+              <div class="tl-time">12:30</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">☕</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Cà phê muối at Vi Café</span>
+                    <span class="tl-cat">Salt Coffee · Huế Specialty</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Try Huế's famous salt coffee — a unique sweet-salty foam atop rich Vietnamese coffee.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.7</span>
+                  <span class="tl-tag">💰 35k VND</span>
+                  <span class="tl-tag">⏱ 40 min</span>
+                </div>
+                <div class="tl-ai-note">
+                  <span class="tl-ai-icon">🧠</span>
+                  <span>Rain expected — great time for an indoor break</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-item" id="tl-1-4" data-loc="pagoda">
+              <div class="tl-time">15:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🛕</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Thiên Mụ Pagoda</span>
+                    <span class="tl-cat">Spiritual · Iconic Landmark</span>
+                  </div>
+                </div>
+                <p class="tl-desc">The 7-story pagoda overlooking the Perfume River. Arrive by 5 PM for golden hour photography.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.9</span>
+                  <span class="tl-tag">💰 Free</span>
+                  <span class="tl-tag">⏱ 1 hr</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-item" id="tl-1-5" data-loc="cruise">
+              <div class="tl-time">17:30</div>
+              <div class="tl-line"><div class="tl-dot last"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🚢</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Perfume River Sunset Cruise</span>
+                    <span class="tl-cat">Experience · Golden Hour</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Dragon boat cruise along the Perfume River as the sun sets over the ancient capital.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.8</span>
+                  <span class="tl-tag">💰 150k VND</span>
+                  <span class="tl-tag">⏱ 1.5 hrs</span>
+                </div>
+                <div class="tl-ai-note">
+                  <span class="tl-ai-icon">🌅</span>
+                  <span>Sunset at 17:45 — timed perfectly</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-block" data-day="2">
+          <div class="day-pill">
+            <span class="day-pill-num">Day 2</span>
+            <span class="day-pill-theme">Food & Nature</span>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-time">07:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🛍️</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Đông Ba Market</span>
+                    <span class="tl-cat">Market · Local Life</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Bustling morning market — try bánh bèo, bánh lọc, and fresh tropical fruits.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.6</span>
+                  <span class="tl-tag">💰 50k VND</span>
+                  <span class="tl-tag">⏱ 1.5 hrs</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">10:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🏛️</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Royal Tomb of Tự Đức</span>
+                    <span class="tl-cat">Heritage · Architecture</span>
+                  </div>
+                </div>
+                <p class="tl-desc">The most poetic of all royal tombs, set among pine forests and lotus ponds.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.8</span>
+                  <span class="tl-tag">💰 150k VND</span>
+                  <span class="tl-tag">⏱ 1.5 hrs</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">13:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🥘</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Cơm Hến at Hẻm Quán</span>
+                    <span class="tl-cat">Royal Cuisine · Lunch</span>
+                  </div>
+                </div>
+                <p class="tl-desc">Baby clam rice — a Huế delicacy with 10+ toppings. Humble but unforgettable.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.7</span>
+                  <span class="tl-tag">💰 30k VND</span>
+                  <span class="tl-tag">⏱ 45 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">15:30</div>
+              <div class="tl-line"><div class="tl-dot last"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">📸</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Thanh Toàn Bridge</span>
+                    <span class="tl-cat">Hidden Gem · Photography</span>
+                  </div>
+                </div>
+                <p class="tl-desc">A 250-year-old covered tile bridge in a peaceful village. Few tourists know about it.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.5</span>
+                  <span class="tl-tag">💰 Free</span>
+                  <span class="tl-tag">⏱ 1 hr</span>
+                </div>
+                <div class="tl-ai-note">
+                  <span class="tl-ai-icon">💎</span>
+                  <span>Hidden gem — only 3% of tourists visit here</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-block" data-day="3">
+          <div class="day-pill">
+            <span class="day-pill-num">Day 3</span>
+            <span class="day-pill-theme">Hidden Gems & Farewell</span>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-time">08:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🌿</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Bạch Mã National Park</span>
+                    <span class="tl-cat">Nature · Adventure</span>
+                  </div>
+                </div>
+                <p class="tl-desc">A half-day nature escape — waterfalls, mist, and panoramic mountain views.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.6</span>
+                  <span class="tl-tag">💰 60k VND</span>
+                  <span class="tl-tag">⏱ 3 hrs</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">12:30</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🍜</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Bánh bèo, lọc, nậm Tasting</span>
+                    <span class="tl-cat">Street Food · Must-try</span>
+                  </div>
+                </div>
+                <p class="tl-desc">The holy trinity of Huế steamed cakes. Try all three at a local family spot.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.8</span>
+                  <span class="tl-tag">💰 25k VND</span>
+                  <span class="tl-tag">⏱ 40 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">15:00</div>
+              <div class="tl-line"><div class="tl-dot"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🏛️</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">An Định Palace</span>
+                    <span class="tl-cat">Heritage · Hidden</span>
+                  </div>
+                </div>
+                <p class="tl-desc">A lesser-known palace blending Vietnamese and European architecture. Quiet and stunning.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.4</span>
+                  <span class="tl-tag">💰 50k VND</span>
+                  <span class="tl-tag">⏱ 1 hr</span>
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-time">19:00</div>
+              <div class="tl-line"><div class="tl-dot last"></div></div>
+              <div class="tl-card">
+                <div class="tl-card-head">
+                  <span class="tl-emoji">🌙</span>
+                  <div class="tl-card-info">
+                    <span class="tl-name">Farewell Dinner by the River</span>
+                    <span class="tl-cat">Fine Dining · Evening</span>
+                  </div>
+                </div>
+                <p class="tl-desc">End your Huế story with royal cuisine overlooking the Perfume River at night.</p>
+                <div class="tl-meta">
+                  <span class="tl-tag">⭐ 4.9</span>
+                  <span class="tl-tag">💰 300k VND</span>
+                  <span class="tl-tag">⏱ 1.5 hrs</span>
+                </div>
+                <div class="tl-ai-note">
+                  <span class="tl-ai-icon">✨</span>
+                  <span>AI picked the highest-rated riverside restaurant</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Customize Section -->
+      <section class="customize-section" id="customize-section">
+        <h3 class="section-label">⚡ Quick Customize</h3>
+        <p class="section-sublabel">Tap to let AI adjust your plan</p>
+        <div class="customize-chips" id="customize-chips">
+          <button class="cust-chip" data-mod="less-walk">🚶 Less walking</button>
+          <button class="cust-chip" data-mod="more-food">🍜 More local food</button>
+          <button class="cust-chip" data-mod="nightlife">🌙 Add nightlife</button>
+          <button class="cust-chip" data-mod="relaxed">😌 Relaxed schedule</button>
+          <button class="cust-chip" data-mod="hidden">💎 More hidden gems</button>
+          <button class="cust-chip" data-mod="photo">📸 Photography spots</button>
+          <button class="cust-chip" data-mod="budget">💰 Cheaper options</button>
+          <button class="cust-chip" data-mod="romantic">💕 More romantic</button>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="hub-actions" id="hub-actions">
+        <button class="btn-primary" id="btn-hub-save">
+          <span class="btn-sparkle">💾</span>
+          <span class="btn-text">Save Trip</span>
+        </button>
+        <div class="hub-actions-row">
+          <button class="btn-secondary btn-half" id="btn-hub-customize">
+            <span class="btn-icon">✏️</span>
+            <span class="btn-text">Customize</span>
+          </button>
+          <button class="btn-secondary btn-half" id="btn-hub-regen">
+            <span class="btn-icon">🔄</span>
+            <span class="btn-text">Regenerate</span>
+          </button>
+        </div>
+      </section>
+
+      <div style="height:100px"></div>
+    </div>
+
+    <!-- Floating Ask AI Button -->
+    <button class="fab-ai" id="fab-ai" aria-label="Ask AI">
+      <span class="fab-ai-icon">✨</span>
+      <span class="fab-ai-label">Ask AI</span>
+    </button>
+
+    <!-- Ask AI Bottom Sheet -->
+    <div class="sheet-overlay" id="ai-overlay"></div>
+    <div class="ai-sheet" id="ai-sheet">
+      <div class="sheet-handle"></div>
+      <div class="ai-sheet-header">
+        <div class="ai-avatar">
+          <span>✨</span>
+        </div>
+        <div class="ai-header-text">
+          <span class="ai-header-name">HueViVu AI</span>
+          <span class="ai-header-status"><span class="ai-online-dot"></span> Ready to help</span>
+        </div>
+        <button class="ai-sheet-close" id="ai-sheet-close">✕</button>
+      </div>
+      <div class="ai-chat" id="ai-chat">
+        <div class="ai-msg ai-msg-bot">
+          <div class="ai-msg-bubble">
+            Hi! 👋 I'm your travel companion for Huế. Ask me anything about your trip!
+          </div>
+        </div>
+      </div>
+      <div class="ai-suggestions" id="ai-suggestions">
+        <button class="ai-sug" data-q="What if it rains tomorrow?">🌧️ What if it rains?</button>
+        <button class="ai-sug" data-q="Find nearby cafes with good wifi">☕ Find nearby cafés</button>
+        <button class="ai-sug" data-q="Make the trip more chill and relaxed">😌 Make it more chill</button>
+        <button class="ai-sug" data-q="What are the best photo spots?">📸 Best photo spots</button>
+      </div>
+      <div class="ai-input-bar">
+        <input type="text" class="ai-input" id="ai-input" placeholder="Ask anything about Huế..." />
+        <button class="ai-send" id="ai-send" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Customize Bottom Sheet -->
+    <div class="sheet-overlay" id="cust-overlay"></div>
+    <div class="cust-sheet" id="cust-sheet">
+      <div class="sheet-handle"></div>
+      <div class="cust-sheet-header">
+        <span class="cust-sheet-emoji">⚡</span>
+        <h3>Customizing your trip...</h3>
+      </div>
+      <div class="cust-sheet-body" id="cust-sheet-body">
+        <div class="cust-progress">
+          <div class="cust-spinner"></div>
+          <span class="cust-progress-text" id="cust-progress-text">AI is adjusting your itinerary</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="hub.js"></script>
+</body>
+</html>

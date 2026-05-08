@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Plan Your Journey</title>
+  <meta name="description" content="Tell us your travel style and let AI create your perfect Huế itinerary." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="flow.css" />
+</head>
+<body>
+  <div id="app" class="app-container flow-app">
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <!-- Flow Header -->
+    <header class="flow-header" id="flow-header">
+      <button class="flow-back" id="flow-back" aria-label="Go back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="flow-progress-bar">
+        <div class="flow-progress-fill" id="progress-fill"></div>
+      </div>
+      <button class="flow-skip" id="flow-skip">Skip</button>
+    </header>
+
+    <!-- Questions Container -->
+    <main class="flow-main" id="flow-main">
+
+      <!-- Step 1: Trip Duration -->
+      <section class="flow-step active" data-step="1" id="step-1">
+        <div class="step-decorator">
+          <span class="step-emoji">🗓️</span>
+        </div>
+        <div class="step-question">
+          <span class="step-label">Step 1 of 5</span>
+          <h2 class="step-title">How long will you<br><span class="accent">explore Huế?</span></h2>
+          <p class="step-desc">This helps AI tailor the pace and depth of your itinerary.</p>
+        </div>
+        <div class="option-grid option-grid-2" id="options-duration">
+          <button class="option-card" data-value="1-2">
+            <span class="option-emoji">⚡</span>
+            <span class="option-name">1–2 days</span>
+            <span class="option-sub">Quick visit</span>
+          </button>
+          <button class="option-card" data-value="3-4">
+            <span class="option-emoji">🌤️</span>
+            <span class="option-name">3–4 days</span>
+            <span class="option-sub">Weekend trip</span>
+          </button>
+          <button class="option-card" data-value="5-7">
+            <span class="option-emoji">🌊</span>
+            <span class="option-name">5–7 days</span>
+            <span class="option-sub">Deep dive</span>
+          </button>
+          <button class="option-card" data-value="7+">
+            <span class="option-emoji">🏡</span>
+            <span class="option-name">7+ days</span>
+            <span class="option-sub">Extended stay</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 2: Travel Style -->
+      <section class="flow-step" data-step="2" id="step-2">
+        <div class="step-decorator">
+          <span class="step-emoji">🎨</span>
+        </div>
+        <div class="step-question">
+          <span class="step-label">Step 2 of 5</span>
+          <h2 class="step-title">What excites you<br><span class="accent">the most?</span></h2>
+          <p class="step-desc">Pick all that spark joy. AI will blend them into your plan.</p>
+        </div>
+        <div class="option-grid option-grid-2 multi-select" id="options-style">
+          <button class="option-card" data-value="culture">
+            <span class="option-emoji">🏛️</span>
+            <span class="option-name">History & Culture</span>
+            <span class="option-sub">Imperial citadel, tombs</span>
+          </button>
+          <button class="option-card" data-value="food">
+            <span class="option-emoji">🍜</span>
+            <span class="option-name">Food & Cuisine</span>
+            <span class="option-sub">Bún bò, street eats</span>
+          </button>
+          <button class="option-card" data-value="nature">
+            <span class="option-emoji">🌿</span>
+            <span class="option-name">Nature & Wellness</span>
+            <span class="option-sub">Hot springs, trails</span>
+          </button>
+          <button class="option-card" data-value="photo">
+            <span class="option-emoji">📸</span>
+            <span class="option-name">Photography</span>
+            <span class="option-sub">Golden hour spots</span>
+          </button>
+          <button class="option-card" data-value="spiritual">
+            <span class="option-emoji">🛕</span>
+            <span class="option-name">Temples & Spiritual</span>
+            <span class="option-sub">Pagodas, zen gardens</span>
+          </button>
+          <button class="option-card" data-value="craft">
+            <span class="option-emoji">🎨</span>
+            <span class="option-name">Art & Craft</span>
+            <span class="option-sub">Villages, workshops</span>
+          </button>
+        </div>
+        <div class="multi-hint">
+          <span>💡 Tap multiple to select</span>
+        </div>
+      </section>
+
+      <!-- Step 3: Companion -->
+      <section class="flow-step" data-step="3" id="step-3">
+        <div class="step-decorator">
+          <span class="step-emoji">👥</span>
+        </div>
+        <div class="step-question">
+          <span class="step-label">Step 3 of 5</span>
+          <h2 class="step-title">Who's joining<br><span class="accent">the adventure?</span></h2>
+          <p class="step-desc">We'll adjust activities, dining and pacing accordingly.</p>
+        </div>
+        <div class="option-list" id="options-companion">
+          <button class="option-row" data-value="solo">
+            <span class="option-row-emoji">🧑</span>
+            <div class="option-row-text">
+              <span class="option-row-name">Solo Explorer</span>
+              <span class="option-row-sub">Freedom to roam at your pace</span>
+            </div>
+            <span class="option-row-check"></span>
+          </button>
+          <button class="option-row" data-value="couple">
+            <span class="option-row-emoji">💑</span>
+            <div class="option-row-text">
+              <span class="option-row-name">With Partner</span>
+              <span class="option-row-sub">Romantic spots & cozy dining</span>
+            </div>
+            <span class="option-row-check"></span>
+          </button>
+          <button class="option-row" data-value="friends">
+            <span class="option-row-emoji">👫</span>
+            <div class="option-row-text">
+              <span class="option-row-name">Friends Group</span>
+              <span class="option-row-sub">Fun activities & nightlife</span>
+            </div>
+            <span class="option-row-check"></span>
+          </button>
+          <button class="option-row" data-value="family">
+            <span class="option-row-emoji">👨‍👩‍👧</span>
+            <div class="option-row-text">
+              <span class="option-row-name">Family Trip</span>
+              <span class="option-row-sub">Kid-friendly & relaxed pace</span>
+            </div>
+            <span class="option-row-check"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 4: Budget -->
+      <section class="flow-step" data-step="4" id="step-4">
+        <div class="step-decorator">
+          <span class="step-emoji">💰</span>
+        </div>
+        <div class="step-question">
+          <span class="step-label">Step 4 of 5</span>
+          <h2 class="step-title">What's your<br><span class="accent">comfort zone?</span></h2>
+          <p class="step-desc">AI will match stays, dining, and activities to your budget.</p>
+        </div>
+        <div class="budget-cards" id="options-budget">
+          <button class="budget-card" data-value="budget">
+            <div class="budget-card-top">
+              <span class="budget-emoji">🎒</span>
+              <span class="budget-label">Budget</span>
+            </div>
+            <span class="budget-range">$20–35/day</span>
+            <span class="budget-desc">Hostels, street food, local transport</span>
+          </button>
+          <button class="budget-card" data-value="moderate">
+            <div class="budget-card-top">
+              <span class="budget-emoji">🌸</span>
+              <span class="budget-label">Moderate</span>
+            </div>
+            <span class="budget-range">$40–70/day</span>
+            <span class="budget-desc">Boutique stays, mixed dining</span>
+            <span class="budget-popular">Popular</span>
+          </button>
+          <button class="budget-card" data-value="premium">
+            <div class="budget-card-top">
+              <span class="budget-emoji">✨</span>
+              <span class="budget-label">Premium</span>
+            </div>
+            <span class="budget-range">$80–150/day</span>
+            <span class="budget-desc">Luxury hotels, fine dining</span>
+          </button>
+          <button class="budget-card" data-value="luxury">
+            <div class="budget-card-top">
+              <span class="budget-emoji">👑</span>
+              <span class="budget-label">Luxury</span>
+            </div>
+            <span class="budget-range">$150+/day</span>
+            <span class="budget-desc">5-star resorts, private tours</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 5: Food Preferences -->
+      <section class="flow-step" data-step="5" id="step-5">
+        <div class="step-decorator">
+          <span class="step-emoji">🍽️</span>
+        </div>
+        <div class="step-question">
+          <span class="step-label">Step 5 of 5</span>
+          <h2 class="step-title">How adventurous is<br><span class="accent">your palate?</span></h2>
+          <p class="step-desc">Huế is a food heaven. Let us know what you crave.</p>
+        </div>
+        <div class="option-grid option-grid-2 multi-select" id="options-food">
+          <button class="option-card" data-value="street">
+            <span class="option-emoji">🥢</span>
+            <span class="option-name">Street Food</span>
+            <span class="option-sub">Authentic local bites</span>
+          </button>
+          <button class="option-card" data-value="royal">
+            <span class="option-emoji">🥘</span>
+            <span class="option-name">Royal Cuisine</span>
+            <span class="option-sub">Huế imperial dishes</span>
+          </button>
+          <button class="option-card" data-value="vegan">
+            <span class="option-emoji">🥗</span>
+            <span class="option-name">Vegetarian</span>
+            <span class="option-sub">Plant-based options</span>
+          </button>
+          <button class="option-card" data-value="dessert">
+            <span class="option-emoji">🍰</span>
+            <span class="option-name">Sweets & Desserts</span>
+            <span class="option-sub">Chè, bánh specialties</span>
+          </button>
+          <button class="option-card" data-value="drinks">
+            <span class="option-emoji">🍺</span>
+            <span class="option-name">Drinks & Café</span>
+            <span class="option-sub">Coffee culture, bars</span>
+          </button>
+          <button class="option-card" data-value="spicy">
+            <span class="option-emoji">🌶️</span>
+            <span class="option-name">Spicy Lover</span>
+            <span class="option-sub">Bring on the heat!</span>
+          </button>
+        </div>
+        <div class="multi-hint">
+          <span>💡 Tap multiple to select</span>
+        </div>
+      </section>
+
+      <!-- Step 6: AI Thinking -->
+      <section class="flow-step" data-step="6" id="step-6">
+        <div class="ai-thinking-screen">
+          <div class="ai-orb-container">
+            <div class="ai-orb">
+              <div class="ai-orb-ring ring-1"></div>
+              <div class="ai-orb-ring ring-2"></div>
+              <div class="ai-orb-ring ring-3"></div>
+              <div class="ai-orb-core">✨</div>
+            </div>
+          </div>
+          <h2 class="ai-thinking-title" id="ai-thinking-title">Creating your journey...</h2>
+          <p class="ai-thinking-sub" id="ai-thinking-sub">AI is analyzing your preferences</p>
+          <div class="ai-thinking-steps" id="ai-steps">
+            <div class="ai-step" data-ai="1">
+              <span class="ai-step-icon">🗺️</span>
+              <span class="ai-step-text">Mapping best routes</span>
+              <span class="ai-step-status"></span>
+            </div>
+            <div class="ai-step" data-ai="2">
+              <span class="ai-step-icon">🍜</span>
+              <span class="ai-step-text">Finding food gems</span>
+              <span class="ai-step-status"></span>
+            </div>
+            <div class="ai-step" data-ai="3">
+              <span class="ai-step-icon">🏛️</span>
+              <span class="ai-step-text">Curating experiences</span>
+              <span class="ai-step-status"></span>
+            </div>
+            <div class="ai-step" data-ai="4">
+              <span class="ai-step-icon">💰</span>
+              <span class="ai-step-text">Optimizing budget</span>
+              <span class="ai-step-status"></span>
+            </div>
+          </div>
+          <div class="ai-fun-fact" id="ai-fun-fact">
+            <span class="fact-icon">💡</span>
+            <span class="fact-text">Did you know? Huế has over 1,300 unique dishes in its culinary tradition!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 7: Generated Itinerary -->
+      <section class="flow-step" data-step="7" id="step-7">
+        <div class="result-screen">
+          <div class="result-header-card">
+            <div class="result-badge">
+              <span class="result-badge-dot"></span>
+              <span>AI Generated</span>
+            </div>
+            <h2 class="result-title">Your Huế Journey</h2>
+            <div class="result-meta">
+              <span class="result-meta-item" id="result-duration">📅 3–4 days</span>
+              <span class="result-meta-divider">·</span>
+              <span class="result-meta-item" id="result-budget">💰 Moderate</span>
+              <span class="result-meta-divider">·</span>
+              <span class="result-meta-item" id="result-companion">👫 Friends</span>
+            </div>
+          </div>
+
+          <div class="itinerary-days" id="itinerary-days">
+            <!-- Day 1 -->
+            <div class="day-card">
+              <div class="day-header">
+                <span class="day-number">Day 1</span>
+                <span class="day-theme">Imperial Heritage</span>
+              </div>
+              <div class="day-items">
+                <div class="day-item">
+                  <span class="item-time">08:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Imperial Citadel</span>
+                    <span class="item-type">🏛️ Culture</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">12:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Bún bò Huế at Bà Tuyết</span>
+                    <span class="item-type">🍜 Food</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">14:30</span>
+                  <div class="item-content">
+                    <span class="item-name">Thiên Mụ Pagoda</span>
+                    <span class="item-type">🛕 Spiritual</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">18:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Perfume River sunset cruise</span>
+                    <span class="item-type">🌅 Experience</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="day-card">
+              <div class="day-header">
+                <span class="day-number">Day 2</span>
+                <span class="day-theme">Food & Nature</span>
+              </div>
+              <div class="day-items">
+                <div class="day-item">
+                  <span class="item-time">07:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Đông Ba Market</span>
+                    <span class="item-type">🛍️ Market</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">10:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Royal Tomb of Tự Đức</span>
+                    <span class="item-type">🏛️ Culture</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">13:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Cơm hến lunch at Hẻm</span>
+                    <span class="item-type">🍜 Food</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">15:30</span>
+                  <div class="item-content">
+                    <span class="item-name">Thanh Toàn Bridge</span>
+                    <span class="item-type">📸 Photo spot</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="day-card">
+              <div class="day-header">
+                <span class="day-number">Day 3</span>
+                <span class="day-theme">Hidden Gems</span>
+              </div>
+              <div class="day-items">
+                <div class="day-item">
+                  <span class="item-time">08:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Bạch Mã National Park</span>
+                    <span class="item-type">🌿 Nature</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">12:30</span>
+                  <div class="item-content">
+                    <span class="item-name">Bánh bèo, lọc, nậm tasting</span>
+                    <span class="item-type">🍜 Food</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">15:00</span>
+                  <div class="item-content">
+                    <span class="item-name">An Định Palace</span>
+                    <span class="item-type">🏛️ Culture</span>
+                  </div>
+                </div>
+                <div class="day-item">
+                  <span class="item-time">19:00</span>
+                  <div class="item-content">
+                    <span class="item-name">Farewell dinner by the river</span>
+                    <span class="item-type">🌙 Evening</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result CTAs -->
+          <div class="result-cta-group">
+            <button class="btn-primary" id="btn-save-trip">
+              <span class="btn-sparkle">💾</span>
+              <span class="btn-text">Save This Trip</span>
+            </button>
+            <button class="btn-secondary" id="btn-regenerate">
+              <span class="btn-icon">🔄</span>
+              <span class="btn-text">Regenerate</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Flow Footer -->
+    <footer class="flow-footer" id="flow-footer">
+      <button class="btn-primary flow-next" id="flow-next" disabled>
+        <span class="btn-text">Continue</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </footer>
+  </div>
+
+  <script src="flow.js"></script>
+</body>
+</html>
