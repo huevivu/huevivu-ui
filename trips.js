@@ -45,12 +45,45 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Card taps
-  document.querySelectorAll('.today-card, .trip-item, .memory-item').forEach(card => {
+  document.querySelectorAll('.today-card, .memory-item').forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.97)';
       setTimeout(() => { card.style.transform = ''; }, 200);
     });
   });
+
+  // --- Trip item navigation ---
+  document.querySelectorAll('.trip-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.style.transform = 'scale(0.97)';
+      item.style.background = 'rgba(255, 127, 107, 0.04)';
+      setTimeout(() => {
+        window.location.href = 'hub.html';
+      }, 300);
+    });
+  });
+
+  // --- Add Trip button ---
+  const btnAddTrip = document.getElementById('btn-add-trip');
+  if (btnAddTrip) {
+    btnAddTrip.addEventListener('click', () => {
+      btnAddTrip.style.transform = 'scale(0.85)';
+      setTimeout(() => {
+        window.location.href = 'flow.html';
+      }, 200);
+    });
+  }
+
+  // --- Empty state plan button ---
+  const btnEmptyPlan = document.getElementById('btn-empty-plan');
+  if (btnEmptyPlan) {
+    btnEmptyPlan.addEventListener('click', () => {
+      btnEmptyPlan.querySelector('.btn-text').textContent = 'Đang chuẩn bị...';
+      setTimeout(() => {
+        window.location.href = 'flow.html';
+      }, 500);
+    });
+  }
 
   // AI Plan button (fab-ai style)
   const navAi = document.getElementById('nav-ai');

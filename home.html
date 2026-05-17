@@ -91,6 +91,25 @@
         </div>
       </section>
 
+      <!-- AI Welcome Banner -->
+      <section class="section" id="ai-welcome-section">
+        <div class="ai-welcome-banner" id="ai-welcome-banner">
+          <div class="ai-welcome-row">
+            <div class="ai-welcome-avatar">
+              <span>✨</span>
+            </div>
+            <div class="ai-welcome-body">
+              <span class="ai-welcome-label">AI gợi ý hôm nay</span>
+              <p class="ai-welcome-text">Chào buổi sáng! Trời đẹp 28°C — thích hợp ghé Chùa Thiên Mụ lúc sáng sớm, ít người và ánh sáng đẹp để chụp ảnh. 🌅</p>
+            </div>
+          </div>
+          <div class="ai-welcome-actions">
+            <button class="ai-welcome-chip" id="ai-chip-accept">Xem lịch trình →</button>
+            <button class="ai-welcome-chip ai-welcome-chip-alt" id="ai-chip-dismiss">Lần sau</button>
+          </div>
+        </div>
+      </section>
+
       <!-- AI Quick Actions -->
       <section class="section">
         <h2 class="section-title">✨ AI có thể giúp gì?</h2>
@@ -278,6 +297,45 @@
       </section>
 
       <div style="height:100px"></div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notif-overlay" id="notif-overlay"></div>
+    <div class="notif-panel" id="notif-panel">
+      <div class="notif-header">
+        <h3 class="notif-title">🔔 Thông báo</h3>
+        <button class="notif-close" id="notif-close">✕</button>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item notif-unread">
+          <div class="notif-item-icon">✨</div>
+          <div class="notif-item-body">
+            <span class="notif-item-text">AI đã cập nhật lịch trình của bạn dựa trên thời tiết mới nhất</span>
+            <span class="notif-item-time">5 phút trước</span>
+          </div>
+        </div>
+        <div class="notif-item notif-unread">
+          <div class="notif-item-icon">🍜</div>
+          <div class="notif-item-body">
+            <span class="notif-item-text">Quán Bà Tuyết vừa mở cửa — chỉ cách bạn 0.8km</span>
+            <span class="notif-item-time">15 phút trước</span>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-item-icon">🌅</div>
+          <div class="notif-item-body">
+            <span class="notif-item-text">Hoàng hôn hôm nay lúc 17:45 — đừng bỏ lỡ tại Sông Hương!</span>
+            <span class="notif-item-time">1 giờ trước</span>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-item-icon">🏆</div>
+          <div class="notif-item-body">
+            <span class="notif-item-text">Bạn đã đạt huy hiệu "Nhà thám hiểm"!</span>
+            <span class="notif-item-time">Hôm qua</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Bottom Navbar -->

@@ -355,3 +355,94 @@
   font-weight: 500;
   color: var(--gray-soft);
 }
+
+/* --- AI Travel Personality Card --- */
+.ai-personality-card {
+  padding: 20px;
+  background: white;
+  border: 1px solid rgba(255, 127, 107, 0.12);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-personality-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--coral), var(--warm-orange), var(--peach));
+}
+
+.ai-pers-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ai-pers-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 12px rgba(255, 127, 107, 0.3);
+}
+
+.ai-pers-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-pers-title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.ai-pers-sub {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--gray-soft);
+}
+
+.ai-pers-body {
+  margin-bottom: 14px;
+}
+
+.ai-pers-text {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.6;
+}
+
+.ai-pers-text strong {
+  color: var(--coral);
+  font-weight: 700;
+}
+
+.ai-pers-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ai-pers-tag {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(255, 127, 107, 0.08), rgba(255, 154, 92, 0.05));
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--coral);
+}
+

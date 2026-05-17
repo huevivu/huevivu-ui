@@ -38,14 +38,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Quick Action tap feedback ---
+  // --- Quick Action tap & navigation ---
   const qaCards = document.querySelectorAll('.qa-card');
   qaCards.forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.92)';
       setTimeout(() => { card.style.transform = ''; }, 200);
       const action = card.dataset.action;
-      console.log(`🚀 Quick action: ${action}`);
+      
+      switch (action) {
+        case 'plan':
+          setTimeout(() => { window.location.href = 'flow.html'; }, 300);
+          break;
+        case 'food':
+          setTimeout(() => { window.location.href = 'explore.html#food'; }, 300);
+          break;
+        case 'culture':
+          setTimeout(() => { window.location.href = 'explore.html#heritage'; }, 300);
+          break;
+        case 'photo':
+          setTimeout(() => { window.location.href = 'explore.html#photo'; }, 300);
+          break;
+        default:
+          console.log(`🚀 Quick action: ${action}`);
+      }
     });
   });
 
@@ -57,6 +73,68 @@ document.addEventListener('DOMContentLoaded', () => {
       btnViewTrip.style.pointerEvents = 'none';
       setTimeout(() => {
         window.location.href = 'hub.html';
+      }, 400);
+    });
+  }
+
+  // --- Profile avatar navigation ---
+  const btnProfile = document.getElementById('btn-profile');
+  if (btnProfile) {
+    btnProfile.addEventListener('click', () => {
+      btnProfile.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        window.location.href = 'profile.html';
+      }, 200);
+    });
+  }
+
+  // --- Notification Panel ---
+  const btnNotif = document.getElementById('btn-notif');
+  const notifOverlay = document.getElementById('notif-overlay');
+  const notifPanel = document.getElementById('notif-panel');
+  const notifClose = document.getElementById('notif-close');
+
+  function openNotif() {
+    if (notifOverlay) notifOverlay.classList.add('open');
+    if (notifPanel) notifPanel.classList.add('open');
+  }
+
+  function closeNotif() {
+    if (notifOverlay) notifOverlay.classList.remove('open');
+    if (notifPanel) notifPanel.classList.remove('open');
+  }
+
+  if (btnNotif) btnNotif.addEventListener('click', openNotif);
+  if (notifClose) notifClose.addEventListener('click', closeNotif);
+  if (notifOverlay) notifOverlay.addEventListener('click', closeNotif);
+
+  // Notification item click feedback
+  document.querySelectorAll('.notif-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.remove('notif-unread');
+      item.style.background = 'rgba(255, 127, 107, 0.06)';
+      setTimeout(() => { item.style.background = ''; }, 300);
+    });
+  });
+
+  // --- AI Welcome Banner ---
+  const aiChipAccept = document.getElementById('ai-chip-accept');
+  const aiChipDismiss = document.getElementById('ai-chip-dismiss');
+  const aiWelcomeBanner = document.getElementById('ai-welcome-banner');
+
+  if (aiChipAccept) {
+    aiChipAccept.addEventListener('click', () => {
+      aiChipAccept.textContent = 'Đang mở...';
+      setTimeout(() => { window.location.href = 'hub.html'; }, 400);
+    });
+  }
+
+  if (aiChipDismiss && aiWelcomeBanner) {
+    aiChipDismiss.addEventListener('click', () => {
+      aiWelcomeBanner.classList.add('dismissed');
+      setTimeout(() => {
+        const section = document.getElementById('ai-welcome-section');
+        if (section) section.style.display = 'none';
       }, 400);
     });
   }
@@ -95,8 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Bottom navigation (handled by <a> tags) ---
-  // Touch feedback for nav items
+  // --- Bottom navigation ---
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
       item.style.transform = 'scale(0.9)';

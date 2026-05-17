@@ -129,6 +129,18 @@
               </div>
             </div>
           </div>
+          </div>
+        </section>
+
+        <!-- AI Insight Card -->
+        <section class="section">
+          <div class="ai-trip-insight" id="ai-trip-insight">
+            <div class="ai-trip-icon"><span>🧠</span></div>
+            <div class="ai-trip-body">
+              <span class="ai-trip-label">AI gợi ý</span>
+              <p class="ai-trip-text">Trời sẽ mát hơn sau 3 PM — thích hợp dạo chơi Chùa Thiên Mụ và ngắm hoàng hôn tại Sông Hương ✨</p>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -160,6 +172,17 @@
               </div>
               <div class="trip-item-arrow">→</div>
             </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="empty-upcoming" style="display:none">
+            <span class="empty-emoji">🌟</span>
+            <span class="empty-title">Chưa có chuyến đi sắp tới</span>
+            <span class="empty-desc">Để AI lên kế hoạch cho chuyến phiêu lưu tiếp theo của bạn tại Huế!</span>
+            <button class="btn-primary" style="max-width:240px;padding:14px 24px;font-size:0.9375rem" id="btn-empty-plan">
+              <span class="btn-sparkle">✨</span>
+              <span class="btn-text">Lên kế hoạch ngay</span>
+            </button>
           </div>
         </section>
       </div>
@@ -193,9 +216,16 @@
             <div class="memory-item"><img src="assets/hero.png" alt="Memory" /><span class="memory-date">10/3</span></div>
           </div>
         </section>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="empty-past" style="display:none">
+            <span class="empty-emoji">😊</span>
+            <span class="empty-title">Chưa có kỉ niệm nào</span>
+            <span class="empty-desc">Sau chuyến đi đầu tiên, kỉ niệm của bạn sẽ được lưu ở đây!</span>
+          </div>
       </div>
 
-      <div style="height:20px"></div>
+      <div style="height:100px"></div>
     </div>
 
     <!-- Bottom Navbar -->

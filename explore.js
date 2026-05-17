@@ -59,5 +59,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Search Overlay ---
+  const exploreInput = document.getElementById('explore-input');
+  const searchOverlay = document.getElementById('search-overlay');
+  const searchClose = document.getElementById('explore-search-close');
+  const overlayInput = document.getElementById('explore-overlay-input');
+
+  if (exploreInput && searchOverlay) {
+    exploreInput.addEventListener('focus', () => {
+      searchOverlay.classList.add('open');
+      setTimeout(() => {
+        if (overlayInput) overlayInput.focus();
+      }, 100);
+      // Blur the original input so keyboard doesn't double-show
+      exploreInput.blur();
+    });
+  }
+
+  if (searchClose && searchOverlay) {
+    searchClose.addEventListener('click', () => {
+      searchOverlay.classList.remove('open');
+      if (overlayInput) overlayInput.value = '';
+    });
+  }
+
+  // Trending chip click in overlay
+  document.querySelectorAll('.search-overlay .trend-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (overlayInput) {
+        overlayInput.value = chip.textContent;
+        overlayInput.focus();
+      }
+    });
+  });
+
+  // Recent item click in overlay
+  document.querySelectorAll('.recent-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (overlayInput) {
+        overlayInput.value = item.textContent.trim();
+        overlayInput.focus();
+      }
+    });
+  });
+
+  // AI suggest card click
+  document.querySelectorAll('.ai-suggest-card').forEach(card => {
+    card.addEventListener('click', () => {
+      if (overlayInput) {
+        const text = card.querySelector('.ai-suggest-text');
+        if (text) {
+          overlayInput.value = text.textContent;
+          overlayInput.focus();
+        }
+      }
+    });
+  });
+
+  // --- Location Banner ---
+  const locEnable = document.getElementById('loc-enable');
+  const locBanner = document.getElementById('location-banner');
+  if (locEnable && locBanner) {
+    locEnable.addEventListener('click', () => {
+      locEnable.textContent = 'Đang bật...';
+      locEnable.style.opacity = '0.6';
+      locEnable.style.pointerEvents = 'none';
+      setTimeout(() => {
+        locBanner.classList.add('hidden');
+        setTimeout(() => {
+          locBanner.parentElement.style.display = 'none';
+        }, 400);
+      }, 800);
+    });
+  }
+
+  // --- AI Explore Bar action ---
+  const aiExploreAction = document.getElementById('ai-explore-action');
+  if (aiExploreAction) {
+    aiExploreAction.addEventListener('click', () => {
+      aiExploreAction.style.transform = 'scale(0.9)';
+      setTimeout(() => { aiExploreAction.style.transform = ''; }, 200);
+    });
+  }
+
   console.log('🔍 HueViVu Explore loaded');
 });

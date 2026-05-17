@@ -87,6 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Explore Manually CTA ---
+  const btnExplore = document.getElementById('btn-explore');
+  if (btnExplore) {
+    btnExplore.addEventListener('click', () => {
+      btnExplore.style.transform = 'scale(0.96)';
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 300);
+    });
+  }
+
   // --- Intersection Observer for scroll animations ---
   const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
   const observer = new IntersectionObserver((entries) => {
