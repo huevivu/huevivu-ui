@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Nhật Ký</title>
+  <meta name="description" content="Nhật ký du lịch cá nhân — Lưu giữ cảm xúc và kỷ niệm tại Huế." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="journal.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+    </div>
+
+    <div class="page-scroll" id="page-scroll">
+
+      <!-- Header -->
+      <header class="page-header" id="page-header">
+        <button class="page-header-btn" onclick="history.back()" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 class="page-header-title">Nhật ký</h1>
+        <button class="page-header-btn" id="btn-new-journal" aria-label="New entry">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </header>
+
+      <!-- AI Recap Banner -->
+      <section class="section" style="margin-top:8px">
+        <div class="jr-ai-recap" id="jr-ai-recap">
+          <div class="jr-ai-icon">🧠</div>
+          <div class="jr-ai-body">
+            <span class="jr-ai-label">AI TRAVEL RECAP</span>
+            <p class="jr-ai-text">AI đã tạo bản tóm tắt chuyến đi "3-Day Food & Culture" từ nhật ký của bạn</p>
+          </div>
+          <button class="jr-ai-btn" id="btn-view-recap">Xem</button>
+        </div>
+      </section>
+
+      <!-- Trip Selector -->
+      <section class="section">
+        <div class="jr-trip-select">
+          <span class="jr-trip-label">📅 Chuyến đi</span>
+          <select class="jr-trip-dropdown" id="jr-trip-dropdown">
+            <option value="current">3-Day Food & Culture (đang diễn ra)</option>
+            <option value="past1">Sunset Weekend (15-17/06)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Journal Entries Timeline -->
+      <section class="section">
+        <h2 class="section-title">📖 Ngày 1 — Di sản Hoàng gia & Ẩm thực</h2>
+
+        <!-- Entry 1 -->
+        <div class="jr-entry">
+          <div class="jr-entry-header">
+            <div class="jr-entry-mood">😊</div>
+            <div class="jr-entry-meta">
+              <span class="jr-entry-time">07:30 · Hôm nay</span>
+              <span class="jr-entry-location">📍 Quán Bà Tuyết</span>
+            </div>
+            <span class="jr-entry-public tag tag-green">Public</span>
+          </div>
+          <div class="jr-entry-content">
+            <p class="jr-entry-text">Bún bò buổi sáng sớm — vị cay nồng, nước lèo đậm đà. Quán nhỏ ven đường, chỉ có người local. Đây mới là Huế thật sự! 🍜✨</p>
+          </div>
+          <div class="jr-entry-photos">
+            <div class="jr-photo"><img src="assets/food.png" alt="Bún bò" /></div>
+            <div class="jr-photo"><img src="assets/hero.png" alt="Quán" /></div>
+          </div>
+          <div class="jr-entry-footer">
+            <button class="jr-entry-btn">❤️ 12</button>
+            <button class="jr-entry-btn">💬 3</button>
+          </div>
+        </div>
+
+        <!-- Entry 2 -->
+        <div class="jr-entry">
+          <div class="jr-entry-header">
+            <div class="jr-entry-mood">🤩</div>
+            <div class="jr-entry-meta">
+              <span class="jr-entry-time">09:45 · Hôm nay</span>
+              <span class="jr-entry-location">📍 Hoàng Thành Huế</span>
+            </div>
+            <span class="jr-entry-private tag tag-purple">Private</span>
+          </div>
+          <div class="jr-entry-content">
+            <p class="jr-entry-text">Cổng Ngọ Môn lúc sáng sớm — không đông, ánh nắng vàng chiếu lên tường đỏ, cảm giác như được bước vào lịch sử. Hoàng hôn ở đây chắc cũng đẹp lắm. 🏛️</p>
+          </div>
+          <div class="jr-entry-photos">
+            <div class="jr-photo"><img src="assets/citadel.png" alt="Ngọ Môn" /></div>
+            <div class="jr-photo"><img src="assets/hero-hub.png" alt="Inside" /></div>
+            <div class="jr-photo"><img src="assets/river.png" alt="Detail" /></div>
+          </div>
+        </div>
+
+        <!-- Entry 3 -->
+        <div class="jr-entry">
+          <div class="jr-entry-header">
+            <div class="jr-entry-mood">😌</div>
+            <div class="jr-entry-meta">
+              <span class="jr-entry-time">17:30 · Hôm nay</span>
+              <span class="jr-entry-location">📍 Sông Hương</span>
+            </div>
+            <span class="jr-entry-public tag tag-green">Public</span>
+          </div>
+          <div class="jr-entry-content">
+            <p class="jr-entry-text">Hoàng hôn trên sông Hương — mọi thứ chậm lại. Ngồi trên thuyền rồng, uống trà sen, nghe nhã nhạc. Khoảnh khắc bình yên nhất chuyến đi. 🌅</p>
+          </div>
+          <div class="jr-entry-photos">
+            <div class="jr-photo wide"><img src="assets/river.png" alt="Sunset" /></div>
+          </div>
+          <div class="jr-entry-footer">
+            <button class="jr-entry-btn">❤️ 28</button>
+            <button class="jr-entry-btn">💬 7</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Write New Entry Bottom Sheet Trigger -->
+      <div style="height:120px"></div>
+    </div>
+
+    <!-- Floating Write Button -->
+    <button class="jr-fab" id="jr-fab">
+      <span>✏️</span>
+      <span class="jr-fab-label">Viết nhật ký</span>
+    </button>
+
+    <!-- Write Entry Bottom Sheet -->
+    <div class="jr-write-overlay" id="jr-write-overlay"></div>
+    <div class="jr-write-sheet" id="jr-write-sheet">
+      <div class="jr-write-handle"></div>
+      <div class="jr-write-header">
+        <h3 class="jr-write-title">✏️ Viết nhật ký</h3>
+        <button class="jr-write-close" id="jr-write-close">✕</button>
+      </div>
+
+      <div class="jr-write-body">
+        <!-- Mood Picker -->
+        <div class="jr-mood-picker">
+          <span class="jr-mood-label">Cảm xúc hôm nay</span>
+          <div class="jr-moods" id="jr-moods">
+            <button class="jr-mood-btn active" data-mood="happy">😊</button>
+            <button class="jr-mood-btn" data-mood="peaceful">😌</button>
+            <button class="jr-mood-btn" data-mood="excited">🤩</button>
+            <button class="jr-mood-btn" data-mood="nostalgic">🥹</button>
+            <button class="jr-mood-btn" data-mood="sparkle">✨</button>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="jr-location-row">
+          <span class="jr-loc-icon">📍</span>
+          <input type="text" class="jr-loc-input" id="jr-loc-input" placeholder="Gắn địa điểm..." />
+        </div>
+
+        <!-- Text -->
+        <textarea class="jr-write-text" id="jr-write-text" placeholder="Hôm nay bạn đã trải nghiệm gì ở Huế?..." rows="4"></textarea>
+
+        <!-- Photo Upload -->
+        <div class="jr-photo-upload" id="jr-photo-upload">
+          <span class="jr-upload-icon">📷</span>
+          <span class="jr-upload-text">Thêm ảnh</span>
+        </div>
+
+        <!-- Privacy Toggle -->
+        <div class="jr-privacy-row">
+          <span class="jr-privacy-label">🔒 Riêng tư</span>
+          <div class="jr-toggle" id="jr-toggle">
+            <div class="jr-toggle-track">
+              <div class="jr-toggle-thumb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <button class="jr-write-save" id="jr-write-save">
+        <span>✨ Lưu nhật ký</span>
+      </button>
+    </div>
+
+    <!-- Bottom Navbar -->
+    <nav class="bottom-nav" id="bottom-nav" style="display:none"></nav>
+  </div>
+
+  <script src="journal.js"></script>
+</body>
+</html>

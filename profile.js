@@ -28,6 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // --- Achievement Badge Dropdown ---
+  const achToggle = document.getElementById('ach-toggle');
+  const achWrap = document.getElementById('achievement-wrap');
+  if (achToggle && achWrap) {
+    let firstOpen = true;
+    achToggle.addEventListener('click', () => {
+      achWrap.classList.toggle('open');
+      // Animate progress bars on first open
+      if (firstOpen && achWrap.classList.contains('open')) {
+        firstOpen = false;
+        achWrap.querySelectorAll('.badge-fill').forEach(fill => {
+          const target = fill.style.width;
+          fill.style.width = '0%';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              fill.style.width = target;
+            });
+          });
+        });
+      }
+    });
+  }
+
   // Menu item tap
   document.querySelectorAll('.menu-item').forEach(item => {
     item.addEventListener('click', () => {

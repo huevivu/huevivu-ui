@@ -194,30 +194,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Place card tap ---
+  // --- Place card → detail page ---
   const placeCards = document.querySelectorAll('.place-card');
   placeCards.forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.96)';
-      setTimeout(() => { card.style.transform = ''; }, 200);
+      const placeId = card.dataset.place || 'citadel';
+      setTimeout(() => { window.location.href = `place-detail.html?id=${placeId}`; }, 200);
     });
   });
 
-  // --- Food card tap ---
+  // --- Food card → detail page ---
   const foodCards = document.querySelectorAll('.food-card');
   foodCards.forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.97)';
-      setTimeout(() => { card.style.transform = ''; }, 200);
+      const placeId = card.dataset.place || 'bunbo';
+      setTimeout(() => { window.location.href = `place-detail.html?id=${placeId}`; }, 200);
     });
   });
 
-  // --- Tour card tap ---
+  // --- Tour card → detail page ---
   const tourCards = document.querySelectorAll('.tour-card');
   tourCards.forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.96)';
-      setTimeout(() => { card.style.transform = ''; }, 200);
+      const tourId = card.dataset.tour || 'culture3d';
+      setTimeout(() => { window.location.href = `tour-detail.html?id=${tourId}`; }, 200);
     });
   });
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Bộ sưu tập</title>
+  <meta name="description" content="Bộ sưu tập địa điểm du lịch tại Huế." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="collection-detail.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+
+    <!-- Hero Banner -->
+    <div class="col-hero" id="col-hero">
+      <img class="col-hero-img" id="hero-img" src="assets/citadel.png" alt="Collection" />
+      <div class="col-hero-overlay"></div>
+      <div class="col-hero-nav">
+        <button class="detail-back" id="btn-back" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+      </div>
+      <div class="col-hero-info">
+        <span class="col-count" id="col-count">5 địa điểm</span>
+        <h1 class="col-name" id="col-name">Di sản UNESCO</h1>
+        <p class="col-desc" id="col-desc">Những di sản văn hóa thế giới tại Huế</p>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="detail-scroll" id="detail-scroll">
+
+      <!-- AI Summary -->
+      <section class="section" id="ai-section">
+        <div class="col-ai-summary">
+          <div class="cas-icon">🧠</div>
+          <div class="cas-body">
+            <span class="cas-label">AI gợi ý</span>
+            <p class="cas-text" id="ai-summary-text">5 địa điểm di sản, AI gợi ý nên ghé 3 điểm phù hợp nhất với bạn trong 1 ngày.</p>
+          </div>
+          <button class="cas-btn" id="btn-ai-plan">Tạo lịch trình</button>
+        </div>
+      </section>
+
+      <!-- Place List -->
+      <section class="section" id="places-section">
+        <h2 class="section-title" id="places-title">📍 Các địa điểm</h2>
+        <div class="col-place-list" id="col-place-list">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <div style="height:120px"></div>
+    </div>
+
+    <!-- Fixed CTA Bar -->
+    <div class="detail-cta-bar">
+      <button class="detail-cta-primary col-cta-full" id="btn-create-trip">
+        <span>✨</span> Tạo lịch trình từ bộ sưu tập này
+      </button>
+    </div>
+
+  </div>
+  <script src="collection-detail.js"></script>
+</body>
+</html>

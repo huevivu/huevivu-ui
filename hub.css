@@ -217,6 +217,24 @@
 }
 .tl-ai-icon { font-size:0.875rem; }
 
+/* Timeline Actions (Journal / Review) */
+.tl-actions {
+  display:flex; gap:8px; margin-top:12px;
+  padding-top:10px; border-top:1px dashed rgba(26,29,59,0.06);
+}
+.tl-action-btn {
+  flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+  padding:8px; border-radius:var(--radius-sm); border:none;
+  background:rgba(26,29,59,0.03); color:var(--navy);
+  font-family:var(--font); font-size:0.75rem; font-weight:600;
+  cursor:pointer; transition:all 0.3s;
+}
+.tl-action-btn:hover {
+  background:white; border-color:var(--coral-light);
+  box-shadow:var(--shadow-sm); color:var(--coral);
+}
+.tl-action-btn:active { transform:scale(0.96); }
+
 /* --- Customize Section --- */
 .customize-section {
   padding:24px 20px 0;

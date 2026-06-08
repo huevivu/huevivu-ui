@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Cộng Đồng</title>
+  <meta name="description" content="Khám phá lịch trình từ cộng đồng du lịch Huế — Được gợi ý bởi AI." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="community.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+    </div>
+
+    <div class="page-scroll" id="page-scroll">
+
+      <!-- Header -->
+      <header class="page-header" id="page-header">
+        <h1 class="page-header-title">Cộng đồng</h1>
+        <button class="page-header-btn" id="btn-search-community" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </header>
+
+      <!-- AI Recommendation Banner -->
+      <section class="section" style="margin-top:8px">
+        <div class="cm-ai-banner">
+          <div class="cm-ai-glow"></div>
+          <div class="cm-ai-icon">✨</div>
+          <div class="cm-ai-body">
+            <span class="cm-ai-label">AI GỢI Ý CHO BẠN</span>
+            <p class="cm-ai-text">3 lịch trình phù hợp 90%+ với phong cách <strong>Cultural Explorer</strong> của bạn</p>
+          </div>
+          <button class="cm-ai-btn" id="cm-ai-see">Xem →</button>
+        </div>
+      </section>
+
+      <!-- Filter Tabs -->
+      <section class="section">
+        <div class="cm-filters" id="cm-filters">
+          <button class="cm-filter active" data-filter="all">🔥 Tất cả</button>
+          <button class="cm-filter" data-filter="food">🍜 Ẩm thực</button>
+          <button class="cm-filter" data-filter="heritage">🏛️ Di sản</button>
+          <button class="cm-filter" data-filter="nature">🌿 Thiên nhiên</button>
+          <button class="cm-filter" data-filter="budget">💰 Tiết kiệm</button>
+        </div>
+      </section>
+
+      <!-- Trending Section -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">🔥 Đang thịnh hành</h2>
+        </div>
+        <div class="cm-trending-scroll">
+          <div class="cm-trending-card" data-trip="trending1">
+            <img src="assets/hero-hub.png" alt="Trending" class="cm-trending-img" />
+            <div class="cm-trending-overlay"></div>
+            <div class="cm-trending-content">
+              <span class="cm-trending-rank">#1</span>
+              <span class="cm-trending-title">Huế trong 48h</span>
+              <span class="cm-trending-stat">🔄 34 clone</span>
+            </div>
+          </div>
+          <div class="cm-trending-card" data-trip="trending2">
+            <img src="assets/river.png" alt="Trending" class="cm-trending-img" />
+            <div class="cm-trending-overlay"></div>
+            <div class="cm-trending-content">
+              <span class="cm-trending-rank">#2</span>
+              <span class="cm-trending-title">Food Tour solo</span>
+              <span class="cm-trending-stat">🔄 28 clone</span>
+            </div>
+          </div>
+          <div class="cm-trending-card" data-trip="trending3">
+            <img src="assets/citadel.png" alt="Trending" class="cm-trending-img" />
+            <div class="cm-trending-overlay"></div>
+            <div class="cm-trending-content">
+              <span class="cm-trending-rank">#3</span>
+              <span class="cm-trending-title">Chill & Heritage</span>
+              <span class="cm-trending-stat">🔄 21 clone</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feed -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">📋 Lịch trình từ cộng đồng</h2>
+        </div>
+
+        <!-- Trip Card 1 -->
+        <div class="cm-trip-card" data-trip="shared1">
+          <div class="cm-trip-header">
+            <div class="cm-trip-avatar">M</div>
+            <div class="cm-trip-user">
+              <span class="cm-trip-username">Minh Anh</span>
+              <span class="cm-trip-time">2 ngày trước · 🌟 Level 4</span>
+            </div>
+            <div class="cm-trip-ai-match">
+              <span class="cm-match-val">92%</span>
+              <span class="cm-match-label">phù hợp</span>
+            </div>
+          </div>
+          <div class="cm-trip-cover">
+            <img src="assets/hero-hub.png" alt="Trip" class="cm-trip-img" />
+            <div class="cm-trip-cover-overlay"></div>
+            <div class="cm-trip-cover-tags">
+              <span class="cm-cover-tag">🏛️ Văn hóa</span>
+              <span class="cm-cover-tag">🍜 Ẩm thực</span>
+            </div>
+          </div>
+          <div class="cm-trip-body">
+            <h3 class="cm-trip-title">3 Ngày Khám Phá Di Sản & Ẩm Thực Huế</h3>
+            <p class="cm-trip-desc">Chuyến đi tuyệt vời — từ bún bò buổi sáng đến hoàng hôn trên sông Hương ✨</p>
+            <div class="cm-trip-meta">
+              <span class="cm-meta-item">📅 3 ngày</span>
+              <span class="cm-meta-item">📍 12 điểm</span>
+              <span class="cm-meta-item">💰 2.5M VND</span>
+              <span class="cm-meta-item">👤 Solo</span>
+            </div>
+            <div class="cm-trip-tags">
+              <span class="cm-tag">#disản</span>
+              <span class="cm-tag">#ẩmthựcHuế</span>
+              <span class="cm-tag">#hoànghôn</span>
+            </div>
+          </div>
+          <div class="cm-trip-actions">
+            <button class="cm-action-btn" data-action="like" id="like-shared1">
+              <span class="cm-action-icon">♡</span>
+              <span class="cm-action-count">42</span>
+            </button>
+            <button class="cm-action-btn" data-action="comment">
+              <span class="cm-action-icon">💬</span>
+              <span class="cm-action-count">5</span>
+            </button>
+            <button class="cm-action-btn" data-action="save" id="save-shared1">
+              <span class="cm-action-icon">🔖</span>
+              <span class="cm-action-count">18</span>
+            </button>
+            <button class="cm-action-btn cm-clone-btn" data-action="clone">
+              <span class="cm-action-icon">📋</span>
+              <span>Clone</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Trip Card 2 -->
+        <div class="cm-trip-card" data-trip="shared2">
+          <div class="cm-trip-header">
+            <div class="cm-trip-avatar" style="background:linear-gradient(135deg,#60A5FA,#3B82F6)">T</div>
+            <div class="cm-trip-user">
+              <span class="cm-trip-username">Thu Hà</span>
+              <span class="cm-trip-time">5 ngày trước · 🌟 Level 6</span>
+            </div>
+            <div class="cm-trip-ai-match">
+              <span class="cm-match-val">87%</span>
+              <span class="cm-match-label">phù hợp</span>
+            </div>
+          </div>
+          <div class="cm-trip-cover">
+            <img src="assets/river.png" alt="Trip" class="cm-trip-img" />
+            <div class="cm-trip-cover-overlay"></div>
+            <div class="cm-trip-cover-tags">
+              <span class="cm-cover-tag">🌅 Hoàng hôn</span>
+              <span class="cm-cover-tag">📸 Nhiếp ảnh</span>
+            </div>
+          </div>
+          <div class="cm-trip-body">
+            <h3 class="cm-trip-title">Sunset Chaser — 2 Ngày Sông Hương</h3>
+            <p class="cm-trip-desc">Ngắm hoàng hôn 3 điểm khác nhau dọc sông Hương, mỗi nơi đều mang vẻ đẹp riêng 🌅</p>
+            <div class="cm-trip-meta">
+              <span class="cm-meta-item">📅 2 ngày</span>
+              <span class="cm-meta-item">📍 8 điểm</span>
+              <span class="cm-meta-item">💰 1.8M VND</span>
+              <span class="cm-meta-item">👫 Couple</span>
+            </div>
+            <div class="cm-trip-tags">
+              <span class="cm-tag">#hoànghôn</span>
+              <span class="cm-tag">#sôngHương</span>
+              <span class="cm-tag">#nhiếpảnh</span>
+            </div>
+          </div>
+          <div class="cm-trip-actions">
+            <button class="cm-action-btn" data-action="like" id="like-shared2">
+              <span class="cm-action-icon">♡</span>
+              <span class="cm-action-count">67</span>
+            </button>
+            <button class="cm-action-btn" data-action="comment">
+              <span class="cm-action-icon">💬</span>
+              <span class="cm-action-count">12</span>
+            </button>
+            <button class="cm-action-btn" data-action="save" id="save-shared2">
+              <span class="cm-action-icon">🔖</span>
+              <span class="cm-action-count">31</span>
+            </button>
+            <button class="cm-action-btn cm-clone-btn" data-action="clone">
+              <span class="cm-action-icon">📋</span>
+              <span>Clone</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Trip Card 3 -->
+        <div class="cm-trip-card" data-trip="shared3">
+          <div class="cm-trip-header">
+            <div class="cm-trip-avatar" style="background:linear-gradient(135deg,#4ADE80,#22C55E)">L</div>
+            <div class="cm-trip-user">
+              <span class="cm-trip-username">Long Phạm</span>
+              <span class="cm-trip-time">1 tuần trước · 🌟 Level 5</span>
+            </div>
+            <div class="cm-trip-ai-match">
+              <span class="cm-match-val">78%</span>
+              <span class="cm-match-label">phù hợp</span>
+            </div>
+          </div>
+          <div class="cm-trip-cover">
+            <img src="assets/citadel.png" alt="Trip" class="cm-trip-img" />
+            <div class="cm-trip-cover-overlay"></div>
+            <div class="cm-trip-cover-tags">
+              <span class="cm-cover-tag">💰 Budget</span>
+              <span class="cm-cover-tag">🍜 Ẩm thực</span>
+            </div>
+          </div>
+          <div class="cm-trip-body">
+            <h3 class="cm-trip-title">Huế Tiết Kiệm — Dưới 1 Triệu/Ngày</h3>
+            <p class="cm-trip-desc">Chứng minh rằng có thể trải nghiệm Huế trọn vẹn mà không cần phải tốn kém 💪</p>
+            <div class="cm-trip-meta">
+              <span class="cm-meta-item">📅 4 ngày</span>
+              <span class="cm-meta-item">📍 15 điểm</span>
+              <span class="cm-meta-item">💰 3.2M VND</span>
+              <span class="cm-meta-item">👨‍👩‍👧 Gia đình</span>
+            </div>
+            <div class="cm-trip-tags">
+              <span class="cm-tag">#tiếtkiệm</span>
+              <span class="cm-tag">#giađình</span>
+              <span class="cm-tag">#ẩmthực</span>
+            </div>
+          </div>
+          <div class="cm-trip-actions">
+            <button class="cm-action-btn" data-action="like" id="like-shared3">
+              <span class="cm-action-icon">♡</span>
+              <span class="cm-action-count">89</span>
+            </button>
+            <button class="cm-action-btn" data-action="comment">
+              <span class="cm-action-icon">💬</span>
+              <span class="cm-action-count">23</span>
+            </button>
+            <button class="cm-action-btn" data-action="save" id="save-shared3">
+              <span class="cm-action-icon">🔖</span>
+              <span class="cm-action-count">45</span>
+            </button>
+            <button class="cm-action-btn cm-clone-btn" data-action="clone">
+              <span class="cm-action-icon">📋</span>
+              <span>Clone</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <div style="height:100px"></div>
+    </div>
+
+    <!-- Floating AI Button -->
+    <a href="flow.html" class="floating-ai-btn" aria-label="AI Plan">
+      <span class="fab-ai-icon">✨</span>
+    </a>
+
+    <!-- Bottom Navbar -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <a href="home.html" class="nav-item" data-tab="home" id="nav-home">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Trang chủ</span>
+      </a>
+      <a href="explore.html" class="nav-item" data-tab="explore" id="nav-explore">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span>Khám phá</span>
+      </a>
+      <a href="trips.html" class="nav-item" data-tab="trips" id="nav-trips">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+        <span>Chuyến đi</span>
+      </a>
+      <a href="community.html" class="nav-item active" data-tab="community" id="nav-community">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Cộng đồng</span>
+      </a>
+      <a href="profile.html" class="nav-item" data-tab="profile" id="nav-profile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Cá nhân</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="community.js"></script>
+</body>
+</html>

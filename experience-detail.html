@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Trải nghiệm</title>
+  <meta name="description" content="Khám phá trải nghiệm du lịch tuyệt vời tại Huế." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="experience-detail.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+
+    <!-- Hero -->
+    <div class="detail-hero" id="detail-hero">
+      <img class="detail-hero-img" id="hero-img" src="assets/river.png" alt="Experience" />
+      <div class="detail-hero-overlay"></div>
+      <div class="detail-hero-nav">
+        <button class="detail-back" id="btn-back" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="detail-hero-actions">
+          <button class="detail-action-btn" id="btn-save" aria-label="Save">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </button>
+          <button class="detail-action-btn" id="btn-share" aria-label="Share">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="detail-hero-badges" id="hero-badges">
+        <span class="hero-badge-tag" id="hero-badge">HOT</span>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="detail-scroll" id="detail-scroll">
+
+      <!-- Title Section -->
+      <section class="detail-title-section">
+        <h1 class="detail-name" id="detail-name">Sunset Cruise trên sông Hương</h1>
+        <div class="exp-detail-meta">
+          <span class="edm-item"><span>⏱</span> <span id="meta-duration">2 giờ</span></span>
+          <span class="edm-divider">·</span>
+          <span class="edm-item"><span>⭐</span> <span id="meta-rating">4.9</span> <span class="edm-sub" id="meta-count">(856)</span></span>
+          <span class="edm-divider">·</span>
+          <span class="edm-item edm-price" id="meta-price">250k VND</span>
+        </div>
+      </section>
+
+      <!-- AI Match -->
+      <section class="section" id="ai-match-section">
+        <div class="exp-ai-match" id="ai-match">
+          <div class="eam-icon">✨</div>
+          <div class="eam-body">
+            <span class="eam-label">Phù hợp 95% với bạn</span>
+            <p class="eam-text" id="ai-match-text">Bạn yêu hoàng hôn & nhiếp ảnh — trải nghiệm này sẽ cho bạn cả hai trên sông Hương.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Description -->
+      <section class="section" id="desc-section">
+        <h2 class="section-title">📖 Về trải nghiệm này</h2>
+        <p class="detail-desc" id="detail-desc">Lướt nhẹ trên sông Hương trong ánh hoàng hôn vàng rực, nghe nhã nhạc cung đình và thưởng thức trà Huế truyền thống. Một trải nghiệm không thể bỏ lỡ khi đến Huế.</p>
+      </section>
+
+      <!-- What's Included -->
+      <section class="section" id="included-section">
+        <h2 class="section-title">✅ Bao gồm</h2>
+        <div class="exp-included" id="exp-included">
+          <div class="inc-item inc-yes"><span class="inc-icon">🚢</span><span>Thuyền rồng truyền thống</span></div>
+          <div class="inc-item inc-yes"><span class="inc-icon">🎵</span><span>Nhã nhạc cung đình</span></div>
+          <div class="inc-item inc-yes"><span class="inc-icon">🍵</span><span>Trà & bánh Huế</span></div>
+          <div class="inc-item inc-yes"><span class="inc-icon">📸</span><span>Hướng dẫn viên</span></div>
+          <div class="inc-item inc-no"><span class="inc-icon">🍽️</span><span>Bữa tối (tùy chọn thêm)</span></div>
+          <div class="inc-item inc-no"><span class="inc-icon">🚗</span><span>Đưa đón khách sạn</span></div>
+        </div>
+      </section>
+
+      <!-- Schedule -->
+      <section class="section" id="schedule-section">
+        <h2 class="section-title">📋 Lịch trình</h2>
+        <div class="exp-schedule" id="exp-schedule">
+          <div class="sch-item">
+            <div class="sch-time">17:00</div>
+            <div class="sch-dot-line"><div class="sch-dot"></div></div>
+            <div class="sch-content">
+              <span class="sch-title">Tập trung tại bến thuyền</span>
+              <span class="sch-desc">Nhận welcome drink & chụp ảnh kỷ niệm</span>
+            </div>
+          </div>
+          <div class="sch-item">
+            <div class="sch-time">17:15</div>
+            <div class="sch-dot-line"><div class="sch-dot"></div></div>
+            <div class="sch-content">
+              <span class="sch-title">Khởi hành trên sông Hương</span>
+              <span class="sch-desc">Lướt qua Cầu Trường Tiền, ngắm thành phố</span>
+            </div>
+          </div>
+          <div class="sch-item">
+            <div class="sch-time">17:45</div>
+            <div class="sch-dot-line"><div class="sch-dot active"></div></div>
+            <div class="sch-content">
+              <span class="sch-title">Ngắm hoàng hôn ✨</span>
+              <span class="sch-desc">Thời khắc đẹp nhất — mặt trời lặn trên sông Hương</span>
+            </div>
+          </div>
+          <div class="sch-item">
+            <div class="sch-time">18:15</div>
+            <div class="sch-dot-line"><div class="sch-dot"></div></div>
+            <div class="sch-content">
+              <span class="sch-title">Nhã nhạc & trà Huế</span>
+              <span class="sch-desc">Thưởng thức nghệ thuật cung đình & trà truyền thống</span>
+            </div>
+          </div>
+          <div class="sch-item">
+            <div class="sch-time">19:00</div>
+            <div class="sch-dot-line"><div class="sch-dot"></div></div>
+            <div class="sch-content">
+              <span class="sch-title">Kết thúc tại bến thuyền</span>
+              <span class="sch-desc">Trở về bến, tặng quà lưu niệm</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reviews -->
+      <section class="section" id="reviews-section">
+        <div class="section-header">
+          <h2 class="section-title">💬 Đánh giá</h2>
+          <span class="see-all">Xem tất cả</span>
+        </div>
+        <div class="exp-reviews" id="exp-reviews">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">🧑</div>
+              <div class="review-author">
+                <span class="review-name">Minh Anh</span>
+                <span class="review-date">2 tuần trước</span>
+              </div>
+              <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            </div>
+            <p class="review-text">"Trải nghiệm tuyệt vời nhất tại Huế! Hoàng hôn trên sông Hương đẹp đến nao lòng. Hướng dẫn viên rất nhiệt tình và hiểu biết."</p>
+          </div>
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">👩</div>
+              <div class="review-author">
+                <span class="review-name">Thu Hà</span>
+                <span class="review-date">1 tháng trước</span>
+              </div>
+              <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            </div>
+            <p class="review-text">"Nhã nhạc trên sông rất đặc biệt — cảm giác như quay về thời Nguyễn. Nên đi vào mùa hè để thấy hoàng hôn đẹp nhất."</p>
+          </div>
+        </div>
+      </section>
+
+      <div style="height:120px"></div>
+    </div>
+
+    <!-- Fixed CTA Bar -->
+    <div class="detail-cta-bar" id="detail-cta-bar">
+      <div class="exp-cta-price">
+        <span class="ecp-label">Từ</span>
+        <span class="ecp-value" id="cta-price">250k VND</span>
+        <span class="ecp-unit">/người</span>
+      </div>
+      <button class="detail-cta-primary" id="btn-book">
+        <span>✨</span> Đặt trải nghiệm
+      </button>
+    </div>
+
+  </div>
+  <script src="experience-detail.js"></script>
+</body>
+</html>

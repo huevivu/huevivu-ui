@@ -180,6 +180,173 @@
   color: var(--coral);
 }
 
+/* --- Achievement Wrapper --- */
+.achievement-wrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.achievement-banner {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s var(--ease-out);
+}
+
+.achievement-banner:hover {
+  background: linear-gradient(135deg, rgba(255, 127, 107, 0.12), rgba(255, 154, 92, 0.06));
+}
+
+.ach-chevron {
+  font-size: 1rem;
+  color: var(--gray-soft);
+  transition: transform 0.4s var(--ease-out);
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.achievement-wrap.open .ach-chevron {
+  transform: rotate(180deg);
+}
+
+/* --- Badge Dropdown --- */
+.badge-dropdown {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  border-top: 0 solid transparent;
+}
+
+.achievement-wrap.open .badge-dropdown {
+  max-height: 600px;
+  border-top: 1px solid rgba(26, 29, 59, 0.06);
+}
+
+.badge-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 8px;
+}
+
+.bdh-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.bdh-count {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--coral);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(255, 127, 107, 0.1), rgba(255, 154, 92, 0.06));
+}
+
+/* --- Badge Item --- */
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  transition: all 0.3s var(--ease-out);
+  cursor: default;
+}
+
+.badge-item:hover {
+  background: rgba(255, 127, 107, 0.03);
+}
+
+.badge-item:last-child {
+  padding-bottom: 16px;
+}
+
+.badge-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 127, 107, 0.08), rgba(255, 154, 92, 0.04));
+}
+
+.badge-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.badge-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.badge-req {
+  font-size: 0.6875rem;
+  font-weight: 400;
+  color: var(--gray-soft);
+  line-height: 1.3;
+}
+
+/* --- Progress Bar --- */
+.badge-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--peach-light);
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.badge-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--coral), var(--warm-orange));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.badge-pct {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--coral);
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+}
+
+.badge-pct.done {
+  color: #22C55E;
+}
+
+/* --- Badge States --- */
+.badge-achieved .badge-emoji {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+}
+
+.badge-achieved .badge-fill {
+  background: linear-gradient(90deg, #22C55E, #4ADE80);
+}
+
+.badge-locked {
+  opacity: 0.45;
+}
+
+.badge-locked .badge-emoji {
+  background: rgba(26, 29, 59, 0.04);
+  filter: grayscale(0.8);
+}
+
+.badge-locked .badge-fill {
+  background: var(--peach-light);
+}
+
 /* --- Preference Tags --- */
 .pref-tags {
   display: flex;

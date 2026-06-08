@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Travel Memory</title>
+  <meta name="description" content="AI Travel Recap — Kỷ niệm chuyến đi của bạn được tóm tắt bởi AI." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="travel-memory.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+    <div class="ambient-bg">
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+    </div>
+
+    <div class="detail-scroll" id="page-scroll">
+
+      <!-- Cinematic Hero -->
+      <div class="tm-hero">
+        <img src="assets/river.png" alt="Memory" class="tm-hero-img" />
+        <div class="tm-hero-overlay"></div>
+        <button class="detail-back tm-back" onclick="history.back()">←</button>
+        <div class="tm-hero-content">
+          <span class="tm-hero-label">✨ AI TRAVEL MEMORY</span>
+          <h1 class="tm-hero-title">3 Ngày Khám Phá<br/>Di Sản & Ẩm Thực</h1>
+          <span class="tm-hero-date">12 – 14 Tháng 5, 2026 · Huế</span>
+        </div>
+      </div>
+
+      <!-- AI Summary -->
+      <section class="section" style="margin-top:16px">
+        <div class="tm-ai-summary">
+          <div class="tm-ai-header">
+            <span class="tm-ai-icon">🧠</span>
+            <span class="tm-ai-tag">AI RECAP</span>
+          </div>
+          <p class="tm-ai-text">
+            Ba ngày trải nghiệm trọn vẹn nhất tại Huế — bạn đã hòa mình vào di sản hoàng gia, thưởng thức ẩm thực đường phố đặc sắc, và ngắm những hoàng hôn tuyệt đẹp trên sông Hương. Chuyến đi mang dấu ấn của một <strong>Cultural Explorer</strong> đích thực.
+          </p>
+          <p class="tm-ai-quote">"Khoảnh khắc yên bình nhất là buổi chiều trên thuyền rồng, khi mặt trời chạm mặt nước sông Hương." 🌅</p>
+        </div>
+      </section>
+
+      <!-- Key Stats -->
+      <section class="section">
+        <h2 class="section-title">📊 Chuyến đi của bạn</h2>
+        <div class="tm-stats-grid">
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">📅</span>
+            <span class="tm-stat-val">3</span>
+            <span class="tm-stat-label">Ngày</span>
+          </div>
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">📍</span>
+            <span class="tm-stat-val">12</span>
+            <span class="tm-stat-label">Địa điểm</span>
+          </div>
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">📸</span>
+            <span class="tm-stat-val">47</span>
+            <span class="tm-stat-label">Ảnh</span>
+          </div>
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">🚶</span>
+            <span class="tm-stat-val">18km</span>
+            <span class="tm-stat-label">Đi bộ</span>
+          </div>
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">🍜</span>
+            <span class="tm-stat-val">8</span>
+            <span class="tm-stat-label">Món ăn</span>
+          </div>
+          <div class="tm-stat-card">
+            <span class="tm-stat-emoji">💰</span>
+            <span class="tm-stat-val">2.5M</span>
+            <span class="tm-stat-label">Chi phí</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Photo Highlights -->
+      <section class="section">
+        <h2 class="section-title">📸 Khoảnh khắc đáng nhớ</h2>
+        <div class="tm-photo-grid">
+          <div class="tm-photo-item large"><img src="assets/river.png" alt="Memory" /></div>
+          <div class="tm-photo-item"><img src="assets/hero-hub.png" alt="Memory" /></div>
+          <div class="tm-photo-item"><img src="assets/citadel.png" alt="Hoàng Thành" /></div>
+          <div class="tm-photo-item"><img src="assets/food.png" alt="Ẩm thực" /></div>
+          <div class="tm-photo-item"><img src="assets/hero.png" alt="Di sản" /></div>
+        </div>
+      </section>
+
+      <!-- Mood Timeline -->
+      <section class="section">
+        <h2 class="section-title">💫 Cảm xúc theo ngày</h2>
+        <div class="tm-mood-timeline">
+          <div class="tm-mood-day">
+            <div class="tm-mood-date">
+              <span class="tm-mood-daynum">N1</span>
+              <span class="tm-mood-daytext">12/05</span>
+            </div>
+            <div class="tm-mood-connector"></div>
+            <div class="tm-mood-card">
+              <span class="tm-mood-emoji-lg">🤩</span>
+              <div class="tm-mood-info">
+                <span class="tm-mood-feeling">Phấn khích</span>
+                <p class="tm-mood-note">Bún bò sáng sớm, Hoàng Thành trong nắng vàng, cơm hến trưa ngon tuyệt!</p>
+              </div>
+            </div>
+          </div>
+          <div class="tm-mood-day">
+            <div class="tm-mood-date">
+              <span class="tm-mood-daynum">N2</span>
+              <span class="tm-mood-daytext">13/05</span>
+            </div>
+            <div class="tm-mood-connector"></div>
+            <div class="tm-mood-card">
+              <span class="tm-mood-emoji-lg">😌</span>
+              <div class="tm-mood-info">
+                <span class="tm-mood-feeling">Bình yên</span>
+                <p class="tm-mood-note">Lăng Tự Đức yên tĩnh, hoàng hôn trên sông Hương — khoảnh khắc tuyệt vời nhất.</p>
+              </div>
+            </div>
+          </div>
+          <div class="tm-mood-day">
+            <div class="tm-mood-date">
+              <span class="tm-mood-daynum">N3</span>
+              <span class="tm-mood-daytext">14/05</span>
+            </div>
+            <div class="tm-mood-connector last"></div>
+            <div class="tm-mood-card">
+              <span class="tm-mood-emoji-lg">🥹</span>
+              <div class="tm-mood-info">
+                <span class="tm-mood-feeling">Lưu luyến</span>
+                <p class="tm-mood-note">Khám phá làng cổ, café cuối cùng — không muốn rời Huế!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Insights -->
+      <section class="section">
+        <div class="tm-ai-insights">
+          <div class="tm-insight-header">
+            <span class="tm-insight-icon">✨</span>
+            <span class="tm-insight-title">AI nhận xét</span>
+          </div>
+          <div class="tm-insight-list">
+            <div class="tm-insight-item">
+              <span class="tm-insight-emoji">🏛️</span>
+              <span class="tm-insight-text">Bạn dành 40% thời gian cho di sản — đúng phong cách Cultural Explorer!</span>
+            </div>
+            <div class="tm-insight-item">
+              <span class="tm-insight-emoji">🍜</span>
+              <span class="tm-insight-text">8 món ẩm thực — bạn đã vượt mục tiêu "Sành ăn Huế" badge!</span>
+            </div>
+            <div class="tm-insight-item">
+              <span class="tm-insight-emoji">📸</span>
+              <span class="tm-insight-text">47 ảnh tại 5 điểm sông Hương — gần đạt badge "Nhiếp ảnh gia sông Hương"!</span>
+            </div>
+            <div class="tm-insight-item">
+              <span class="tm-insight-emoji">💡</span>
+              <span class="tm-insight-text">Lần sau thử thêm trải nghiệm nightlife — Huế về đêm rất khác!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style="height:100px"></div>
+    </div>
+
+    <!-- CTA Bar -->
+    <div class="tm-cta-bar">
+      <button class="tm-btn-share" id="tm-btn-share">🌐 Chia sẻ kỷ niệm</button>
+      <button class="tm-btn-plan" id="tm-btn-plan">✨ Tạo lịch trình tương tự</button>
+    </div>
+  </div>
+
+  <script src="travel-memory.js"></script>
+</body>
+</html>

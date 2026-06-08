@@ -1047,7 +1047,7 @@
 
 /* --- Notification Panel --- */
 .notif-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 250;
   background: rgba(26, 29, 59, 0.3);
@@ -1063,13 +1063,13 @@
 }
 
 .notif-panel {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   z-index: 260;
-  width: 100%;
+  width: 85%;
   max-width: 380px;
-  max-height: 100vh;
+  height: 100%;
   background: var(--soft-white);
   box-shadow: -8px 0 40px rgba(26, 29, 59, 0.15);
   transform: translateX(100%);

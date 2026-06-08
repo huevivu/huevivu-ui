@@ -171,6 +171,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // --- Timeline Actions (Journal / Review) ---
+  document.querySelectorAll('.tl-card').forEach(card => {
+    const actions = document.createElement('div');
+    actions.className = 'tl-actions';
+    actions.innerHTML = `
+      <button class="tl-action-btn" data-action="journal">📝 Nhật ký</button>
+      <button class="tl-action-btn" data-action="review">⭐ Đánh giá</button>
+    `;
+    
+    actions.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent card expansion
+      const btn = e.target.closest('.tl-action-btn');
+      if (!btn) return;
+      
+      if (btn.dataset.action === 'journal') {
+        window.location.href = 'journal.html';
+      } else if (btn.dataset.action === 'review') {
+        btn.innerHTML = '⭐ Đã ghi nhận';
+        btn.style.color = 'var(--coral)';
+        btn.style.pointerEvents = 'none';
+      }
+    });
+    
+    card.appendChild(actions);
+  });
+
   // --- Timeline card click expansion ---
   document.querySelectorAll('.tl-card').forEach(card => {
     card.addEventListener('click', () => {

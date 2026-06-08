@@ -61,20 +61,95 @@
         </div>
       </section>
 
-      <!-- Achievement Banner -->
+      <!-- Achievement Banner + Badge Dropdown -->
       <section class="section">
-        <div class="achievement-banner">
-          <div class="ach-icon">🏆</div>
-          <div class="ach-body">
-            <span class="ach-title">Nhà thám hiểm Huế</span>
-            <span class="ach-desc">Đã ghé thăm 10+ địa điểm di sản</span>
+        <div class="achievement-wrap" id="achievement-wrap">
+          <!-- Main Banner (Clickable Header) -->
+          <div class="achievement-banner" id="ach-toggle">
+            <div class="ach-icon">🏆</div>
+            <div class="ach-body">
+              <span class="ach-title">Nhà thám hiểm Huế</span>
+              <span class="ach-desc">Đã ghé thăm 10+ địa điểm di sản</span>
+            </div>
+            <div class="ach-progress-ring">
+              <svg width="44" height="44" viewBox="0 0 44 44">
+                <circle cx="22" cy="22" r="18" fill="none" stroke="var(--peach-light)" stroke-width="3"/>
+                <circle cx="22" cy="22" r="18" fill="none" stroke="var(--coral)" stroke-width="3" stroke-dasharray="113.1" stroke-dashoffset="33.9" stroke-linecap="round" transform="rotate(-90 22 22)"/>
+              </svg>
+              <span class="ach-percent">70%</span>
+            </div>
+            <span class="ach-chevron" id="ach-chevron">▾</span>
           </div>
-          <div class="ach-progress-ring">
-            <svg width="44" height="44" viewBox="0 0 44 44">
-              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--peach-light)" stroke-width="3"/>
-              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--coral)" stroke-width="3" stroke-dasharray="113.1" stroke-dashoffset="33.9" stroke-linecap="round" transform="rotate(-90 22 22)"/>
-            </svg>
-            <span class="ach-percent">70%</span>
+
+          <!-- Badge Dropdown List -->
+          <div class="badge-dropdown" id="badge-dropdown">
+            <div class="badge-dropdown-header">
+              <span class="bdh-title">🎖️ Tất cả danh hiệu</span>
+              <span class="bdh-count">2/6 đạt được</span>
+            </div>
+
+            <!-- Badge: Achieved -->
+            <div class="badge-item badge-achieved">
+              <div class="badge-emoji">🏆</div>
+              <div class="badge-info">
+                <span class="badge-name">Nhà thám hiểm Huế</span>
+                <span class="badge-req">Ghé thăm 10 địa điểm di sản</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:70%"></div></div>
+              </div>
+              <span class="badge-pct">70%</span>
+            </div>
+
+            <div class="badge-item badge-achieved">
+              <div class="badge-emoji">🍜</div>
+              <div class="badge-info">
+                <span class="badge-name">Sành ăn Huế</span>
+                <span class="badge-req">Thử 8 món ẩm thực đặc trưng</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:100%"></div></div>
+              </div>
+              <span class="badge-pct done">100%</span>
+            </div>
+
+            <!-- Badge: In Progress -->
+            <div class="badge-item">
+              <div class="badge-emoji">📸</div>
+              <div class="badge-info">
+                <span class="badge-name">Nhiếp ảnh gia sông Hương</span>
+                <span class="badge-req">Chụp 20 ảnh tại 5 điểm sông Hương</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:45%"></div></div>
+              </div>
+              <span class="badge-pct">45%</span>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-emoji">🌅</div>
+              <div class="badge-info">
+                <span class="badge-name">Người săn hoàng hôn</span>
+                <span class="badge-req">Ngắm hoàng hôn tại 3 địa điểm khác nhau</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:33%"></div></div>
+              </div>
+              <span class="badge-pct">33%</span>
+            </div>
+
+            <!-- Badge: Locked -->
+            <div class="badge-item badge-locked">
+              <div class="badge-emoji">🧭</div>
+              <div class="badge-info">
+                <span class="badge-name">Lữ khách cung đình</span>
+                <span class="badge-req">Hoàn thành 1 tour Heritage Walk</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:0%"></div></div>
+              </div>
+              <span class="badge-pct">0%</span>
+            </div>
+
+            <div class="badge-item badge-locked">
+              <div class="badge-emoji">💎</div>
+              <div class="badge-info">
+                <span class="badge-name">Hidden Gem Hunter</span>
+                <span class="badge-req">Khám phá 5 địa điểm ẩn giấu</span>
+                <div class="badge-bar"><div class="badge-fill" style="width:0%"></div></div>
+              </div>
+              <span class="badge-pct">0%</span>
+            </div>
           </div>
         </div>
       </section>
@@ -201,6 +276,11 @@
       <div style="height:100px"></div>
     </div>
 
+    <!-- Floating AI Button -->
+    <a href="flow.html" class="floating-ai-btn" aria-label="AI Plan">
+      <span class="fab-ai-icon">✨</span>
+    </a>
+
     <!-- Bottom Navbar -->
     <nav class="bottom-nav" id="bottom-nav">
       <a href="home.html" class="nav-item" data-tab="home" id="nav-home">
@@ -211,13 +291,13 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <span>Khám phá</span>
       </a>
-      <button class="nav-item nav-center" data-tab="ai" id="nav-ai" type="button">
-        <div class="nav-ai-btn"><span class="fab-ai-icon">✨</span></div>
-        <span>AI Plan</span>
-      </button>
       <a href="trips.html" class="nav-item" data-tab="trips" id="nav-trips">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
         <span>Chuyến đi</span>
+      </a>
+      <a href="community.html" class="nav-item" data-tab="community" id="nav-community">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Cộng đồng</span>
       </a>
       <a href="profile.html" class="nav-item active" data-tab="profile" id="nav-profile">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>

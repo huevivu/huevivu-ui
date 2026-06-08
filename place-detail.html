@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HueViVu — Chi tiết địa điểm</title>
+  <meta name="description" content="Khám phá chi tiết địa điểm du lịch tại Huế." />
+  <meta name="theme-color" content="#FF7F6B" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="place-detail.css" />
+</head>
+<body>
+  <div id="app" class="app-container page-app">
+
+    <!-- Hero -->
+    <div class="detail-hero" id="detail-hero">
+      <img class="detail-hero-img" id="hero-img" src="assets/citadel.png" alt="Place" />
+      <div class="detail-hero-overlay"></div>
+      <div class="detail-hero-nav">
+        <button class="detail-back" id="btn-back" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="detail-hero-actions">
+          <button class="detail-action-btn" id="btn-save" aria-label="Save">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </button>
+          <button class="detail-action-btn" id="btn-share" aria-label="Share">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="detail-hero-badges" id="hero-badges">
+        <span class="hero-badge-tag">UNESCO</span>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="detail-scroll" id="detail-scroll">
+
+      <!-- Title Section -->
+      <section class="detail-title-section">
+        <h1 class="detail-name" id="detail-name">Hoàng Thành Huế</h1>
+        <div class="detail-cats" id="detail-cats">
+          <span class="detail-cat">🏛️ Di tích lịch sử</span>
+          <span class="detail-cat">🌏 UNESCO</span>
+        </div>
+        <div class="detail-stats">
+          <div class="detail-stat">
+            <span class="detail-stat-icon">⭐</span>
+            <span class="detail-stat-val" id="stat-rating">4.9</span>
+            <span class="detail-stat-label">(2.3k)</span>
+          </div>
+          <div class="detail-stat-divider"></div>
+          <div class="detail-stat">
+            <span class="detail-stat-icon">💰</span>
+            <span class="detail-stat-val" id="stat-price">200k VND</span>
+          </div>
+          <div class="detail-stat-divider"></div>
+          <div class="detail-stat">
+            <span class="detail-stat-icon">⏱</span>
+            <span class="detail-stat-val" id="stat-duration">2-3 giờ</span>
+          </div>
+          <div class="detail-stat-divider"></div>
+          <div class="detail-stat">
+            <span class="detail-stat-icon">📍</span>
+            <span class="detail-stat-val" id="stat-distance">1.2 km</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Insight -->
+      <section class="section" id="ai-insight-section">
+        <div class="detail-ai-insight" id="ai-insight">
+          <div class="dai-icon">🧠</div>
+          <div class="dai-body">
+            <span class="dai-label">AI gợi ý</span>
+            <p class="dai-text" id="ai-insight-text">Nên đến lúc 7h sáng — ít người, ánh sáng đẹp cho chụp ảnh, và tránh được nắng nóng buổi trưa.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Description -->
+      <section class="section" id="desc-section">
+        <h2 class="section-title">📖 Giới thiệu</h2>
+        <p class="detail-desc" id="detail-desc">
+          Hoàng Thành Huế là quần thể kiến trúc hoàng gia lớn nhất còn tồn tại ở Việt Nam, được UNESCO công nhận là Di sản Văn hóa Thế giới năm 1993. Nơi đây từng là trung tâm chính trị và văn hóa của triều Nguyễn suốt 143 năm (1802-1945).
+        </p>
+        <p class="detail-desc detail-desc-2" id="detail-desc-2">
+          Với diện tích hơn 520 hecta, Hoàng Thành bao gồm Ngọ Môn, Điện Thái Hòa, Tử Cấm Thành, và nhiều cung điện, đền miếu mang đậm dấu ấn nghệ thuật và lịch sử Huế.
+        </p>
+      </section>
+
+      <!-- Photo Gallery -->
+      <section class="section" id="gallery-section">
+        <h2 class="section-title">📸 Hình ảnh</h2>
+        <div class="detail-gallery" id="detail-gallery">
+          <div class="gallery-item"><img src="assets/citadel.png" alt="Photo 1" /></div>
+          <div class="gallery-item"><img src="assets/hero-hub.png" alt="Photo 2" /></div>
+          <div class="gallery-item"><img src="assets/hero.png" alt="Photo 3" /></div>
+          <div class="gallery-item"><img src="assets/river.png" alt="Photo 4" /></div>
+        </div>
+      </section>
+
+      <!-- Highlights -->
+      <section class="section" id="highlights-section">
+        <h2 class="section-title">✨ Điểm nổi bật</h2>
+        <div class="detail-highlights" id="detail-highlights">
+          <div class="highlight-card">
+            <span class="highlight-icon">🏛️</span>
+            <span class="highlight-text">Ngọ Môn — cổng chính hoành tráng</span>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">👑</span>
+            <span class="highlight-text">Điện Thái Hòa — nơi thiết triều</span>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">🏯</span>
+            <span class="highlight-text">Tử Cấm Thành — nơi ở của vua</span>
+          </div>
+          <div class="highlight-card">
+            <span class="highlight-icon">🌿</span>
+            <span class="highlight-text">Vườn Cơ Hạ — khu vườn yên tĩnh</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Opening Hours -->
+      <section class="section" id="hours-section">
+        <h2 class="section-title">🕐 Giờ mở cửa</h2>
+        <div class="detail-hours">
+          <div class="hours-row">
+            <span class="hours-day">Thứ 2 — Chủ nhật</span>
+            <span class="hours-time">07:00 — 17:30</span>
+          </div>
+          <div class="hours-note">
+            <span>💡</span>
+            <span>Quầy vé đóng lúc 17:00. Nên đến trước 15:00 để tham quan thoải mái.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Local Tips -->
+      <section class="section" id="tips-section">
+        <h2 class="section-title">💡 Mẹo từ dân địa phương</h2>
+        <div class="detail-tips">
+          <div class="detail-tip">
+            <div class="tip-avatar-small">👩‍🍳</div>
+            <div class="tip-content">
+              <span class="tip-author-small">Chị Hoa · Người Huế</span>
+              <p class="tip-quote">"Đi từ cổng Ngọ Môn, rẽ trái vào Tử Cấm Thành trước — ít khách hơn nhiều so với đi thẳng."</p>
+            </div>
+          </div>
+          <div class="detail-tip">
+            <div class="tip-avatar-small">🧑‍🎨</div>
+            <div class="tip-content">
+              <span class="tip-author-small">Anh Minh · Nhiếp ảnh gia</span>
+              <p class="tip-quote">"Golden hour ở Ngọ Môn là khoảng 16:30 — ánh sáng chiếu qua cổng rất đẹp để chụp ảnh."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Nearby Places -->
+      <section class="section" id="nearby-section">
+        <div class="section-header">
+          <h2 class="section-title">📍 Địa điểm gần đây</h2>
+        </div>
+        <div class="detail-nearby-scroll">
+          <div class="detail-nearby-card" data-place="pagoda">
+            <div class="dnc-img"><img src="assets/river.png" alt="Chùa Thiên Mụ" /></div>
+            <span class="dnc-name">Chùa Thiên Mụ</span>
+            <span class="dnc-dist">📍 3.2 km</span>
+          </div>
+          <div class="detail-nearby-card" data-place="market">
+            <div class="dnc-img"><img src="assets/food.png" alt="Chợ Đông Ba" /></div>
+            <span class="dnc-name">Chợ Đông Ba</span>
+            <span class="dnc-dist">📍 0.8 km</span>
+          </div>
+          <div class="detail-nearby-card" data-place="tomb">
+            <div class="dnc-img"><img src="assets/hero-hub.png" alt="Lăng Tự Đức" /></div>
+            <span class="dnc-name">Lăng Tự Đức</span>
+            <span class="dnc-dist">📍 5.4 km</span>
+          </div>
+        </div>
+      </section>
+
+      <div style="height:120px"></div>
+    </div>
+
+    <!-- Fixed CTA Bar -->
+    <div class="detail-cta-bar" id="detail-cta-bar">
+      <button class="detail-cta-secondary" id="btn-directions">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        Chỉ đường
+      </button>
+      <button class="detail-cta-primary" id="btn-add-trip">
+        <span>✨</span> Thêm vào lịch trình
+      </button>
+    </div>
+
+  </div>
+  <script src="place-detail.js"></script>
+</body>
+</html>

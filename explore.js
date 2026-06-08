@@ -38,8 +38,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Nearby card tap
-  document.querySelectorAll('.nearby-card, .exp-card, .collection-card, .tip-card').forEach(card => {
+  // --- Nearby card → place detail ---
+  document.querySelectorAll('.nearby-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.97)';
+      const placeId = card.dataset.place || 'citadel';
+      setTimeout(() => { window.location.href = `place-detail.html?id=${placeId}`; }, 200);
+    });
+  });
+
+  // --- Experience card → experience detail ---
+  document.querySelectorAll('.exp-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.97)';
+      const expId = card.dataset.exp || 'sunset';
+      setTimeout(() => { window.location.href = `experience-detail.html?id=${expId}`; }, 200);
+    });
+  });
+
+  // --- Collection card → collection detail ---
+  document.querySelectorAll('.collection-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.97)';
+      const colId = card.dataset.col || 'unesco';
+      setTimeout(() => { window.location.href = `collection-detail.html?id=${colId}`; }, 200);
+    });
+  });
+
+  // --- Tip card tap ---
+  document.querySelectorAll('.tip-card').forEach(card => {
     card.addEventListener('click', () => {
       card.style.transform = 'scale(0.97)';
       setTimeout(() => { card.style.transform = ''; }, 200);
@@ -133,12 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- AI Explore Bar action ---
+  // --- AI Explore Bar action → place detail ---
   const aiExploreAction = document.getElementById('ai-explore-action');
   if (aiExploreAction) {
     aiExploreAction.addEventListener('click', () => {
-      aiExploreAction.style.transform = 'scale(0.9)';
-      setTimeout(() => { aiExploreAction.style.transform = ''; }, 200);
+      aiExploreAction.textContent = 'Đang mở...';
+      setTimeout(() => { window.location.href = 'place-detail.html?id=pagoda'; }, 300);
     });
   }
 
