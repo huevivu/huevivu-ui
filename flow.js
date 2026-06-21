@@ -289,9 +289,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Initial state ---
-  updateProgress();
-  updateNextButton();
-  btnBack.style.visibility = 'hidden';
+  if (window.location.hash === '#analyzing') {
+    state.currentStep = 6;
+    document.querySelector('.flow-step.active').classList.remove('active');
+    const targetEl = document.getElementById('step-6');
+    targetEl.style.display = '';
+    targetEl.classList.add('active');
+    footer.classList.add('hidden');
+    btnBack.style.visibility = 'hidden';
+    runAIThinking();
+  } else {
+    updateProgress();
+    updateNextButton();
+    btnBack.style.visibility = 'hidden';
+  }
 
   // --- Ripple effect for all buttons ---
   const style = document.createElement('style');

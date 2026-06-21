@@ -5,6 +5,8 @@
 .detail-scroll {
   width: 100%;
   align-self: stretch;
+  overflow-y: auto;
+  flex: 1;
 }
 
 /* --- Cinematic Hero --- */

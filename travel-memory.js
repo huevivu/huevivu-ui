@@ -68,3 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('💫 HueViVu Travel Memory loaded');
 });
+
+// Lắng nghe lệnh auto-scroll từ showcase
+window.addEventListener('message', (e) => {
+  if (e.data === 'start-auto-scroll') {
+    const scroller = document.getElementById('page-scroll');
+    if (scroller) {
+      scroller.scrollTop = 0;
+      let lastTime = 0;
+      const speed = 0.08; // 80px / second
+      function step(now) {
+        if (!lastTime) lastTime = now;
+        const dt = now - lastTime;
+        lastTime = now;
+        scroller.scrollTop += speed * dt;
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+  }
+});
