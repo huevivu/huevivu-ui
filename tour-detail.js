@@ -251,21 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
     this.classList.toggle('saved');
     this.style.transform = 'scale(1.2)';
     setTimeout(() => { this.style.transform = ''; }, 300);
+    const saved = this.classList.contains('saved');
+    if (typeof API !== 'undefined') API.trackEvent(saved ? 'save' : 'unsave', { context: { tour: tourId } });
+    if (window.toast) toast(saved ? 'Đã lưu tour 🔖' : 'Đã bỏ lưu', saved ? 'success' : '');
   });
 
-  // Customize button
+  // Customize button → tạo lịch trình riêng từ tour này
   document.getElementById('btn-customize').addEventListener('click', () => {
     window.location.href = 'flow.html';
   });
 
-  // Book CTA
+  // Book CTA → tạo lịch trình theo tour (HueViVu không phải app đặt tour)
   document.getElementById('btn-book').addEventListener('click', function() {
-    this.innerHTML = '<span>✅</span> Đã đặt thành công!';
-    this.style.background = '#22C55E';
-    setTimeout(() => {
-      this.innerHTML = '<span>✨</span> Đặt gói này';
-      this.style.background = '';
-    }, 2000);
+    if (typeof API !== 'undefined') API.trackEvent('add_trip', { context: { tour: tourId } });
+    this.innerHTML = '<span>✨</span> Đang mở trình lập lịch...';
+    if (window.toast) toast('Để AI dựng lịch trình riêng theo tour này nhé ✨', 'success');
+    setTimeout(() => { window.location.href = 'flow.html'; }, 700);
   });
 
   console.log(`📦 Tour detail loaded: ${tour.name}`);

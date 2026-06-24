@@ -176,8 +176,24 @@ const PLACES = {
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const placeId = params.get('id') || 'citadel';
-  const place = PLACES[placeId] || PLACES.citadel;
 
+  // Map place từ DB (shape backend) sang shape render của trang
+  function mapDbPlace(p) {
+    return {
+      name: p.name, img: p.img || 'assets/citadel.png',
+      cats: [p.category].filter(Boolean), badges: [],
+      rating: String(p.rating || ''), ratingCount: p.rating_count ? `(${p.rating_count})` : '',
+      price: p.price || '', duration: p.duration || '', distance: p.distance || '',
+      ai: p.ai_insight || '', desc: p.description || '', desc2: '',
+      highlights: (p.highlights || []).map(h => ({ icon: '✨', text: h })),
+      hours: p.hours || '', hoursTime: p.hours_time || '', hoursNote: p.hours_note || '',
+      tips: (p.tips || []).map(t => ({ avatar: '🧑', author: 'Mẹo địa phương', quote: `"${t}"` })),
+      gallery: [p.img || 'assets/citadel.png'],
+      nearby: [],
+    };
+  }
+
+  function renderPlace(place) {
   // Populate content
   document.title = `HueViVu — ${place.name}`;
   document.getElementById('hero-img').src = place.img;
@@ -231,13 +247,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Nearby
   const nearbyEl = document.querySelector('.detail-nearby-scroll');
-  nearbyEl.innerHTML = place.nearby.map(n =>
-    `<div class="detail-nearby-card" data-place="${n.id}">
-      <div class="dnc-img"><img src="${n.img}" alt="${n.name}" /></div>
-      <span class="dnc-name">${n.name}</span>
-      <span class="dnc-dist">${n.dist}</span>
-    </div>`
-  ).join('');
+  if (place.nearby && place.nearby.length) {
+    nearbyEl.innerHTML = place.nearby.map(n =>
+      `<div class="detail-nearby-card" data-place="${n.id}">
+        <div class="dnc-img"><img src="${n.img}" alt="${n.name}" /></div>
+        <span class="dnc-name">${n.name}</span>
+        <span class="dnc-dist">${n.dist}</span>
+      </div>`
+    ).join('');
+  }
+  }
+
+  // --- Chọn nguồn dữ liệu: static (giàu) → fallback DB (cho địa điểm seed mới) ---
+  if (PLACES[placeId]) {
+    renderPlace(PLACES[placeId]);
+  } else if (typeof API !== 'undefined') {
+    API.getPlace(placeId)
+      .then(p => renderPlace(mapDbPlace(p)))
+      .catch(() => renderPlace(PLACES.citadel));
+  } else {
+    renderPlace(PLACES.citadel);
+  }
+
+  // Track view (data flywheel cho AI personalization)
+  if (typeof API !== 'undefined') API.trackEvent('view', { place_id: placeId });
 
   // --- Section reveal ---
   const scroll = document.getElementById('detail-scroll');
@@ -262,30 +295,53 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSave.classList.toggle('saved');
     btnSave.style.transform = 'scale(1.2)';
     setTimeout(() => { btnSave.style.transform = ''; }, 300);
+    const saved = btnSave.classList.contains('saved');
+    if (typeof API !== 'undefined') API.trackEvent(saved ? 'save' : 'unsave', { place_id: placeId });
+    if (window.toast) toast(saved ? 'Đã lưu địa điểm 🔖' : 'Đã bỏ lưu', saved ? 'success' : '');
   });
 
-  // --- Nearby card navigation ---
-  document.querySelectorAll('.detail-nearby-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.place;
-      window.location.href = `place-detail.html?id=${id}`;
+  // --- Share ---
+  const btnShare = document.getElementById('btn-share');
+  if (btnShare) {
+    btnShare.addEventListener('click', () => {
+      const name = document.getElementById('detail-name')?.textContent || 'Địa điểm ở Huế';
+      if (typeof API !== 'undefined') API.trackEvent('share', { place_id: placeId });
+      if (window.hvShare) window.hvShare(name, `${name} — khám phá cùng HueViVu`);
     });
-  });
+  }
 
-  // --- Gallery item tap ---
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.style.transform = 'scale(0.95)';
-      setTimeout(() => { item.style.transform = ''; }, 200);
+  // --- Directions (mở Google Maps) ---
+  const btnDirections = document.getElementById('btn-directions');
+  if (btnDirections) {
+    btnDirections.addEventListener('click', () => {
+      const name = document.getElementById('detail-name')?.textContent || '';
+      const q = encodeURIComponent(`${name} Huế`);
+      if (typeof API !== 'undefined') API.trackEvent('directions', { place_id: placeId });
+      window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
     });
+  }
+
+  // --- Nearby card navigation (delegation — vì render bất đồng bộ) ---
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.detail-nearby-card');
+    if (card && card.dataset.place) {
+      window.location.href = `place-detail.html?id=${card.dataset.place}`;
+    }
+    const gi = e.target.closest('.gallery-item');
+    if (gi) {
+      gi.style.transform = 'scale(0.95)';
+      setTimeout(() => { gi.style.transform = ''; }, 200);
+    }
   });
 
   // --- CTA buttons ---
   document.getElementById('btn-add-trip').addEventListener('click', () => {
     const btn = document.getElementById('btn-add-trip');
+    if (typeof API !== 'undefined') API.trackEvent('add_trip', { place_id: placeId });
     btn.innerHTML = '<span>✅</span> Đã thêm!';
     btn.style.background = '#22C55E';
     btn.style.boxShadow = '0 8px 24px rgba(34,197,94,0.3)';
+    if (window.toast) toast('Đã ghi nhận yêu thích — AI sẽ ưu tiên nơi này trong lịch trình ✨', 'success');
     setTimeout(() => {
       btn.innerHTML = '<span>✨</span> Thêm vào lịch trình';
       btn.style.background = '';
@@ -293,5 +349,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   });
 
-  console.log(`📍 Place detail loaded: ${place.name}`);
+  console.log('📍 Place detail loaded:', placeId);
 });

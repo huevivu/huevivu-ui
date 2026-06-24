@@ -430,6 +430,10 @@
             <span class="btn-text">Regenerate</span>
           </button>
         </div>
+        <button class="btn-secondary" id="btn-hub-feedback" style="width:100%;margin-top:10px;">
+          <span class="btn-icon">⭐</span>
+          <span class="btn-text">Đánh giá chuyến đi này</span>
+        </button>
       </section>
 
       <div style="height:100px"></div>
@@ -458,15 +462,15 @@
       <div class="ai-chat" id="ai-chat">
         <div class="ai-msg ai-msg-bot">
           <div class="ai-msg-bubble">
-            Hi! 👋 I'm your travel companion for Huế. Ask me anything about your trip!
+            Chào bạn! 👋 Mình là trợ lý đồng hành cho chuyến đi này. Hỏi mình bất cứ điều gì về lịch trình của bạn nhé!
           </div>
         </div>
       </div>
       <div class="ai-suggestions" id="ai-suggestions">
-        <button class="ai-sug" data-q="What if it rains tomorrow?">🌧️ What if it rains?</button>
-        <button class="ai-sug" data-q="Find nearby cafes with good wifi">☕ Find nearby cafés</button>
-        <button class="ai-sug" data-q="Make the trip more chill and relaxed">😌 Make it more chill</button>
-        <button class="ai-sug" data-q="What are the best photo spots?">📸 Best photo spots</button>
+        <button class="ai-sug" data-q="Hôm nay tôi đi đâu trong lịch trình?">📅 Hôm nay đi đâu?</button>
+        <button class="ai-sug" data-q="Nếu trời mưa thì điều chỉnh lịch trình thế nào?">🌧️ Nếu trời mưa?</button>
+        <button class="ai-sug" data-q="Gợi ý món ăn nên thử ở các điểm trong lịch trình">🍜 Món nên thử</button>
+        <button class="ai-sug" data-q="Mẹo di chuyển giữa các điểm trong lịch trình của tôi">🛵 Mẹo di chuyển</button>
       </div>
       <div class="ai-input-bar">
         <input type="text" class="ai-input" id="ai-input" placeholder="Ask anything about Huế..." />
@@ -492,7 +496,55 @@
       </div>
     </div>
 
+    <!-- Feedback Modal -->
+    <div class="sheet-overlay" id="feedback-overlay"></div>
+    <div class="feedback-modal" id="feedback-modal">
+      <div class="sheet-handle"></div>
+      <div class="feedback-header">
+        <span class="feedback-emoji">⭐</span>
+        <h3>Đánh giá chuyến đi</h3>
+        <button class="ai-sheet-close" id="feedback-close">✕</button>
+      </div>
+      <form class="feedback-body" id="feedback-form">
+        <div class="feedback-section">
+          <label class="feedback-label">Bạn hài lòng với chuyến đi này đến đâu?</label>
+          <div class="star-rating" id="rating-overall-group">
+            <span class="star" title="1">★</span>
+            <span class="star" title="2">★</span>
+            <span class="star" title="3">★</span>
+            <span class="star" title="4">★</span>
+            <span class="star" title="5">★</span>
+            <input type="hidden" id="rating-overall" value="0">
+          </div>
+        </div>
+        <div class="feedback-section">
+          <label class="feedback-label">AI lập lịch có hợp lý không?</label>
+          <div class="star-rating" id="rating-ai-group">
+            <span class="star" title="1">★</span>
+            <span class="star" title="2">★</span>
+            <span class="star" title="3">★</span>
+            <span class="star" title="4">★</span>
+            <span class="star" title="5">★</span>
+            <input type="hidden" id="rating-ai" value="0">
+          </div>
+        </div>
+        <div class="feedback-section">
+          <label class="feedback-label">Bạn đã ghé những đâu? (chọn tất cả)</label>
+          <div class="feedback-places-list" id="feedback-places">
+            <span style="color:var(--text-muted);font-size:13px">Đang tải danh sách địa điểm...</span>
+          </div>
+        </div>
+        <div class="feedback-section">
+          <label class="feedback-label">Ghi chú thêm (tùy chọn)</label>
+          <textarea class="feedback-notes" id="feedback-notes" rows="3" placeholder="Chia sẻ cảm nhận, điều bất ngờ, hay điểm cần cải thiện..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary feedback-submit" style="width:100%">Gửi đánh giá</button>
+      </form>
+    </div>
+
   </div>
+  <script src="api-client.js"></script>
+  <script src="trip-render.js"></script>
   <script src="hub.js"></script>
 </body>
 </html>

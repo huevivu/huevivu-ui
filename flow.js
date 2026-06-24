@@ -191,7 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- AI Thinking Animation ---
+  // --- AI Thinking Animation (calls real backend) ---
+  let _generatedTripId = null;
+  let _generatedTrip = null;
+
   function runAIThinking() {
     const steps = document.querySelectorAll('#ai-steps .ai-step');
     const title = document.getElementById('ai-thinking-title');
@@ -199,57 +202,102 @@ document.addEventListener('DOMContentLoaded', () => {
     const factEl = document.getElementById('ai-fun-fact');
 
     const facts = [
-      "Huế has over 1,300 unique dishes in its culinary tradition!",
-      "The Imperial City was built in 1805 and took 30 years to complete.",
-      "Huế's Perfume River got its name from flowers that fall into the water upstream.",
-      "The city has 7 UNESCO World Heritage Sites within its borders.",
-      "Bánh bèo alone has over 10 regional variations in Huế."
+      "Huế có hơn 1,300 món ăn đặc trưng trong truyền thống ẩm thực!",
+      "Hoàng Thành Huế được xây dựng năm 1805, mất 30 năm để hoàn thành.",
+      "Sông Hương được đặt tên vì hoa thơm từ thượng nguồn trôi theo dòng nước.",
+      "Thành phố có 7 Di sản Thế giới UNESCO trong phạm vi tỉnh Thừa Thiên Huế.",
+      "Chỉ riêng bánh bèo đã có hơn 10 biến thể đặc trưng ở Huế!"
     ];
 
-    const titles = [
-      "Creating your journey...",
-      "Almost there...",
-      "Finalizing your plan..."
-    ];
+    const titles = ["Đang tạo hành trình...", "Gần xong rồi...", "Hoàn thiện kế hoạch..."];
 
     let factIdx = 0;
-    factEl.querySelector('.fact-text').textContent = facts[0];
+    if (factEl) factEl.querySelector('.fact-text').textContent = facts[0];
 
-    // Animate steps one by one
+    // Fire real API call in parallel with animation
+    const budgetMap = { budget: 1000000, moderate: 2500000, premium: 5000000, luxury: 10000000 };
+    const durationMap = { '1-2': 2, '3-4': 3, '5-7': 5, '7+': 7 };
+
+    const sessionId = sessionStorage.getItem('hv_session');
+    const apiPromise = (typeof API !== 'undefined')
+      ? API.generateTrip({
+          duration: durationMap[state.answers.duration] || 3,
+          styles: state.answers.styles,
+          companion: state.answers.companion,
+          budget: budgetMap[state.answers.budget] || 2500000,
+          food: state.answers.food,
+          sessionId,
+        }).then(data => {
+          _generatedTripId = data.tripId;
+          _generatedTrip = data.trip;
+          renderResult(data.trip);
+        }).catch(err => {
+          console.warn('[flow] API error, using offline mode:', err.message);
+        })
+      : Promise.resolve();
+
+    // Run animation while API call is in flight
     let i = 0;
     function animateStep() {
       if (i >= steps.length) {
-        // All done
-        title.textContent = "Your journey is ready! ✨";
-        sub.textContent = "Crafted just for you";
-        setTimeout(() => {
-          goToStep(7, 'forward');
-          updateResultMeta();
-        }, 800);
+        // Wait for API if still pending, then advance
+        apiPromise.finally(() => {
+          if (title) title.textContent = "Lịch trình của bạn đã sẵn sàng! ✨";
+          if (sub) sub.textContent = "Được tạo riêng cho bạn";
+          setTimeout(() => {
+            goToStep(7, 'forward');
+            updateResultMeta();
+          }, 800);
+        });
         return;
       }
 
       steps[i].classList.add('active');
+      if (i === 2 && title) title.textContent = titles[1];
+      if (i === 3 && title) title.textContent = titles[2];
 
-      if (i === 2) title.textContent = titles[1];
-      if (i === 3) title.textContent = titles[2];
-
+      const stepDelay = _generatedTrip ? 600 : 1200; // speed up if API already done
       setTimeout(() => {
         steps[i].classList.remove('active');
         steps[i].classList.add('done');
 
-        // Rotate fun fact
         factIdx = (factIdx + 1) % facts.length;
-        factEl.querySelector('.fact-text').textContent = facts[factIdx];
-        factEl.style.opacity = '0';
-        setTimeout(() => { factEl.style.opacity = '1'; }, 150);
+        if (factEl) {
+          factEl.querySelector('.fact-text').textContent = facts[factIdx];
+          factEl.style.opacity = '0';
+          setTimeout(() => { factEl.style.opacity = '1'; }, 150);
+        }
 
         i++;
         animateStep();
-      }, 1200);
+      }, stepDelay);
     }
 
     setTimeout(animateStep, 600);
+  }
+
+  // --- Render lịch trình AI thật vào màn kết quả ---
+  function renderResult(trip) {
+    if (!trip) return;
+    const titleEl = document.querySelector('.result-title');
+    if (titleEl && trip.title) titleEl.textContent = trip.title;
+
+    // Render các ngày thật
+    const daysEl = document.getElementById('itinerary-days');
+    if (window.TripRender && daysEl) {
+      TripRender.renderCompactDays(daysEl, trip);
+    }
+
+    // Chèn AI insight + summary lên đầu (nếu chưa có)
+    const screen = document.querySelector('.result-screen');
+    if (screen && trip.ai_insight && !document.getElementById('result-ai-insight')) {
+      const note = document.createElement('div');
+      note.id = 'result-ai-insight';
+      note.style.cssText = 'margin:14px 0;padding:14px 16px;border-radius:16px;background:rgba(255,127,107,0.08);border:1px solid rgba(255,127,107,0.18);font-size:13.5px;line-height:1.5;color:var(--text,#2c2c2c);';
+      note.innerHTML = `<strong style="color:var(--coral,#FF7F6B)">🧠 AI:</strong> ${TripRender.esc(trip.ai_insight)}`;
+      const header = document.querySelector('.result-header-card');
+      if (header && header.parentNode) header.parentNode.insertBefore(note, header.nextSibling);
+    }
   }
 
   // --- Update result meta from answers ---
@@ -271,12 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSave = document.getElementById('btn-save-trip');
   if (btnSave) {
     btnSave.addEventListener('click', () => {
-      btnSave.innerHTML = '<span class="btn-sparkle">✅</span><span class="btn-text">Trip Saved!</span>';
+      btnSave.innerHTML = '<span class="btn-sparkle">✅</span><span class="btn-text">Đã lưu!</span>';
       btnSave.style.background = 'linear-gradient(135deg, #4CAF50, #66BB6A)';
       btnSave.style.boxShadow = '0 8px 32px rgba(76, 175, 80, 0.3)';
       btnSave.style.pointerEvents = 'none';
-      // Navigate to Itinerary Hub
-      setTimeout(() => { window.location.href = 'hub.html'; }, 800);
+      const dest = _generatedTripId ? `hub.html?id=${_generatedTripId}` : 'hub.html';
+      setTimeout(() => { window.location.href = dest; }, 800);
     });
   }
 

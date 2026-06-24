@@ -365,7 +365,52 @@
         <div class="search-results" id="explore-search-results"></div>
       </div>
     </div>
+
+    <!-- ─── Map Overlay (có chế độ NGOẠI TUYẾN: hiện hành trình đã lưu) ─── -->
+    <div class="map-overlay" id="map-overlay" aria-hidden="true">
+      <div class="map-ov-header">
+        <button class="map-ov-close" id="map-ov-close" aria-label="Đóng">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <span class="map-ov-title">Bản đồ hành trình</span>
+        <span class="map-ov-status" id="map-ov-status">● Trực tuyến</span>
+      </div>
+
+      <div class="map-ov-offline" id="map-ov-offline">
+        <span class="mov-off-icon">📵</span>
+        <span>Đang ngoại tuyến — đang hiển thị <b>hành trình đã lưu</b> gần nhất. Bản đồ & lộ trình vẫn dùng được khi mất mạng.</span>
+      </div>
+
+      <div class="map-ov-canvas">
+        <div class="map-gradient"></div>
+        <svg class="map-ov-route-svg" viewBox="0 0 300 200" preserveAspectRatio="none" fill="none">
+          <path d="M40,150 C90,110 130,140 170,90 C205,48 240,70 268,52" stroke="#FF7F6B" stroke-width="2.5" stroke-dasharray="5 6" stroke-linecap="round" opacity="0.85"/>
+        </svg>
+        <div class="map-pins">
+          <div class="map-pin" style="left:13%;top:74%">🏛️</div>
+          <div class="map-pin" style="left:38%;top:55%">🍜</div>
+          <div class="map-pin" style="left:57%;top:44%">🛕</div>
+          <div class="map-pin" style="left:78%;top:30%">🌊</div>
+          <div class="map-pin" style="left:89%;top:25%">🏯</div>
+        </div>
+        <div class="map-center-label">
+          <span class="mcl-icon">📍</span>
+          <span class="mcl-text">Huế, Việt Nam</span>
+        </div>
+      </div>
+
+      <div class="map-ov-sheet">
+        <div class="map-ov-sheet-grip"></div>
+        <div class="map-ov-sheet-head">
+          <span class="map-ov-route-title" id="map-ov-route-title">Hành trình của bạn</span>
+          <span class="map-ov-saved" id="map-ov-saved"></span>
+        </div>
+        <div class="map-ov-route" id="map-route"></div>
+      </div>
+    </div>
   </div>
+  <script src="api-client.js"></script>
+  <script src="trip-render.js"></script>
   <script src="explore.js"></script>
 </body>
 

@@ -69,25 +69,125 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Save Entry ---
+  // --- Mood emoji map (render) ---
+  const MOOD_EMOJI = { happy: '😊', peaceful: '😌', excited: '🤩', nostalgic: '🥹', sparkle: '✨', wonder: '🤩', love: '😍' };
+
+  const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function entryHTML(e) {
+    const emoji = MOOD_EMOJI[e.mood] || '😊';
+    const time = (e.time_str ? e.time_str + ' · ' : '') + 'Nhật ký';
+    const tag = e.is_private
+      ? '<span class="jr-entry-private tag tag-purple">Private</span>'
+      : '<span class="jr-entry-public tag tag-green">Public</span>';
+    return `
+      <div class="jr-entry">
+        <div class="jr-entry-header">
+          <div class="jr-entry-mood">${emoji}</div>
+          <div class="jr-entry-meta">
+            <span class="jr-entry-time">${esc(time)}</span>
+            ${e.place_name ? `<span class="jr-entry-location">📍 ${esc(e.place_name)}</span>` : ''}
+          </div>
+          ${tag}
+        </div>
+        <div class="jr-entry-content">
+          <p class="jr-entry-text">${esc(e.content)}</p>
+        </div>
+      </div>`;
+  }
+
+  // Prefill địa điểm từ query (?place=) khi mở từ hub
+  const qPlace = new URLSearchParams(window.location.search).get('place');
+  if (qPlace) {
+    const loc = document.getElementById('jr-loc-input');
+    if (loc) loc.value = qPlace;
+  }
+
+  // --- Load entries thật ---
+  const entriesWrap = document.getElementById('jr-entries');
+  async function loadEntries() {
+    if (typeof API === 'undefined' || !entriesWrap) return;
+    let entries;
+    try { entries = await API.getJournal(); } catch { return; }
+    if (!Array.isArray(entries)) return;
+    if (entries.length) {
+      entriesWrap.innerHTML = entries.map(entryHTML).join('');
+    } else {
+      entriesWrap.innerHTML = '<p style="text-align:center;color:var(--text-muted,#8a8a8a);padding:32px 0;font-size:14px">Chưa có nhật ký nào. Nhấn ✏️ để viết kỷ niệm đầu tiên!</p>';
+    }
+  }
+  loadEntries();
+
+  // --- Nạp danh sách chuyến đi vào dropdown + lọc nhật ký theo chuyến ---
+  const tripDropdown = document.getElementById('jr-trip-dropdown');
+  async function loadTripOptions() {
+    if (!tripDropdown || typeof API === 'undefined') return;
+    let trips;
+    try { trips = await API.getTrips(); } catch { return; }
+    if (!Array.isArray(trips) || !trips.length) return;
+    tripDropdown.innerHTML = '<option value="">Tất cả chuyến đi</option>' +
+      trips.map(t => `<option value="${t.id}">${esc(t.title || 'Chuyến đi')}</option>`).join('');
+  }
+  loadTripOptions();
+  if (tripDropdown) {
+    tripDropdown.addEventListener('change', async () => {
+      if (typeof API === 'undefined' || !entriesWrap) return;
+      let entries;
+      try { entries = await API.getJournal(tripDropdown.value || undefined); } catch { return; }
+      entriesWrap.innerHTML = Array.isArray(entries) && entries.length
+        ? entries.map(entryHTML).join('')
+        : '<p style="text-align:center;color:var(--text-muted,#8a8a8a);padding:32px 0;font-size:14px">Chưa có nhật ký cho chuyến này 🌸</p>';
+    });
+  }
+
+  // --- Save Entry (lưu thật vào backend) ---
   const saveBtn = document.getElementById('jr-write-save');
   if (saveBtn) {
-    saveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', async () => {
       const text = document.getElementById('jr-write-text');
-      if (text && text.value.trim().length < 3) {
+      const content = text ? text.value.trim() : '';
+      if (content.length < 3) {
         saveBtn.style.transform = 'translateX(-4px)';
         setTimeout(() => { saveBtn.style.transform = 'translateX(4px)'; }, 100);
         setTimeout(() => { saveBtn.style.transform = ''; }, 200);
         return;
       }
+
+      const mood = document.querySelector('.jr-mood-btn.active')?.dataset.mood || 'happy';
+      const placeName = document.getElementById('jr-loc-input')?.value.trim() || '';
+      const isPrivate = !document.getElementById('jr-toggle')?.classList.contains('active');
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      saveBtn.querySelector('span').textContent = 'Đang lưu...';
+      let saved = null;
+      if (typeof API !== 'undefined') {
+        try {
+          saved = await API.addJournalEntry({
+            time_str: timeStr, place_name: placeName || null,
+            content, mood, is_private: isPrivate,
+          });
+        } catch {}
+      }
+
       saveBtn.querySelector('span').textContent = '✓ Đã lưu!';
       saveBtn.style.background = 'linear-gradient(135deg, #22C55E, #4ADE80)';
+
+      // Prepend entry mới vào danh sách
+      if (entriesWrap) {
+        const data = saved || { content, mood, place_name: placeName, is_private: isPrivate, time_str: timeStr };
+        const empty = entriesWrap.querySelector('p');
+        if (empty) entriesWrap.innerHTML = '';
+        entriesWrap.insertAdjacentHTML('afterbegin', entryHTML(data));
+      }
+      if (window.toast) toast('Đã lưu vào nhật ký 📖', 'success');
+
       setTimeout(() => {
         closeSheet();
         saveBtn.querySelector('span').textContent = '✨ Lưu nhật ký';
         saveBtn.style.background = '';
         if (text) text.value = '';
-      }, 1200);
+      }, 1000);
     });
   }
 

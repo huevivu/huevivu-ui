@@ -27,14 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sections.forEach(s => sectionObserver.observe(s));
 
-  // --- Category pill selection ---
+  // --- Category pill selection → mở Khám phá theo danh mục ---
   const catPills = document.querySelectorAll('.cat-pill');
   catPills.forEach(pill => {
     pill.addEventListener('click', () => {
       catPills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       pill.style.transform = 'scale(0.93)';
-      setTimeout(() => { pill.style.transform = ''; }, 150);
+      const cat = pill.dataset.cat;
+      setTimeout(() => {
+        pill.style.transform = '';
+        if (cat && cat !== 'all') window.location.href = `explore.html?cat=${cat}`;
+        else window.location.href = 'explore.html';
+      }, 180);
     });
   });
 
@@ -66,13 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Active trip card navigation ---
+  let activeTripId = null;
   const btnViewTrip = document.getElementById('btn-view-trip');
   if (btnViewTrip) {
     btnViewTrip.addEventListener('click', () => {
       btnViewTrip.textContent = 'Đang mở...';
       btnViewTrip.style.pointerEvents = 'none';
       setTimeout(() => {
-        window.location.href = 'hub.html';
+        window.location.href = activeTripId ? `hub.html?id=${activeTripId}` : 'hub.html';
       }, 400);
     });
   }
@@ -169,9 +175,100 @@ document.addEventListener('DOMContentLoaded', () => {
       if (searchOverlayInput) {
         searchOverlayInput.value = chip.textContent;
         searchOverlayInput.focus();
+        runSearch(chip.textContent);
       }
     });
   });
+
+  // --- Search thật (gọi API.getPlaces) ---
+  const searchResults = document.getElementById('search-results');
+  const trendingBlock = document.querySelector('.search-trending');
+  let searchTimer = null;
+
+  function placeResultHTML(p) {
+    return `
+      <div class="search-result-item" data-place="${p.id}" style="display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;cursor:pointer;transition:background .2s">
+        <img src="${p.img || 'assets/citadel.png'}" alt="${p.name}" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0" />
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:14px;color:var(--text,#2c2c2c)">${p.name}</div>
+          <div style="font-size:12px;color:var(--text-muted,#8a8a8a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.address || p.category || ''}</div>
+        </div>
+        <span style="font-size:12px;color:var(--coral,#FF7F6B);font-weight:600">⭐ ${p.rating || ''}</span>
+      </div>`;
+  }
+
+  async function runSearch(q) {
+    if (!searchResults) return;
+    q = (q || '').trim();
+    if (!q) {
+      searchResults.innerHTML = '';
+      if (trendingBlock) trendingBlock.style.display = '';
+      return;
+    }
+    if (trendingBlock) trendingBlock.style.display = 'none';
+    searchResults.innerHTML = '<p style="text-align:center;color:var(--text-muted,#8a8a8a);padding:20px;font-size:13px">Đang tìm...</p>';
+    if (typeof API === 'undefined') return;
+    try {
+      const places = await API.getPlaces({ q });
+      if (!places.length) {
+        searchResults.innerHTML = `<p style="text-align:center;color:var(--text-muted,#8a8a8a);padding:24px;font-size:13px">Không tìm thấy "${q}" 🌸</p>`;
+        return;
+      }
+      searchResults.innerHTML = places.map(placeResultHTML).join('');
+    } catch {
+      searchResults.innerHTML = '';
+    }
+  }
+
+  if (searchOverlayInput) {
+    searchOverlayInput.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(searchOverlayInput.value), 280);
+    });
+  }
+  if (searchResults) {
+    searchResults.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-result-item');
+      if (item && item.dataset.place) window.location.href = `place-detail.html?id=${item.dataset.place}`;
+    });
+  }
+
+  // --- Load dữ liệu thật: active trip + thời tiết ---
+  async function loadHome() {
+    if (typeof API === 'undefined') return;
+
+    // Active trip
+    try {
+      const trips = await API.getTrips();
+      const active = (trips || []).filter(t => t.status === 'active');
+      const section = document.getElementById('active-trip-section');
+      if (active.length) {
+        const t = active[0];
+        activeTripId = t.id;
+        const titleEl = document.querySelector('.atc-title');
+        if (titleEl) titleEl.textContent = t.title;
+        const metaEl = document.querySelector('.atc-meta');
+        if (metaEl) metaEl.innerHTML = `<span>📅 ${t.duration} ngày</span><span>·</span><span>📍 ${t.total_cost_estimate || ''}</span>`;
+      } else if (section) {
+        section.style.display = 'none';
+      }
+    } catch {}
+
+    // Weather → cập nhật câu chào AI
+    try {
+      const w = await API.getWeather();
+      const txt = document.querySelector('.ai-welcome-text');
+      if (txt && w) {
+        const tip = w.condition === 'rainy'
+          ? 'trời có mưa — ghé The Time Coffee nhâm nhi cà phê và ngắm phố cổ ☕'
+          : w.condition === 'cloudy'
+            ? 'trời nhiều mây dịu mát — hợp dạo Hoàng Thành và chụp ảnh 🏛️'
+            : 'trời đẹp — thích hợp ghé Chùa Thiên Mụ lúc sáng sớm, ánh sáng vàng rất đẹp 🌅';
+        txt.textContent = `Chào bạn! Huế hôm nay ${w.temp}°C, ${w.condition_vi || ''} — ${tip}`;
+      }
+    } catch {}
+  }
+  loadHome();
 
   // --- Bottom navigation ---
   document.querySelectorAll('.nav-item').forEach(item => {
@@ -243,6 +340,15 @@ document.addEventListener('DOMContentLoaded', () => {
       this.style.overflow = 'hidden';
       this.appendChild(ripple);
       setTimeout(() => ripple.remove(), 500);
+    });
+  });
+
+  // "Xem tất cả" → Khám phá (mục ẩm thực lọc sẵn danh mục food)
+  document.querySelectorAll('.see-all').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const heading = btn.closest('section, .section, .home-section')?.textContent || '';
+      const cat = /ẩm thực|món ăn|food/i.test(heading) ? '?cat=food' : '';
+      window.location.href = 'explore.html' + cat;
     });
   });
 

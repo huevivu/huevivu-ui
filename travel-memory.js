@@ -38,14 +38,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Share Button ---
+  // --- Load dữ liệu thật: chuyến đi gần nhất + nhật ký ---
+  let recapTrip = null;
+  (async () => {
+    if (typeof API === 'undefined') return;
+    try {
+      const trips = await API.getTrips();
+      if (Array.isArray(trips) && trips.length) {
+        recapTrip = trips[0];
+        const titleEl = document.querySelector('.tm-hero-title');
+        if (titleEl && recapTrip.title) titleEl.innerHTML = recapTrip.title.replace(/ /, '<br/>');
+        const statVals = document.querySelectorAll('.tm-stat-val');
+        // [Ngày, Địa điểm, Ảnh, Đi bộ, Món ăn, Chi phí]
+        if (statVals[0] && recapTrip.duration) statVals[0].textContent = recapTrip.duration;
+        if (statVals[5] && recapTrip.total_cost_estimate) {
+          statVals[5].textContent = recapTrip.total_cost_estimate.replace(/[^0-9.,M]/g, '').slice(0, 5) || recapTrip.total_cost_estimate;
+        }
+      }
+      const entries = await API.getJournal();
+      if (Array.isArray(entries)) {
+        const statVals = document.querySelectorAll('.tm-stat-val');
+        if (statVals[2]) statVals[2].textContent = entries.length; // dùng số nhật ký cho "Ảnh/Khoảnh khắc"
+      }
+    } catch {}
+  })();
+
+  // --- Share Button → chia sẻ thật lên cộng đồng ---
   const shareBtn = document.getElementById('tm-btn-share');
   if (shareBtn) {
-    shareBtn.addEventListener('click', () => {
+    shareBtn.addEventListener('click', async () => {
+      if (recapTrip && typeof API !== 'undefined') {
+        try { await API.shareTrip(recapTrip.id); } catch {}
+      }
       shareBtn.textContent = '✓ Đã chia sẻ lên cộng đồng!';
       shareBtn.style.background = 'linear-gradient(135deg, #22C55E, #4ADE80)';
       shareBtn.style.color = 'white';
       shareBtn.style.borderColor = 'transparent';
+      if (window.toast) toast('Kỷ niệm của bạn đã lên Cộng đồng 🌐', 'success');
       setTimeout(() => {
         shareBtn.textContent = '🌐 Chia sẻ kỷ niệm';
         shareBtn.style.background = '';
@@ -62,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       planBtn.textContent = '⏳ AI đang tạo...';
       setTimeout(() => {
         window.location.href = 'flow.html';
-      }, 1000);
+      }, 800);
     });
   }
 

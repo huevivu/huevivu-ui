@@ -29,24 +29,63 @@ document.addEventListener('DOMContentLoaded', () => {
   aiClose.addEventListener('click', closeAI);
   aiOverlay.addEventListener('click', closeAI);
 
-  // --- AI Chat ---
-  const aiResponses = {
-    'rain': "Good thinking! 🌧️ If it rains tomorrow, I've already placed indoor activities in the afternoon — the salt coffee at Vi Café is perfect rainy-day vibes. I can also swap in the Huế Museum of Royal Antiquities.",
-    'cafe': "Great choice! ☕ Here are 3 top cafés near your route:\n\n1. **Vi Café** — Famous salt coffee, cozy garden\n2. **Mộc Café** — River view, great wifi\n3. **Chè Hẻm** — Sweet soup + coffee combo\n\nWant me to add one to your itinerary?",
-    'chill': "Got it! 😌 I've adjusted your Day 2 — removed the early market visit and pushed everything 2 hours later. Added a riverside hammock café for the morning. Your new step count: ~5,200 (down from 8,500).",
-    'photo': "📸 Here are the best golden-hour spots on your route:\n\n1. **Thiên Mụ Pagoda** at 17:30 — river reflection shot\n2. **Thanh Toàn Bridge** at 16:00 — village atmosphere\n3. **Imperial Citadel** at 07:30 — empty courtyards\n\nI've marked them with 📸 in your timeline!",
-    'default': "That's a great question! 🤔 Based on your itinerary, I'd suggest exploring more of the riverside area. The Perfume River at dusk is magical. Want me to adjust your plan?"
-  };
+  // --- Trip context ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const tripId = urlParams.get('id');
+  let currentTrip = null;
+  let chatHistory = [];
 
-  function getAIResponse(q) {
-    const lower = q.toLowerCase();
-    if (lower.includes('rain')) return aiResponses.rain;
-    if (lower.includes('caf')) return aiResponses.cafe;
-    if (lower.includes('chill') || lower.includes('relax')) return aiResponses.chill;
-    if (lower.includes('photo')) return aiResponses.photo;
-    return aiResponses.default;
+  // Đổ dữ liệu trip thật vào giao diện (hero + timeline)
+  function renderTrip(trip) {
+    currentTrip = trip;
+    const itinerary = trip.itinerary || trip;
+
+    // Hero title + summary
+    const titleEl = document.querySelector('.hero-card-title');
+    if (titleEl && trip.title) titleEl.textContent = trip.title;
+    const subEl = document.querySelector('.hero-card-sub');
+    if (subEl && trip.summary) subEl.textContent = trip.summary;
+
+    // Hero stats: [Duration, Budget, Weather, Locations]
+    const statVals = document.querySelectorAll('.hero-stats .hero-stat .hs-val');
+    if (statVals.length >= 4) {
+      if (trip.duration) statVals[0].textContent = trip.duration + (trip.duration > 1 ? ' Ngày' : ' Ngày');
+      const cost = trip.total_cost_estimate || itinerary.total_cost_estimate;
+      if (cost) statVals[1].textContent = cost;
+      const placeCount = window.TripRender ? TripRender.countPlaces(itinerary) : null;
+      if (placeCount) statVals[3].textContent = placeCount;
+    }
+
+    // Timeline động
+    const tlSection = document.getElementById('timeline-section');
+    if (window.TripRender && tlSection) {
+      const ok = TripRender.renderTimeline(tlSection, itinerary);
+      if (ok) initTimelineInteractions();
+    }
+
+    // AI insight → chèn vào insights nếu có
+    if (itinerary.ai_insight) {
+      const insightsScroll = document.querySelector('.insights-scroll');
+      if (insightsScroll) {
+        const chip = document.createElement('div');
+        chip.className = 'insight-chip insight-sunset';
+        chip.innerHTML = `<span class="ic-icon">🧠</span><span class="ic-text">${TripRender.esc(itinerary.ai_insight)}</span>`;
+        insightsScroll.insertBefore(chip, insightsScroll.firstChild);
+      }
+    }
   }
 
+  if (tripId && typeof API !== 'undefined') {
+    API.getTrip(tripId).then(trip => {
+      renderTrip(trip);
+      API.trackEvent('view', { trip_id: tripId });
+    }).catch(() => { initTimelineInteractions(); });
+  } else {
+    // Không có id → giữ nội dung mẫu tĩnh, vẫn gắn tương tác
+    initTimelineInteractions();
+  }
+
+  // --- AI Chat ---
   function addMessage(text, isUser) {
     const div = document.createElement('div');
     div.className = `ai-msg ${isUser ? 'ai-msg-user' : 'ai-msg-bot'}`;
@@ -75,21 +114,51 @@ document.addEventListener('DOMContentLoaded', () => {
     if (t) t.remove();
   }
 
-  function handleSend() {
+  // Offline fallback responses (dùng khi không có backend)
+  const _fallbackResponses = {
+    'mưa': 'Nếu trời mưa, hãy ghé The Time Coffee — quán vintage ấm cúng nhất Huế! ☕ Hoặc tham quan Bảo tàng Cổ vật Cung đình Huế.',
+    'cafe': 'Gợi ý 3 quán cà phê gần lịch trình:\n1. **The Time Coffee** — vintage, rang xay tại chỗ\n2. **Mộc Café** — view sông Hương\n3. **Chè Hẻm** — chè ngọt + cà phê đặc trưng',
+    'ăn': 'Ẩm thực phải thử ở Huế:\n1. **Bún bò** sáng sớm tại Bà Tuyết\n2. **Cơm hến** tại Cồn Hến chính gốc\n3. **Bánh khoái** phố Chi Lăng buổi chiều',
+    'default': 'Tôi đang tìm hiểu câu hỏi của bạn... Hãy thử hỏi về địa điểm, ẩm thực, hay thời tiết ở Huế nhé! 🌸'
+  };
+
+  function _getFallback(q) {
+    const lower = q.toLowerCase();
+    if (lower.includes('mưa') || lower.includes('rain')) return _fallbackResponses['mưa'];
+    if (lower.includes('caf') || lower.includes('coffee')) return _fallbackResponses['cafe'];
+    if (lower.includes('ăn') || lower.includes('food') || lower.includes('bún') || lower.includes('món')) return _fallbackResponses['ăn'];
+    return _fallbackResponses['default'];
+  }
+
+  async function handleSend() {
     const q = aiInput.value.trim();
     if (!q) return;
     addMessage(q, true);
     aiInput.value = '';
+    aiSend.disabled = true;
     showTyping();
-    const delay = 800 + Math.random() * 1200;
-    setTimeout(() => {
+
+    chatHistory.push({ role: 'user', content: q });
+
+    try {
+      if (typeof API === 'undefined') throw new Error('API not loaded');
+      const data = await API.sendChat(q, tripId || undefined, chatHistory.slice(-10));
       hideTyping();
-      addMessage(getAIResponse(q), false);
-    }, delay);
+      addMessage(data.reply, false);
+      chatHistory.push({ role: 'assistant', content: data.reply });
+    } catch (err) {
+      hideTyping();
+      // Graceful fallback to local responses
+      const fallback = _getFallback(q);
+      addMessage(fallback, false);
+      chatHistory.push({ role: 'assistant', content: fallback });
+    } finally {
+      aiSend.disabled = false;
+    }
   }
 
   aiSend.addEventListener('click', handleSend);
-  aiInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
+  aiInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
 
   // --- AI Suggestions ---
   document.querySelectorAll('.ai-sug').forEach(btn => {
@@ -100,54 +169,103 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Customize Chips ---
+  // --- Customize Chips (gọi AI thật để chỉnh lịch trình) ---
+  const CUST_INSTRUCTIONS = {
+    'less-walk': 'Giảm đi bộ — chọn các điểm gần nhau, sắp xếp lại để di chuyển ít nhất.',
+    'more-food': 'Thêm nhiều trải nghiệm ẩm thực bản địa Huế vào lịch trình.',
+    'nightlife': 'Thêm hoạt động về đêm — quán bar, chợ đêm, phố đi bộ buổi tối.',
+    'relaxed': 'Làm lịch trình thư giãn hơn — ít điểm mỗi ngày, nhịp chậm, nhiều thời gian nghỉ.',
+    'hidden': 'Thêm nhiều địa điểm bí mật, ít khách du lịch, dân địa phương hay đến.',
+    'photo': 'Ưu tiên các điểm chụp ảnh đẹp, góc sống ảo và giờ vàng ánh sáng.',
+    'budget': 'Tối ưu chi phí — chọn các lựa chọn rẻ hơn, nhiều điểm miễn phí.',
+    'romantic': 'Làm lịch trình lãng mạn hơn cho cặp đôi — hoàng hôn, không gian riêng tư.',
+  };
+
   const custChips = document.querySelectorAll('.cust-chip');
   custChips.forEach(chip => {
     chip.addEventListener('click', () => {
-      if (chip.classList.contains('applied')) return;
-      chip.classList.add('applied');
-      openCustSheet(chip.textContent.trim());
+      const mod = chip.dataset.mod;
+      const instruction = CUST_INSTRUCTIONS[mod] || chip.textContent.trim();
+      applyCustomize(instruction, chip);
     });
   });
 
-  function openCustSheet(label) {
+  async function applyCustomize(instruction, chip) {
     const progressText = document.getElementById('cust-progress-text');
-    progressText.textContent = `Applying: ${label}`;
+    const spinner = document.querySelector('.cust-spinner');
+    if (spinner) spinner.style.display = '';
+    if (progressText) progressText.textContent = 'AI đang điều chỉnh lịch trình của bạn...';
     custOverlay.classList.add('open');
     custSheet.classList.add('open');
+    if (chip) chip.classList.add('applied');
 
-    setTimeout(() => {
-      progressText.textContent = 'Itinerary updated! ✨';
-      document.querySelector('.cust-spinner').style.display = 'none';
+    // Không có trip thật → chỉ minh hoạ
+    if (!tripId || typeof API === 'undefined') {
       setTimeout(() => {
-        custOverlay.classList.remove('open');
-        custSheet.classList.remove('open');
-        document.querySelector('.cust-spinner').style.display = '';
-        // Flash timeline to show "update"
+        if (progressText) progressText.textContent = 'Cần tạo lịch trình trước đã ✨';
+        setTimeout(closeCust, 1200);
+        if (chip) chip.classList.remove('applied');
+      }, 1200);
+      return;
+    }
+
+    try {
+      const data = await API.customizeTrip(tripId, instruction);
+      const newTrip = data.trip || data;
+      // Re-render timeline + hero
+      renderTrip({ ...newTrip, itinerary: newTrip, duration: currentTrip?.duration, total_cost_estimate: newTrip.total_cost_estimate });
+      if (progressText) progressText.textContent = 'Đã cập nhật lịch trình! ✨';
+      setTimeout(() => {
+        closeCust();
         document.querySelectorAll('.tl-card').forEach((c, i) => {
           setTimeout(() => {
             c.style.transition = 'all 0.3s';
-            c.style.borderColor = 'rgba(255,127,107,0.3)';
-            setTimeout(() => { c.style.borderColor = ''; }, 600);
-          }, i * 100);
+            c.style.borderColor = 'rgba(255,127,107,0.4)';
+            setTimeout(() => { c.style.borderColor = ''; }, 700);
+          }, i * 80);
         });
-      }, 1000);
-    }, 2000);
+      }, 900);
+    } catch (err) {
+      if (progressText) progressText.textContent = 'Không điều chỉnh được, thử lại nhé.';
+      setTimeout(closeCust, 1400);
+    } finally {
+      if (chip) setTimeout(() => chip.classList.remove('applied'), 1500);
+    }
   }
 
-  custOverlay.addEventListener('click', () => {
+  function closeCust() {
     custOverlay.classList.remove('open');
     custSheet.classList.remove('open');
-  });
+    const spinner = document.querySelector('.cust-spinner');
+    if (spinner) spinner.style.display = '';
+  }
+
+  custOverlay.addEventListener('click', closeCust);
+
+  // Nút "Customize" → cuộn tới khu vực chip
+  const btnCustomize = document.getElementById('btn-hub-customize');
+  if (btnCustomize) {
+    btnCustomize.addEventListener('click', () => {
+      const sec = document.getElementById('customize-section');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
 
   // --- Save Trip ---
   const btnSave = document.getElementById('btn-hub-save');
   if (btnSave) {
-    btnSave.addEventListener('click', () => {
-      btnSave.innerHTML = '<span class="btn-sparkle">✅</span><span class="btn-text">Trip Saved!</span>';
-      btnSave.style.background = 'linear-gradient(135deg, #4CAF50, #66BB6A)';
-      btnSave.style.boxShadow = '0 8px 32px rgba(76,175,80,0.3)';
-      btnSave.style.pointerEvents = 'none';
+    btnSave.addEventListener('click', async () => {
+      const done = () => {
+        btnSave.innerHTML = '<span class="btn-sparkle">✅</span><span class="btn-text">Đã lưu chuyến đi!</span>';
+        btnSave.style.background = 'linear-gradient(135deg, #4CAF50, #66BB6A)';
+        btnSave.style.boxShadow = '0 8px 32px rgba(76,175,80,0.3)';
+        btnSave.style.pointerEvents = 'none';
+        if (window.toast) toast('Đã lưu vào "Chuyến đi của bạn" 🌸', 'success');
+      };
+      if (tripId && typeof API !== 'undefined') {
+        try { await API.setTripStatus(tripId, 'active'); } catch {}
+      }
+      done();
     });
   }
 
@@ -166,64 +284,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Share ---
   document.getElementById('hub-share').addEventListener('click', () => {
-    if (navigator.share) {
-      navigator.share({ title: 'My Huế Journey', text: '3-Day Food & Culture Journey — planned by HueViVu AI', url: window.location.href });
-    }
+    const title = currentTrip?.title || document.querySelector('.hero-card-title')?.textContent || 'Lịch trình Huế của tôi';
+    if (window.hvShare) window.hvShare(title, `${title} — lên kế hoạch bởi HueViVu AI`);
   });
 
-  // --- Timeline Actions (Journal / Review) ---
-  document.querySelectorAll('.tl-card').forEach(card => {
-    const actions = document.createElement('div');
-    actions.className = 'tl-actions';
-    actions.innerHTML = `
-      <button class="tl-action-btn" data-action="journal">📝 Nhật ký</button>
-      <button class="tl-action-btn" data-action="review">⭐ Đánh giá</button>
-    `;
-    
-    actions.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent card expansion
-      const btn = e.target.closest('.tl-action-btn');
-      if (!btn) return;
-      
-      if (btn.dataset.action === 'journal') {
-        window.location.href = 'journal.html';
-      } else if (btn.dataset.action === 'review') {
-        btn.innerHTML = '⭐ Đã ghi nhận';
-        btn.style.color = 'var(--coral)';
-        btn.style.pointerEvents = 'none';
-      }
-    });
-    
-    card.appendChild(actions);
-  });
-
-  // --- Timeline card click expansion ---
-  document.querySelectorAll('.tl-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const desc = card.querySelector('.tl-desc');
-      if (!desc) return;
-      const isExpanded = desc.style.maxHeight && desc.style.maxHeight !== '0px';
-      document.querySelectorAll('.tl-desc').forEach(d => {
-        d.style.maxHeight = '0px';
-        d.style.opacity = '0';
-        d.style.marginBottom = '0';
+  // --- Timeline interactions (gắn lại sau mỗi lần render động) ---
+  function initTimelineInteractions() {
+    // Actions (Journal / Review) — tránh gắn trùng
+    document.querySelectorAll('.tl-card').forEach(card => {
+      if (card.querySelector('.tl-actions')) return;
+      const actions = document.createElement('div');
+      actions.className = 'tl-actions';
+      actions.innerHTML = `
+        <button class="tl-action-btn" data-action="journal">📝 Nhật ký</button>
+        <button class="tl-action-btn" data-action="review">⭐ Đánh giá</button>
+      `;
+      actions.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const btn = e.target.closest('.tl-action-btn');
+        if (!btn) return;
+        if (btn.dataset.action === 'journal') {
+          const place = card.querySelector('.tl-name')?.textContent || '';
+          window.location.href = 'journal.html' + (place ? `?place=${encodeURIComponent(place)}` : '');
+        } else if (btn.dataset.action === 'review') {
+          openFeedback();
+        }
       });
-      if (!isExpanded) {
-        desc.style.maxHeight = desc.scrollHeight + 'px';
-        desc.style.opacity = '1';
-        desc.style.marginBottom = '10px';
-      }
+      card.appendChild(actions);
     });
-  });
 
-  // Initialize: collapse descriptions
-  document.querySelectorAll('.tl-desc').forEach(d => {
-    d.style.maxHeight = '0px';
-    d.style.opacity = '0';
-    d.style.overflow = 'hidden';
-    d.style.marginBottom = '0';
-    d.style.transition = 'all 0.35s cubic-bezier(0.16,1,0.3,1)';
-  });
+    // Card click → expand description
+    document.querySelectorAll('.tl-card').forEach(card => {
+      if (card.dataset.expandBound) return;
+      card.dataset.expandBound = '1';
+      card.addEventListener('click', () => {
+        const desc = card.querySelector('.tl-desc');
+        if (!desc) return;
+        const isExpanded = desc.style.maxHeight && desc.style.maxHeight !== '0px';
+        document.querySelectorAll('.tl-desc').forEach(d => {
+          d.style.maxHeight = '0px';
+          d.style.opacity = '0';
+          d.style.marginBottom = '0';
+        });
+        if (!isExpanded) {
+          desc.style.maxHeight = desc.scrollHeight + 'px';
+          desc.style.opacity = '1';
+          desc.style.marginBottom = '10px';
+        }
+      });
+    });
+
+    // Collapse descriptions ban đầu
+    document.querySelectorAll('.tl-desc').forEach(d => {
+      d.style.maxHeight = '0px';
+      d.style.opacity = '0';
+      d.style.overflow = 'hidden';
+      d.style.marginBottom = '0';
+      d.style.transition = 'all 0.35s cubic-bezier(0.16,1,0.3,1)';
+    });
+  }
 
   // --- Ripple effect ---
   const style = document.createElement('style');
@@ -255,6 +374,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     lastScrollY = y;
   });
+
+  // --- Feedback Form ---
+  const feedbackOverlay = document.getElementById('feedback-overlay');
+  const feedbackModal   = document.getElementById('feedback-modal');
+  const feedbackClose   = document.getElementById('feedback-close');
+  const feedbackForm    = document.getElementById('feedback-form');
+  const btnFeedback     = document.getElementById('btn-hub-feedback');
+
+  function openFeedback() {
+    if (!feedbackOverlay) return;
+    // Populate places checkboxes from current trip
+    const placesList = document.getElementById('feedback-places');
+    if (placesList && currentTrip?.days) {
+      placesList.innerHTML = '';
+      const seen = new Set();
+      currentTrip.days.forEach(day => {
+        (day.activities || []).forEach(act => {
+          if (act.name && !seen.has(act.name)) {
+            seen.add(act.name);
+            const label = document.createElement('label');
+            label.className = 'feedback-place-item';
+            label.innerHTML = `<input type="checkbox" name="visited" value="${act.name}"> <span>${act.name}</span>`;
+            placesList.appendChild(label);
+          }
+        });
+      });
+    }
+    feedbackOverlay.classList.add('open');
+    feedbackModal.classList.add('open');
+  }
+
+  function closeFeedback() {
+    if (!feedbackOverlay) return;
+    feedbackOverlay.classList.remove('open');
+    feedbackModal.classList.remove('open');
+  }
+
+  if (btnFeedback)  btnFeedback.addEventListener('click', openFeedback);
+  if (feedbackClose) feedbackClose.addEventListener('click', closeFeedback);
+  if (feedbackOverlay) feedbackOverlay.addEventListener('click', (e) => { if (e.target === feedbackOverlay) closeFeedback(); });
+
+  // Star rating logic
+  document.querySelectorAll('.star-rating').forEach(group => {
+    const stars = group.querySelectorAll('.star');
+    const input  = group.querySelector('input[type=hidden]');
+    stars.forEach((star, idx) => {
+      star.addEventListener('click', () => {
+        const val = idx + 1;
+        if (input) input.value = val;
+        stars.forEach((s, i) => s.classList.toggle('active', i <= idx));
+      });
+      star.addEventListener('mouseenter', () => stars.forEach((s, i) => s.classList.toggle('hover', i <= idx)));
+      star.addEventListener('mouseleave', () => stars.forEach(s => s.classList.remove('hover')));
+    });
+  });
+
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!tripId || typeof API === 'undefined') return;
+      const fd = new FormData(feedbackForm);
+      const overallRating = Number(feedbackForm.querySelector('#rating-overall')?.value || 0);
+      const aiRating      = Number(feedbackForm.querySelector('#rating-ai')?.value     || 0);
+      if (!overallRating) { alert('Vui lòng đánh giá tổng thể chuyến đi!'); return; }
+
+      const visited = Array.from(feedbackForm.querySelectorAll('input[name=visited]:checked')).map(el => el.value);
+      const notes   = feedbackForm.querySelector('#feedback-notes')?.value || '';
+
+      const submitBtn = feedbackForm.querySelector('.feedback-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Đang gửi...';
+
+      try {
+        await API.submitFeedback({
+          trip_id: tripId,
+          overall_rating: overallRating,
+          ai_rating: aiRating || overallRating,
+          places_visited: visited,
+          notes,
+        });
+        submitBtn.textContent = '✅ Cảm ơn bạn!';
+        submitBtn.style.background = 'linear-gradient(135deg,#4CAF50,#66BB6A)';
+        setTimeout(closeFeedback, 1500);
+      } catch {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gửi đánh giá';
+        alert('Không thể gửi đánh giá, vui lòng thử lại.');
+      }
+    });
+  }
+
+  // Auto-prompt feedback if user has been on page > 3 min
+  if (tripId) {
+    setTimeout(() => {
+      if (!document.getElementById('feedback-overlay')?.classList.contains('open')) {
+        openFeedback();
+      }
+    }, 3 * 60 * 1000);
+  }
 
   console.log('🌸 HueViVu — Itinerary Hub loaded');
 });

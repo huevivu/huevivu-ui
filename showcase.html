@@ -475,6 +475,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      /* Gradient text trong suốt → bỏ text-shadow (bị lọt qua chữ), dùng drop-shadow sạch */
+      text-shadow: none;
+      filter: drop-shadow(0 3px 14px rgba(0, 0, 0, 0.45));
     }
 
     @keyframes lineReveal {
@@ -615,6 +618,79 @@
       transform: rotate(-3deg);
     }
 
+    .is-active .w-tiktok {
+      width: 168px;
+      height: 196px;
+      animation: winPop 0.6s var(--spring) 1.3s both;
+      transform: rotate(5deg);
+    }
+
+    .is-active .w-tiktok2 {
+      width: 176px;
+      height: 96px;
+      animation: winPop 0.6s var(--spring) 1.6s both;
+      transform: rotate(-4deg);
+    }
+
+    .tk-head {
+      background: #111 !important;
+      color: #fff;
+    }
+
+    .tk-head::before {
+      background: #fe2c55 !important;
+      box-shadow: 12px 0 0 #25f4ee, 24px 0 0 #fff !important;
+    }
+
+    .tk-body {
+      background: #fff;
+      height: 100%;
+    }
+
+    .tk-video {
+      position: relative;
+      height: 72px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #2a2a2a, #444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .tk-play {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.2rem;
+    }
+
+    .tk-badge {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: #fe2c55;
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 6px;
+    }
+
+    .tk-cmt {
+      font-size: 0.55rem;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      color: #444;
+    }
+
+    .tk-cmt b {
+      color: #111;
+    }
+
+    .tk-flag {
+      color: #fe2c55;
+      font-weight: 700;
+    }
+
     @keyframes winPop {
       from {
         opacity: 0;
@@ -652,7 +728,7 @@
       background: rgba(255, 80, 80, 0.1);
       border: 1px solid rgba(255, 80, 80, 0.2);
       color: #FF7070;
-      font-size: 0.7rem;
+      font-size: 1rem;
       font-weight: 700;
       padding: 5px 14px;
       border-radius: 999px;
@@ -741,6 +817,9 @@
       padding: 0 20px;
       z-index: 10;
       margin-top: 40px;
+      /* Phóng to 2 box — đổi số này để to/nhỏ thêm (vd 1.7, 2) */
+      transform: scale(1.5);
+      transform-origin: center center;
     }
 
     .svs-pane {
@@ -815,6 +894,75 @@
       font-weight: 700;
       margin-top: 14px;
       color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Real-time status (cột HueViVu) */
+    .svs-rt-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--coral);
+      margin-bottom: 6px;
+    }
+
+    .svs-rt-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+      animation: svsPulse 1.4s infinite;
+    }
+
+    @keyframes svsPulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
+      70% { box-shadow: 0 0 0 7px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
+    .svs-status {
+      margin-top: 7px;
+      font-size: 0.56rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.14);
+      color: #16a34a;
+      transition: all 0.4s ease;
+    }
+
+    .svs-status.closed {
+      background: rgba(239, 68, 68, 0.14);
+      color: #dc2626;
+    }
+
+    .svs-swap-note {
+      margin-top: 6px;
+      font-size: 0.52rem;
+      font-weight: 700;
+      color: var(--coral);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.5s var(--spring);
+    }
+
+    .svs-swap-note.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .svs-card.flash {
+      animation: svsFlash 0.55s ease;
+    }
+
+    @keyframes svsFlash {
+      0%, 100% { background: #fff; }
+      50% { background: #ffe3e3; }
     }
 
     .svs-limit-row {
@@ -1167,6 +1315,99 @@
       border: 1px solid rgba(255, 107, 91, 0.2);
       width: 90%;
       z-index: 10;
+    }
+
+    .flow-phone-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Pop-up khoe giao diện ở scene Trang Chủ */
+    .idx-pops {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .idx-pop {
+      position: absolute;
+      width: 200px;
+      height: 400px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #11142a;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      transform: scale(0.7) translateY(24px) rotate(0deg);
+    }
+
+    .idx-pop img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .idx-pop.show {
+      animation: idxPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .idx-pop.p0.show { animation-name: idxPop0; }
+    .idx-pop.p1.show { animation-name: idxPop1; }
+    .idx-pop.p2.show { animation-name: idxPop2; }
+    .idx-pop.p3.show { animation-name: idxPop3; }
+
+    @keyframes idxPop0 { from { opacity: 0; transform: scale(0.7) translateY(24px) rotate(0); } to { opacity: 1; transform: scale(1) translateY(0) rotate(-7deg); } }
+    @keyframes idxPop1 { from { opacity: 0; transform: scale(0.7) translateY(24px) rotate(0); } to { opacity: 1; transform: scale(1) translateY(0) rotate(5deg); } }
+    @keyframes idxPop2 { from { opacity: 0; transform: scale(0.7) translateY(24px) rotate(0); } to { opacity: 1; transform: scale(1) translateY(0) rotate(6deg); } }
+    @keyframes idxPop3 { from { opacity: 0; transform: scale(0.7) translateY(24px) rotate(0); } to { opacity: 1; transform: scale(1) translateY(0) rotate(-5deg); } }
+
+    .flow-map-card {
+      width: 100%;
+      max-width: 320px;
+      margin: 14px auto 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 12px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--spring);
+    }
+
+    .flow-map-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .flow-map-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
+    }
+
+    .flow-map-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--coral);
+      box-shadow: 0 0 0 0 rgba(255, 107, 91, 0.6);
+      animation: flowDotPulse 1.6s infinite;
+    }
+
+    @keyframes flowDotPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 91, 0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(255, 107, 91, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 107, 91, 0); }
     }
 
     .s2-copy {
@@ -1890,27 +2131,27 @@
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(16px);
       border-radius: 12px;
-      padding: 8px 12px;
+      padding: 20px 22px;
       display: flex;
       align-items: center;
       gap: 9px;
       white-space: nowrap;
-      min-width: 140px;
+      min-width: 200px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
     }
 
     .gem-card-icon {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
 
     .gem-card-name {
-      font-size: 0.7rem;
+      font-size: 1rem;
       font-weight: 800;
       color: #0E1023;
     }
 
     .gem-card-tag {
-      font-size: 0.58rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--coral);
       margin-top: 1px;
@@ -1958,7 +2199,7 @@
     }
 
     .s5-sub {
-      font-size: 0.85rem;
+      font-size: 1.5rem;
       color: rgba(255, 255, 255, 0.35);
       margin-top: 5px;
       font-style: italic;
@@ -2646,6 +2887,49 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
+    /* ─── SCENE s_emotion ── CẢM XÚC HUẾ ─────── */
+    #s_emotion { background: #000; display: flex; align-items: center; justify-content: center; }
+    .se-bg { position: absolute; inset: 0; }
+    .se-bg-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.22) saturate(1.4); animation: kenBurns 25s ease-in-out infinite alternate; }
+    .se-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 40%, rgba(0,0,0,0.55) 100%); }
+    .se-content { position: relative; z-index: 10; text-align: center; padding: 0 48px; max-width: 680px; }
+    .se-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,107,91,0.7); margin-bottom: 32px; opacity: 0; }
+    .se-headline { font-size: clamp(2rem, 6.5vw, 4rem); font-weight: 300; line-height: 1.5; letter-spacing: -0.01em; color: rgba(255,255,255,0.9); }
+    .se-headline span { display: block; opacity: 0; transform: translateY(24px); }
+    .se-headline em { font-style: italic; font-weight: 700; background: linear-gradient(120deg, var(--coral), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .se-rule { width: 0; height: 1px; background: rgba(255,107,91,0.4); margin: 36px auto 0; transition: width 1.2s var(--ease); }
+    .se-rule.open { width: 52px; }
+
+    /* ─── SCENE s_stats ── CON SỐ BIẾT NÓI ────── */
+    #s_stats { background: var(--dark); display: flex; align-items: center; justify-content: center; }
+    .ss-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,107,91,0.05) 0%, transparent 70%); }
+    .ss-content { position: relative; z-index: 5; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 460px; padding: 0 28px; }
+    .ss-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,107,91,0.65); text-align: center; margin-bottom: 4px; opacity: 0; }
+    .ss-stat { display: flex; align-items: center; gap: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 20px 24px; opacity: 0; transform: translateY(20px); }
+    .ss-num-wrap { display: flex; align-items: baseline; gap: 2px; min-width: 76px; }
+    .ss-num { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; background: linear-gradient(120deg, var(--coral), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-variant-numeric: tabular-nums; }
+    .ss-unit { font-size: 1rem; font-weight: 800; background: linear-gradient(120deg, var(--coral), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .ss-text { flex: 1; }
+    .ss-label { font-size: 0.88rem; font-weight: 700; color: white; line-height: 1.35; }
+    .ss-desc { font-size: 0.67rem; color: rgba(255,255,255,0.35); margin-top: 3px; font-style: italic; }
+    .ss-icon { font-size: 1.7rem; flex-shrink: 0; }
+
+    /* ─── S1 CHAOS ESCALATION ─────────────────── */
+    .s1-notif { position: absolute; top: 44%; right: 500px; background: white; border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); display: flex; align-items: flex-start; gap: 8px; font-size: 0.9rem; color: #333; z-index: 20; opacity: 0; transform: translateX(130%); max-width: 350px; }
+    .s1-notif-icon { font-size: 1.1rem; flex-shrink: 0; line-height: 1.4; }
+    .s1-notif-text { font-weight: 600; line-height: 1.4; }
+    .s1-counter { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1; pointer-events: none; opacity: 0; }
+    .s1-counter-num { font-size: clamp(5rem, 22vw, 11rem); font-weight: 900; letter-spacing: -0.05em; color: rgba(255,255,255,0.04); line-height: 1; }
+    .s1-counter-text { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.07); margin-top: 4px; }
+
+    /* ─── S7 ENHANCED FINALE ──────────────────── */
+    .s7-tagline-em { color: rgba(255,255,255,0.45); font-weight: 300; font-style: italic; }
+    .s7-stats-row { display: flex; align-items: center; justify-content: center; gap: 0; opacity: 0; animation: slideUpFade 0.8s var(--ease) 1.3s both; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 14px 24px; }
+    .s7-mini-stat { text-align: center; padding: 0 18px; }
+    .s7-ms-num { display: block; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; background: linear-gradient(120deg, var(--coral), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .s7-ms-label { display: block; font-size: 0.58rem; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+    .s7-stat-div { width: 1px; height: 28px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+
     #burst {
       position: absolute;
       inset: 0;
@@ -2667,6 +2951,242 @@
         transform: translateY(0);
       }
     }
+
+    /* ─── SCENE s_offline: Bản đồ ngoại tuyến ─── */
+    .off-screen {
+      height: 560px;
+      padding: 0 !important;
+      background: #0f1220 !important;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .off-statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 8px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.85);
+      flex-shrink: 0;
+    }
+
+    .off-sig {
+      transition: color 0.3s;
+    }
+
+    .off-sig.lost {
+      color: #f87171;
+    }
+
+    .off-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 12px 10px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.32);
+      color: #fecaca;
+      font-size: 0.62rem;
+      line-height: 1.4;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.5s, transform 0.5s var(--spring);
+    }
+
+    .off-banner b {
+      color: #fff;
+    }
+
+    .off-banner.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .off-map {
+      position: relative;
+      flex: 1;
+      margin: 0 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a2540, #122033);
+    }
+
+    .off-map::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 28% 38%, rgba(120, 180, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 75% 68%, rgba(255, 127, 107, 0.16), transparent 55%);
+    }
+
+    .off-route {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      stroke-dasharray: 5 6;
+    }
+
+    .off-route path {
+      stroke-dashoffset: 320;
+    }
+
+    #s_offline.is-active .off-route path {
+      animation: offDraw 1.6s ease 0.6s forwards;
+    }
+
+    @keyframes offDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .off-pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 1.3rem;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.5));
+      opacity: 0;
+    }
+
+    #s_offline.is-active .off-pin {
+      animation: movPinPop2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    #s_offline.is-active .off-pin:nth-child(2) { animation-delay: 0.7s; }
+    #s_offline.is-active .off-pin:nth-child(3) { animation-delay: 0.95s; }
+    #s_offline.is-active .off-pin:nth-child(4) { animation-delay: 1.2s; }
+    #s_offline.is-active .off-pin:nth-child(5) { animation-delay: 1.45s; }
+
+    @keyframes movPinPop2 {
+      from { opacity: 0; transform: translate(-50%, -30%) scale(0.5); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .off-loc {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #1a2540;
+      z-index: 2;
+    }
+
+    /* Audio guide tự phát qua GPS (gộp vào màn offline) */
+    .off-audio {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 12px;
+      background: rgba(15, 18, 32, 0.82);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.5s, transform 0.5s var(--spring);
+    }
+
+    #s_offline.is-active .off-audio {
+      animation: offAudioIn 0.6s var(--spring) 2.4s forwards;
+    }
+
+    @keyframes offAudioIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .off-audio-ico { font-size: 1.05rem; }
+
+    .off-audio-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .off-audio-title {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .off-audio-sub {
+      font-size: 0.52rem;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.3;
+    }
+
+    .off-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 14px;
+    }
+
+    .off-wave i {
+      width: 2.5px;
+      border-radius: 2px;
+      background: var(--coral);
+      height: 30%;
+      animation: offWave 0.9s ease-in-out infinite;
+    }
+
+    .off-wave i:nth-child(2) { animation-delay: 0.15s; }
+    .off-wave i:nth-child(3) { animation-delay: 0.3s; }
+    .off-wave i:nth-child(4) { animation-delay: 0.45s; }
+    .off-wave i:nth-child(5) { animation-delay: 0.6s; }
+
+    @keyframes offWave {
+      0%, 100% { height: 25%; }
+      50% { height: 100%; }
+    }
+
+    .off-sheet {
+      flex-shrink: 0;
+      background: #fff;
+      border-radius: 18px 18px 0 0;
+      margin-top: 10px;
+      padding: 12px 14px 16px;
+    }
+
+    .off-sheet-head {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #1a2540;
+      margin-bottom: 8px;
+    }
+
+    .off-check {
+      color: #16a34a;
+    }
+
+    .off-stop {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .off-stop:last-child { border-bottom: none; }
+    .off-stop .off-t { font-size: 0.66rem; font-weight: 800; color: var(--coral); width: 38px; }
+    .off-stop .off-e { font-size: 1rem; }
+    .off-stop .off-n { font-size: 0.74rem; font-weight: 600; color: #2c2c2c; }
 
     @keyframes fadeIn {
       from {
@@ -2743,17 +3263,22 @@
         margin: 0;
       }
 
-      /* Scene 3 Layout (Weather AI) */
+      /* Scene 3 Layout (Weather AI) — phone to hơn + xuống giữa hơn */
       .s3-phone-wrap {
-        left: 55%;
-        top: 10%;
+        left: 56%;
+        top: 13%;
         transform: none !important;
+      }
+
+      .s3-phone {
+        transform: scale(1.16);
+        transform-origin: top center;
       }
 
       .s3-copy {
         position: absolute;
-        left: 15%;
-        top: 45%;
+        left: 14%;
+        top: 50%;
         transform: translateY(-50%) !important;
         text-align: left;
         width: 35%;
@@ -2837,15 +3362,6 @@
       <div class="seg" data-s="8">
         <div class="seg-fill" id="sf8"></div>
       </div>
-      <div class="seg" data-s="9">
-        <div class="seg-fill" id="sf9"></div>
-      </div>
-      <div class="seg" data-s="10">
-        <div class="seg-fill" id="sf10"></div>
-      </div>
-      <div class="seg" data-s="11">
-        <div class="seg-fill" id="sf11"></div>
-      </div>
     </div>
 
     <div id="scene-label">SCENE 01</div>
@@ -2904,6 +3420,23 @@
       <div class="s0-particles" id="p0"></div>
     </div>
 
+    <!-- ─── SCENE s_emotion: CẢM XÚC HUẾ ──────────────────────────────── -->
+    <div class="scene" id="s_emotion">
+      <div class="se-bg">
+        <img src="assets/hero.png" alt="Huế" class="se-bg-img">
+        <div class="se-overlay"></div>
+      </div>
+      <div class="se-content">
+        <div class="se-eyebrow">✦ &nbsp; Huế, Việt Nam &nbsp; ✦</div>
+        <h2 class="se-headline">
+          <span>Một vùng đất</span>
+          <span>cần được <em>cảm nhận</em>,</span>
+          <span>không chỉ được <em>ghé thăm</em>.</span>
+        </h2>
+        <div class="se-rule"></div>
+      </div>
+    </div>
+
     <!-- ─── SCENE s_index: TRANG CHỦ ─────────────────────────────────── -->
     <div class="scene" id="s_index">
       <div class="s2-glow"
@@ -2933,6 +3466,21 @@
           <p class="s2-sub">Giao diện trang chủ hiện đại, thân thiện, sẵn sàng đồng hành cùng bạn.</p>
         </div>
       </div>
+      <!-- Pop-up khoe giao diện: bung lên sau khi cursor bấm "Bắt đầu" -->
+      <div class="idx-pops">
+        <div class="idx-pop p0" style="left:2%; top:14%;">
+          <img src="assets/screen-trip.png" alt="Lịch trình" loading="lazy">
+        </div>
+        <div class="idx-pop p1" style="left:6%; bottom:10%;">
+          <img src="assets/screen-explore.png" alt="Khám phá" loading="lazy">
+        </div>
+        <div class="idx-pop p2" style="right:6%; top:12%;">
+          <img src="assets/screen-discover.png" alt="Bản đồ" loading="lazy">
+        </div>
+        <div class="idx-pop p3" style="right:3%; bottom:12%;">
+          <img src="assets/screen-community.png" alt="Cộng đồng" loading="lazy">
+        </div>
+      </div>
     </div>
 
     <!-- ─── SCENE s_flow: PHÂN TÍCH LỊCH TRÌNH ──────────────────────── -->
@@ -2941,16 +3489,48 @@
         style="background: radial-gradient(ellipse 60% 50% at 75% 25%, rgba(255, 140, 66, 0.1) 0%, transparent 60%);">
       </div>
       <div class="s2-layout">
+        <div class="flow-phone-col">
         <div class="phone">
-          <div class="phone-screen" style="height: 600px; padding:0; background:var(--dark);">
+          <div class="phone-screen" style="height: 440px; padding:0; background:var(--dark);">
             <iframe id="iframe-flow" src="about:blank" data-src="flow.html#analyzing"
               style="width:100%; height:100%; border:none; border-radius: 28px;"></iframe>
           </div>
         </div>
+        <!-- Bản đồ tối ưu lộ trình — hiện dưới điện thoại -->
+        <div class="flow-map-card" id="flowMapCard">
+          <div class="flow-map-head">
+            <span class="flow-map-dot"></span>
+            <span>AI tìm tọa độ bản địa &amp; tối ưu lộ trình…</span>
+          </div>
+          <div class="map-wrap" id="flowmap" style="opacity:1; height:120px; margin:0;">
+            <div class="map-grid-bg"></div>
+            <svg class="map-svg" viewBox="0 0 260 110" fill="none">
+              <defs>
+                <linearGradient id="rgflow" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#FF6B5B" />
+                  <stop offset="100%" stop-color="#FF8C42" />
+                </linearGradient>
+              </defs>
+              <path class="route-path" id="fp" style="stroke:url(#rgflow)" d="M36,88 C55,65 80,78 110,50 C140,22 185,38 220,65" />
+            </svg>
+            <div class="map-pin flowpin" style="left:12%;top:72%">🏛️</div>
+            <div class="map-pin flowpin" style="left:40%;top:38%">🍜</div>
+            <div class="map-pin flowpin" style="left:79%;top:55%">🌅</div>
+            <div class="s2-opt-badge" id="flowopt">
+              <span style="font-size:1.2rem">⚡</span>
+              <div>
+                <div style="font-size:0.55rem; font-weight:800; color:var(--coral); text-transform:uppercase;">Đã Rút Gọn Quãng Đường</div>
+                <div style="font-size:0.75rem; font-weight:800; color:#0E1023;"><strike
+                    style="color:#999; font-weight:600">14.5km</strike> &rarr; 4.2km · tiết kiệm 70%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div><!-- /flow-phone-col -->
         <div class="s2-copy">
           <h2 class="s2-headline">Phân tích<br><span class="s2-grad">sở thích cá nhân.</span></h2>
-          <p class="s2-sub">AI đang tính toán lộ trình, tìm kiếm không gian ẩm thực và tối ưu ngân sách hoàn toàn tự
-            động.</p>
+          <p class="s2-sub">AI tính toán lộ trình, tìm kiếm những không gian <strong>chỉ người bản địa mới thực sự
+            biết</strong>.</p>
         </div>
       </div>
     </div>
@@ -2983,7 +3563,7 @@
         </div>
         <div class="s1-win-wrap" style="left:50%; top:15%; z-index:2;">
           <div class="s1-mess-window w-maps">
-            <div class="w-header">Google Maps (18 tab)</div>
+            <div class="w-header">Trang Web Bản Đồ (18 tab)</div>
             <div class="w-body" style="background:#e5e3df; height:100%; position:relative;">
               <span style="position:absolute; top:10px; left:20px; font-size:1rem;">📍</span>
               <span style="position:absolute; top:40px; left:60px; font-size:1rem;">📍</span>
@@ -2992,9 +3572,9 @@
             </div>
           </div>
         </div>
-        <div class="s1-win-wrap" style="left:25%; top:45%; z-index:3;">
+        <div class="s1-win-wrap" style="left:24%; top:44%; z-index:3;">
           <div class="s1-mess-window w-notes">
-            <div class="w-header">Apple Ghi Chú</div>
+            <div class="w-header">App Ghi Chú</div>
             <div class="w-body" style="background:#fefefe; height:100%; font-family:sans-serif;">
               <b>Ghi chú chuyến đi Huế:</b><br>
               - Đừng quên mang áo mưa!<br>
@@ -3003,14 +3583,48 @@
             </div>
           </div>
         </div>
+        <!-- TikTok: tìm địa điểm nhưng toàn comment feedback giả -->
+        <div class="s1-win-wrap" style="left:80%; top:20%; z-index:4;">
+          <div class="s1-mess-window w-tiktok">
+            <div class="w-header tk-head">TikTok · #reviewquanhue</div>
+            <div class="w-body tk-body">
+              <div class="tk-video">
+                <span class="tk-play">▶</span>
+                <span class="tk-badge">Top 1 Huế 🔥</span>
+              </div>
+              <div class="tk-cmt"><b>an_food2k3</b> Quán ngon nhất Huế 😍 ib đặt bàn nha!</div>
+              <div class="tk-cmt"><b>khachthat_</b> Dở tệ, <span class="tk-flag">review giả hết</span> 🙄</div>
+              <div class="tk-cmt"><b>booking.hue</b> Hợp tác QC inbox 📩📩</div>
+            </div>
+          </div>
+        </div>
+        <div class="s1-win-wrap" style="left:30%; top:30%; z-index:5;">
+          <div class="s1-mess-window w-tiktok2">
+            <div class="w-header tk-head">Bình luận · 1.2k</div>
+            <div class="w-body" style="background:#fff; height:100%;">
+              <div class="tk-cmt">⭐⭐⭐⭐⭐ "Tuyệt vời!" — <span class="tk-flag">acc ảo</span></div>
+              <div class="tk-cmt">⭐ "Lừa đảo, đừng tới!" — <span class="tk-flag">trái ngược</span></div>
+              <div class="tk-cmt">📩 5 lời mời booking đáng ngờ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Escalating chaos elements -->
+      <div class="s1-counter">
+        <div class="s1-counter-num">3h+</div>
+        <div class="s1-counter-text">đã lên kế hoạch · vẫn chưa xong</div>
+      </div>
+      <div class="s1-notif">
+        <div class="s1-notif-icon">🔔</div>
+        <div class="s1-notif-text">Chrome: "18 tab đang mở — Máy chạy chậm"</div>
       </div>
       <div class="s1-vignette"></div>
       <div class="s1-copy">
         <div class="s1-tag">😩 Cách Cũ Tẻ Nhạt</div>
         <h2 class="s1-headline">
           Lên kế hoạch đi chơi<br>
-          <span class="s1-strike">không nên giống như</span><br>
-          <span class="s1-accent-text">đi làm.</span>
+          <span class="s1-strike">quá tốn<br>
+          <span class="s1-accent-text">công sức</span>
         </h2>
       </div>
     </div>
@@ -3023,25 +3637,23 @@
         <div class="svs-pane svs-left" id="svs-left">
           <div class="svs-header">Trợ lý AI Thông thường 🤖</div>
           <div class="svs-body">
-            <div class="svs-text-block">Dưới đây là lịch trình 2 ngày tại Huế:<br><br><b>Ngày 1:</b><br>- 08:00: Tham
-              quan Đại Nội. Mất khoảng 2-3 tiếng.<br>- 11:30: Đi ăn Bún bò Huế Loan.<br>- 14:00: Đi Chùa Thiên
-              Mụ...<br><br><b>Ngày 2:</b><br>- 09:00: Viếng Lăng Khải Định...</div>
+            <div class="svs-text-block">Lịch trình 2 ngày tại Huế:<br><b>Ngày 1:</b><br>- 08:00: Đại Nội (2-3 tiếng)<br>- 11:30: Bún bò Huế Loan<br>- 14:00: Chùa Thiên Mụ...</div>
             <div class="svs-limit-row">
               <span class="svs-limit-icon">📍</span>
               <div>
                 <div class="svs-limit-title">Không biết bạn đang ở đâu</div>
-                <div class="svs-limit-desc">Không thể xác định vị trí thực tế — lộ trình hoàn toàn là phỏng đoán.</div>
+                <div class="svs-limit-desc">Không xác định vị trí thực tế — lộ trình hoàn toàn là phỏng đoán.</div>
               </div>
             </div>
             <div class="svs-limit-row">
-              <span class="svs-limit-icon">🗺️</span>
+              <span class="svs-limit-icon">🕒</span>
               <div>
-                <div class="svs-limit-title">Lộ trình không được tối ưu</div>
-                <div class="svs-limit-desc">Không tính khoảng cách thực tế, dễ bắt bạn đi vòng vèo mất thời gian.</div>
+                <div class="svs-limit-title">Dữ liệu tĩnh, lỗi thời</div>
+                <div class="svs-limit-desc">Không biết quán đã đóng cửa hay hết chỗ — thông tin "chết" từ lúc huấn luyện.</div>
               </div>
             </div>
           </div>
-          <div class="svs-footer">Toàn chữ là chữ · Không định vị · Lộ trình tự đoán.</div>
+          <div class="svs-footer">Toàn chữ là chữ · Không định vị · Dữ liệu cũ.</div>
         </div>
 
         <div class="svs-vs">VS</div>
@@ -3055,12 +3667,18 @@
               <div style="font-weight:bold; font-size:0.7rem;">Hoàng Thành Huế</div>
               <div style="color:#666; font-size:0.55rem;">🏛️ Di sản • 2.5 tiếng • 🌧️ Có mưa sau đó</div>
             </div>
-            <div class="svs-card">
-              <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:0.7rem;">
-                <span>🍜 Bún bò Bà Tuyết</span>
-                <span style="color:var(--coral)">★ 4.8</span>
+            <div class="svs-card" id="svsLiveCard">
+              <div class="svs-rt-head">
+                <span class="svs-rt-dot"></span>
+                <span>Cập nhật theo thời gian thực</span>
               </div>
-              <div style="color:#666; font-size:0.55rem;">Cách 500m • Giá 40k VND</div>
+              <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:0.7rem;">
+                <span id="svsPlaceName">🍜 Bún bò Bà Tuyết</span>
+                <span style="color:var(--coral)" id="svsPlaceRating">★ 4.8</span>
+              </div>
+              <div style="color:#666; font-size:0.55rem;" id="svsPlaceMeta">Cách 500m • Giá 40k VND</div>
+              <div class="svs-status" id="svsStatus">🟢 Đang mở · còn bàn</div>
+              <div class="svs-swap-note" id="svsSwapNote">↻ HueViVu đã tự đổi sang quán gần đó còn mở</div>
             </div>
           </div>
           <div class="svs-footer" style="color:var(--coral)">Trực quan. Thực tế. Sẵn sàng trải nghiệm.</div>
@@ -3211,7 +3829,7 @@
           <div class="s4-screen">
             <div class="chat-header">
               <div class="chat-avatar">✨</div>
-              <span class="chat-name">HueViVu AI</span>
+              <span class="chat-name">ChatBot AI</span>
               <span class="chat-online"></span>
             </div>
             <div class="chat-area" id="chat-area"></div>
@@ -3292,8 +3910,59 @@
       </div>
       <div class="s5-copy">
         <div class="s5-badge">🔍 Bản đồ Khám phá AI</div>
-        <h2 class="s5-headline">Vượt xa khỏi<br><span class="s5-grad">sách hướng dẫn du lịch.</span></h2>
-        <p class="s5-sub">Những tọa độ chỉ người bản địa mới biết.</p>
+        <h2 class="s5-headline">Vượt xa khỏi<br><span class="s5-grad">địa điểm du lịch quá phổ biến.</span></h2>
+        <p class="s5-sub">Đến với những tọa độ chỉ người bản địa mới biết.</p>
+      </div>
+    </div>
+
+    <!-- ─── SCENE s_offline: BẢN ĐỒ NGOẠI TUYẾN ─────────────────── -->
+    <div class="scene" id="s_offline">
+      <div class="s2-glow"
+        style="background: radial-gradient(ellipse 60% 50% at 32% 50%, rgba(120,170,255,0.10) 0%, transparent 60%);">
+      </div>
+      <div class="s2-layout" style="flex-direction:row;">
+        <div class="phone">
+          <div class="phone-screen off-screen">
+            <div class="off-statusbar">
+              <span class="off-sig" id="off-sig">📶 4G</span>
+              <span class="off-clock">14:32</span>
+              <span>🔋 82%</span>
+            </div>
+            <div class="off-banner" id="off-banner">
+              <span>📵</span><span>Đang ngoại tuyến — hiển thị <b>hành trình đã lưu</b></span>
+            </div>
+            <div class="off-map">
+              <svg class="off-route" viewBox="0 0 300 200" preserveAspectRatio="none" fill="none">
+                <path d="M40,158 C95,120 130,150 168,96 C205,52 245,72 270,54" stroke="#FF7F6B" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" />
+              </svg>
+              <div class="off-pin" style="left:13%;top:78%">🏛️</div>
+              <div class="off-pin" style="left:40%;top:58%">🍜</div>
+              <div class="off-pin" style="left:58%;top:46%">🛕</div>
+              <div class="off-pin" style="left:80%;top:30%">🌊</div>
+              <div class="off-loc">📍 Huế, Việt Nam · Đã tải offline</div>
+              <!-- Audio guide tự phát qua GPS -->
+              <div class="off-audio" id="off-audio">
+                <span class="off-audio-ico">🎧</span>
+                <div class="off-audio-info">
+                  <span class="off-audio-title">Chuyện Kể Hoàng Cung</span>
+                  <span class="off-audio-sub">Tự phát qua GPS · Cửa Ngọ Môn</span>
+                </div>
+                <div class="off-wave"><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="off-sheet">
+              <div class="off-sheet-head">Hành trình đã lưu <span class="off-check">✓</span></div>
+              <div class="off-stop"><span class="off-t">08:00</span><span class="off-e">🏛️</span><span class="off-n">Hoàng Thành Huế</span></div>
+              <div class="off-stop"><span class="off-t">11:30</span><span class="off-e">🍜</span><span class="off-n">Bún bò Bà Tuyết</span></div>
+              <div class="off-stop"><span class="off-t">15:00</span><span class="off-e">🛕</span><span class="off-n">Chùa Thiên Mụ</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="s2-copy">
+          <div class="s2-badge">📡 Đồng hành tại điểm đến</div>
+          <h2 class="s2-headline">Tới nơi là<br><span class="s2-grad">có người dẫn đường.</span></h2>
+          <p class="s2-sub">Mất sóng vẫn có bản đồ offline; tới mỗi di tích, AI <strong>tự phát thuyết minh qua GPS</strong> — rảnh tay đắm mình vào lịch sử.</p>
+        </div>
       </div>
     </div>
 
@@ -3385,6 +4054,47 @@
       </div>
     </div>
 
+    <!-- ─── SCENE s_stats: CON SỐ BIẾT NÓI ─────────────────────── -->
+    <div class="scene" id="s_stats">
+      <div class="ss-bg"></div>
+      <div class="ss-content">
+        <div class="ss-eyebrow">✦ &nbsp; HueViVu bằng con số &nbsp; ✦</div>
+        <div class="ss-stat">
+          <div class="ss-icon">🗺️</div>
+          <div class="ss-num-wrap">
+            <span class="ss-num" id="ssn1">0</span>
+            <span class="ss-unit">+</span>
+          </div>
+          <div class="ss-text">
+            <div class="ss-label">Điểm bí mật chỉ người bản địa mới biết</div>
+            <div class="ss-desc">Không có trong sách hướng dẫn du lịch nào</div>
+          </div>
+        </div>
+        <div class="ss-stat">
+          <div class="ss-icon">⚡</div>
+          <div class="ss-num-wrap">
+            <span class="ss-num" id="ssn2">0</span>
+            <span class="ss-unit">s</span>
+          </div>
+          <div class="ss-text">
+            <div class="ss-label">Để tạo lịch trình cá nhân hóa hoàn chỉnh</div>
+            <div class="ss-desc">AI xử lý trong tích tắc — không phải vài giờ</div>
+          </div>
+        </div>
+        <div class="ss-stat">
+          <div class="ss-icon">⭐</div>
+          <div class="ss-num-wrap">
+            <span class="ss-num" id="ssn3">0</span>
+            <span class="ss-unit">%</span>
+          </div>
+          <div class="ss-text">
+            <div class="ss-label">Du khách hài lòng với chuyến đi của mình</div>
+            <div class="ss-desc">Huế qua mắt người bản địa — khác biệt hoàn toàn</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ─── SCENE 7: FINALE ───────────────────────────────────── -->
     <div class="scene" id="s7">
       <div class="s7-mosaic">
@@ -3410,7 +4120,26 @@
             <div class="s7-logo-sub">Người Bạn Đồng Hành AI · Huế, Việt Nam</div>
           </div>
         </div>
-        <p class="s7-tagline">Người dẫn đường AI tận tâm qua<br>trái tim hoàng gia Việt Nam.</p>
+        <p class="s7-tagline">
+          Để Huế kể chuyện với bạn —<br>
+          <span class="s7-tagline-em">không phải bạn đọc về Huế.</span>
+        </p>
+        <div class="s7-stats-row">
+          <div class="s7-mini-stat">
+            <span class="s7-ms-num">200+</span>
+            <span class="s7-ms-label">Điểm Bí Mật</span>
+          </div>
+          <div class="s7-stat-div"></div>
+          <div class="s7-mini-stat">
+            <span class="s7-ms-num">3s</span>
+            <span class="s7-ms-label">Tạo Lịch Trình</span>
+          </div>
+          <div class="s7-stat-div"></div>
+          <div class="s7-mini-stat">
+            <span class="s7-ms-num">98%</span>
+            <span class="s7-ms-label">Hài Lòng</span>
+          </div>
+        </div>
         <div class="s7-pills">
           <div class="s7-pill">✨ Lịch Trình AI</div>
           <div class="s7-pill">🌧️ Thích Ứng Thời Tiết</div>
@@ -3418,17 +4147,16 @@
           <div class="s7-pill">🎧 Thuyết Minh Kể Chuyện</div>
           <div class="s7-pill">🍜 Khám Phá Ẩm Thực</div>
           <div class="s7-pill">📸 Tự Động Ghi Nhật Ký</div>
-          <div class="s7-pill">⚡ Tối Ưu Lộ Trình</div>
         </div>
         <div class="s7-ctas">
           <button class="s7-btn-primary" onclick="location.href='index.html'">
-            ✨ &nbsp;Bắt Đầu Lên Kế Hoạch
+            ✨ &nbsp;Bắt Đầu Ngay — Miễn Phí
           </button>
           <button class="s7-btn-secondary" onclick="location.href='home.html'">
             Khám Phá Trực Tiếp →
           </button>
         </div>
-        <div class="s7-restart"><button onclick="SHOW.restart()">↺ Xem Lại</button></div>
+        <div class="s7-restart"><button onclick="SHOW.restart()">↺ Xem Lại Từ Đầu</button></div>
       </div>
       <div id="burst"></div>
     </div>
@@ -3438,21 +4166,18 @@
   <script>
     const SHOW = (() => {
       const SCENES = [
-        { id: 's0', dur: 6200, label: '01 · Khởi Hành' },
-        { id: 's_index', dur: 6500, label: '02 · Trang Chủ' },
-        { id: 's_flow', dur: 7000, label: '03 · Phân Tích Lịch Trình' },
-        { id: 's1', dur: 6500, label: '04 · Vấn Đề' },
-        { id: 's_vs', dur: 7000, label: '05 · So Sánh AI' },
-        { id: 's2', dur: 7500, label: '06 · Lên Lịch Trình AI' },
-        { id: 's3', dur: 7000, label: '07 · Thích Ứng Thời Tiết' },
-        { id: 's4', dur: 6500, label: '08 · Trò Chuyện Trợ Lý AI' },
-        { id: 's5', dur: 5800, label: '09 · Tọa Độ Bí Mật' },
-        { id: 's6', dur: 6200, label: '10 · Thuyết Minh Audio' },
-        { id: 's_journal', dur: 6500, label: '11 · Nhật Ký Hành Trình' },
-        { id: 's7', dur: 99999, label: '12 · Trải Nghiệm Hoàn Hảo' },
+        { id: 's0',        dur: 6200,  label: '01 · Khởi Hành' },           // 0
+        { id: 's_vs',      dur: 7000,  label: '02 · So Sánh AI' },           // 1
+        { id: 's_index',   dur: 6500,  label: '03 · Trang Chủ' },            // 2  (app thật)
+        { id: 's_flow',    dur: 7000,  label: '04 · Lên Lịch Trình AI' },    // 3  (app thật + tọa độ bản địa)
+        { id: 's3',        dur: 7000,  label: '05 · Thích Ứng Thời Tiết' },  // 4
+        { id: 's4',        dur: 6500,  label: '06 · Trò Chuyện AI' },        // 5
+        { id: 's_offline', dur: 7200,  label: '07 · Đồng Hành Tại Điểm Đến' }, // 6  (offline map + audio GPS)
+        { id: 's_journal', dur: 6500,  label: '08 · Nhật Ký Hành Trình' },   // 7
+        { id: 's7',        dur: 99999, label: '09 · Trải Nghiệm Hoàn Hảo' }, // 8
       ];
 
-      let cur = 0, playing = true;
+      let cur = 0, playing = false;
       let advTimer = null, rafId = null, segStart = null;
 
       const sceneEls = SCENES.map(s => document.getElementById(s.id));
@@ -3474,7 +4199,6 @@
         if (!snap) doFlash();
         cur = idx;
         sceneEls[cur].classList.add('is-active');
-        if (cur === 9) document.querySelectorAll('.mos-cell').forEach(c => c.classList.add('is-active'));
         enterScene(cur);
         updateLabel();
         segFills[cur].style.transition = 'none';
@@ -3504,8 +4228,13 @@
       }
 
       function doFlash() {
-        flash.style.opacity = '0.12';
-        setTimeout(() => { flash.style.opacity = '0'; }, 80);
+        flash.style.background = '#050810';
+        flash.style.transition = 'opacity 0.14s ease-in';
+        flash.style.opacity = '0.88';
+        setTimeout(() => {
+          flash.style.transition = 'opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+          flash.style.opacity = '0';
+        }, 190);
       }
 
       function updateLabel() {
@@ -3521,7 +4250,8 @@
       }
 
       function enterScene(idx) {
-        const fns = [enter0, enter_idx, enter_flow, enter1, enter_vs, enter2, enter3, enter4, enter5, enter6, enter_journal, enter7];
+        // Order mirrors SCENES array: s0,s_vs,s_index,s_flow,s3,s4,s_offline,s_journal,s7
+        const fns = [enter0, enter_vs, enter_idx, enter_flow, enter3, enter4, enter_offline, enter_journal, enter7];
         fns[idx]?.();
       }
 
@@ -3548,19 +4278,23 @@
         ripple.style.opacity = '0';
         ripple.style.transform = 'scale(0)';
 
-        // 1. Move cursor in
+        // Reset các pop-up khoe giao diện
+        const pops = document.querySelectorAll('#s_index .idx-pop');
+        pops.forEach(p => p.classList.remove('show'));
+
+        // 1. Move cursor in (xuất hiện sớm)
         idxTimers.push(setTimeout(() => {
           cursor.style.transition = 'all 2s cubic-bezier(0.25, 1, 0.4, 1)';
           cursor.style.opacity = '1';
           cursor.style.bottom = '80px'; // Tweak to perfectly align with the button
           cursor.style.left = '50%';
-        }, 3800));
+        }, 200));
 
         // 2. Click down
         idxTimers.push(setTimeout(() => {
           svg.style.transition = 'transform 0.1s';
           svg.style.transform = 'scale(0.8)';
-        }, 5100));
+        }, 400));
 
         // 3. Click release & Ripple
         idxTimers.push(setTimeout(() => {
@@ -3578,16 +4312,89 @@
               setTimeout(() => btn.style.transform = '', 150);
             }
           } catch (e) { }
-        }, 5250));
+        }, 400));
+
+        // 4. Bung các màn app khoe giao diện (sau khi cursor bấm)
+        pops.forEach((p, i) => {
+          idxTimers.push(setTimeout(() => p.classList.add('show'), 400 + i * 150));
+        });
 
         // Scene auto-advances at 6500ms
       }
+      let flowScrollRaf = null, flowScrollTimer = null, flowMapTimers = [];
       function enter_flow() {
         setLetterbox(false);
+        const myDur = SCENES[cur].dur;
+        if (flowScrollRaf) { cancelAnimationFrame(flowScrollRaf); flowScrollRaf = null; }
+        clearTimeout(flowScrollTimer);
+
+        // ── Bản đồ tối ưu lộ trình dưới điện thoại ──
+        flowMapTimers.forEach(clearTimeout);
+        flowMapTimers = [];
+        const fcard = document.getElementById('flowMapCard');
+        const fp = document.getElementById('fp');
+        const fopt = document.getElementById('flowopt');
+        const fpins = document.querySelectorAll('#flowmap .flowpin');
+        if (fcard) {
+          fcard.classList.remove('show');
+          fp.style.transition = 'none';
+          fp.style.strokeDashoffset = '280';
+          fopt.style.transition = 'none';
+          fopt.style.opacity = '0';
+          fopt.style.transform = 'translateX(-50%) translateY(20px)';
+          fpins.forEach(p => { p.style.transition = 'none'; p.style.opacity = '0'; });
+          // 1) Card trượt lên
+          flowMapTimers.push(setTimeout(() => fcard.classList.add('show'), 700));
+          // 2) Vẽ đường lộ trình
+          flowMapTimers.push(setTimeout(() => {
+            fp.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.16,1,0.3,1)';
+            fp.style.strokeDashoffset = '0';
+          }, 1200));
+          // 3) Bật các pin lần lượt
+          fpins.forEach((p, i) => {
+            flowMapTimers.push(setTimeout(() => {
+              p.style.transition = 'all 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+              p.style.opacity = '1';
+              p.style.transform = 'translateY(-8px) scale(1.2)';
+              flowMapTimers.push(setTimeout(() => { p.style.transform = 'translateY(0) scale(1)'; }, 300));
+            }, 1500 + i * 450));
+          });
+          // 4) Công bố đã rút gọn quãng đường
+          flowMapTimers.push(setTimeout(() => {
+            fopt.style.transition = 'all 0.6s var(--spring)';
+            fopt.style.opacity = '1';
+            fopt.style.transform = 'translateX(-50%) translateY(0)';
+          }, 3400));
+        }
+
         const ifm = document.getElementById('iframe-flow');
+
+        // Reset scroll lên đầu ngay lập tức
+        try {
+          ifm.contentDocument.documentElement.scrollTop = 0;
+          ifm.contentDocument.body.scrollTop = 0;
+        } catch(e) {}
+
         if (ifm && ifm.src.includes('about:blank')) {
           ifm.src = ifm.getAttribute('data-src');
         }
+
+        // Đợi nội dung load xong rồi cuộn chậm suốt thời gian chiếu
+        flowScrollTimer = setTimeout(() => {
+          try {
+            ifm.contentDocument.documentElement.scrollTop = 0;
+            ifm.contentDocument.body.scrollTop = 0;
+          } catch(e) {}
+          const dur = myDur - 2200;
+          let t0 = null;
+          function tick(now) {
+            if (!t0) t0 = now;
+            if (now - t0 > dur) return;
+            try { ifm.contentWindow.scrollBy(0, 0.75); } catch(e) { return; }
+            flowScrollRaf = requestAnimationFrame(tick);
+          }
+          flowScrollRaf = requestAnimationFrame(tick);
+        }, 2000);
       }
 
       function enter0() {
@@ -3611,17 +4418,156 @@
         container.appendChild(p);
       }
 
-      function enter1() { setLetterbox(false); }
+      let s1timers = [];
+      function enter1() {
+        setLetterbox(false);
+        s1timers.forEach(clearTimeout);
+        s1timers = [];
 
+        const notif = document.querySelector('#s1 .s1-notif');
+        const counter = document.querySelector('#s1 .s1-counter');
+        if (notif) { notif.style.transition = 'none'; notif.style.opacity = '0'; notif.style.transform = 'translateX(130%)'; }
+        if (counter) { counter.style.transition = 'none'; counter.style.opacity = '0'; }
+
+        // Notification slides in at 2.5s
+        s1timers.push(setTimeout(() => {
+          if (notif) {
+            notif.style.transition = 'all 0.6s cubic-bezier(0.34,1.56,0.64,1)';
+            notif.style.opacity = '1';
+            notif.style.transform = 'translateX(0)';
+          }
+        }, 2500));
+
+        // Faint "3h+" counter fades in at 3.8s — shows time wasted
+        s1timers.push(setTimeout(() => {
+          if (counter) {
+            counter.style.transition = 'opacity 1.5s ease';
+            counter.style.opacity = '1';
+          }
+        }, 3800));
+      }
+
+      let emotionTimers = [];
+      function enter_emotion() {
+        setLetterbox(true);
+        emotionTimers.forEach(clearTimeout);
+        emotionTimers = [];
+
+        const eyebrow = document.querySelector('#s_emotion .se-eyebrow');
+        const spans = document.querySelectorAll('#s_emotion .se-headline span');
+        const rule = document.querySelector('#s_emotion .se-rule');
+
+        if (eyebrow) { eyebrow.style.transition = 'none'; eyebrow.style.opacity = '0'; }
+        spans.forEach(s => { s.style.transition = 'none'; s.style.opacity = '0'; s.style.transform = 'translateY(24px)'; });
+        if (rule) rule.classList.remove('open');
+
+        emotionTimers.push(setTimeout(() => {
+          if (eyebrow) { eyebrow.style.transition = 'opacity 1s ease'; eyebrow.style.opacity = '1'; }
+        }, 500));
+
+        spans.forEach((s, i) => {
+          emotionTimers.push(setTimeout(() => {
+            s.style.transition = 'all 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
+            s.style.opacity = '1';
+            s.style.transform = 'translateY(0)';
+          }, 1000 + i * 650));
+        });
+
+        emotionTimers.push(setTimeout(() => {
+          if (rule) rule.classList.add('open');
+        }, 1000 + spans.length * 650 + 300));
+      }
+
+      let statsTimers = [];
+      function enter_stats() {
+        setLetterbox(true);
+        statsTimers.forEach(clearTimeout);
+        statsTimers = [];
+
+        const eyebrow = document.querySelector('#s_stats .ss-eyebrow');
+        const statEls = document.querySelectorAll('#s_stats .ss-stat');
+        const numEls = [
+          document.getElementById('ssn1'),
+          document.getElementById('ssn2'),
+          document.getElementById('ssn3'),
+        ];
+        const targets = [200, 3, 98];
+        const durations = [1600, 700, 1300];
+
+        if (eyebrow) { eyebrow.style.transition = 'none'; eyebrow.style.opacity = '0'; }
+        statEls.forEach(s => { s.style.transition = 'none'; s.style.opacity = '0'; s.style.transform = 'translateY(20px)'; });
+        numEls.forEach(n => { if (n) n.textContent = '0'; });
+
+        statsTimers.push(setTimeout(() => {
+          if (eyebrow) { eyebrow.style.transition = 'opacity 0.8s ease'; eyebrow.style.opacity = '1'; }
+        }, 300));
+
+        statEls.forEach((stat, i) => {
+          statsTimers.push(setTimeout(() => {
+            stat.style.transition = 'all 0.7s cubic-bezier(0.34,1.56,0.64,1)';
+            stat.style.opacity = '1';
+            stat.style.transform = 'translateY(0)';
+            const numEl = numEls[i];
+            const target = targets[i];
+            const dur = durations[i];
+            let start = null;
+            function countUp(ts) {
+              if (!start) start = ts;
+              const pct = Math.min((ts - start) / dur, 1);
+              const eased = 1 - Math.pow(1 - pct, 3);
+              if (numEl) numEl.textContent = Math.floor(eased * target);
+              if (pct < 1) requestAnimationFrame(countUp);
+              else if (numEl) numEl.textContent = target;
+            }
+            setTimeout(() => requestAnimationFrame(countUp), 250);
+          }, 700 + i * 850));
+        });
+      }
+
+      let vsTimers = [];
       function enter_vs() {
         setLetterbox(true);
+        vsTimers.forEach(clearTimeout);
+        vsTimers = [];
         const left = document.getElementById('svs-left');
         const right = document.getElementById('svs-right');
         left.style.transition = 'none'; right.style.transition = 'none';
         left.style.opacity = '0'; right.style.opacity = '0';
         left.style.transform = 'translateX(-30px)'; right.style.transform = 'translateX(30px)';
-        setTimeout(() => { left.style.transition = 'all 0.8s var(--ease)'; left.style.opacity = '1'; left.style.transform = 'translateX(0)'; }, 500);
-        setTimeout(() => { right.style.transition = 'all 0.8s var(--ease)'; right.style.opacity = '1'; right.style.transform = 'translateX(0)'; }, 1800);
+        vsTimers.push(setTimeout(() => { left.style.transition = 'all 0.8s var(--ease)'; left.style.opacity = '1'; left.style.transform = 'translateX(0)'; }, 500));
+        vsTimers.push(setTimeout(() => { right.style.transition = 'all 0.8s var(--ease)'; right.style.opacity = '1'; right.style.transform = 'translateX(0)'; }, 1800));
+
+        // ── Real-time: 🟢 đang mở → 🔴 đóng cửa → tự đổi quán khác ──
+        const card = document.getElementById('svsLiveCard');
+        const status = document.getElementById('svsStatus');
+        const name = document.getElementById('svsPlaceName');
+        const meta = document.getElementById('svsPlaceMeta');
+        const rating = document.getElementById('svsPlaceRating');
+        const note = document.getElementById('svsSwapNote');
+        if (card) {
+          // reset
+          status.className = 'svs-status'; status.textContent = '🟢 Đang mở · còn bàn';
+          name.textContent = '🍜 Bún bò Bà Tuyết'; meta.textContent = 'Cách 500m • Giá 40k VND'; rating.textContent = '★ 4.8';
+          note.classList.remove('show'); card.classList.remove('flash');
+
+          // 3.2s: quán đột ngột đóng cửa
+          vsTimers.push(setTimeout(() => {
+            card.classList.add('flash');
+            status.classList.add('closed');
+            status.textContent = '🔴 Vừa đóng cửa hôm nay';
+          }, 3200));
+
+          // 4.5s: HueViVu tự đổi sang quán khác còn mở
+          vsTimers.push(setTimeout(() => {
+            card.classList.remove('flash');
+            name.textContent = '🍜 Bún bò O Cương';
+            meta.textContent = 'Cách 650m • Mở tới 22:00';
+            rating.textContent = '★ 4.7';
+            status.classList.remove('closed');
+            status.textContent = '🟢 Đang mở · còn bàn';
+            note.classList.add('show');
+          }, 4500));
+        }
       }
 
       let s2timers = [];
@@ -3843,9 +4789,33 @@
         });
       }
 
+      let offlineTimers = [];
+      function enter_offline() {
+        setLetterbox(false);
+        offlineTimers.forEach(clearTimeout);
+        offlineTimers = [];
+        const sig = document.getElementById('off-sig');
+        const banner = document.getElementById('off-banner');
+        if (!sig) return;
+        // reset: còn sóng 4G
+        sig.classList.remove('lost');
+        sig.textContent = '📶 4G';
+        if (banner) banner.classList.remove('show');
+        // 1.3s: mất sóng
+        offlineTimers.push(setTimeout(() => {
+          sig.classList.add('lost');
+          sig.textContent = '📵 Mất sóng';
+        }, 1300));
+        // 1.8s: banner ngoại tuyến trượt xuống
+        offlineTimers.push(setTimeout(() => {
+          if (banner) banner.classList.add('show');
+        }, 1800));
+      }
+
       let s6timers = [];
       function enter6() {
         setLetterbox(true);
+        const myDur = SCENES[cur].dur;
         s6timers.forEach(clearTimeout);
         s6timers = [];
         const cw = document.getElementById('s6cw');
@@ -3859,7 +4829,7 @@
           cw.style.transform = 'translateX(-50%) translateY(0)';
         }, 500));
         s6timers.push(setTimeout(() => {
-          fill.style.transition = `width ${SCENES[7].dur - 1200}ms linear`;
+          fill.style.transition = `width ${myDur - 1200}ms linear`;
           fill.style.width = '55%';
         }, 1000));
       }
@@ -3869,47 +4839,87 @@
 
       function enter_journal() {
         setLetterbox(false);
+        const myDur = SCENES[cur].dur;
+        if (journalScrollRaf) { cancelAnimationFrame(journalScrollRaf); journalScrollRaf = null; }
+        clearTimeout(journalTimer);
+
         const p = document.querySelector('.sj-phone');
         const c = document.querySelector('.sj-copy');
         p.style.animation = 'slideUpFade 0.8s var(--spring) 0.3s both';
         c.style.animation = 'slideUpFade 0.8s var(--ease) 0.6s both';
 
         const ifm = document.getElementById('iframe-journal');
-        
-        cancelAnimationFrame(journalScrollRaf);
-        clearTimeout(journalTimer);
+
+        // Reset scroll lên đầu ngay lập tức
+        try {
+          ifm.contentDocument.documentElement.scrollTop = 0;
+          ifm.contentDocument.body.scrollTop = 0;
+        } catch(e) {}
 
         if (ifm && ifm.src.includes('about:blank')) {
           ifm.src = ifm.getAttribute('data-src');
         }
 
+        // Gửi postMessage rồi cuộn chậm suốt thời gian chiếu
         journalTimer = setTimeout(() => {
-          if (ifm && ifm.contentWindow) {
+          if (!ifm) return;
+          try {
             ifm.contentWindow.postMessage('start-auto-scroll', '*');
+            ifm.contentDocument.documentElement.scrollTop = 0;
+            ifm.contentDocument.body.scrollTop = 0;
+          } catch(e) {}
+          const dur = myDur - 2000;
+          let t0 = null;
+          function tick(now) {
+            if (!t0) t0 = now;
+            if (now - t0 > dur) return;
+            try { ifm.contentWindow.scrollBy(0, 0.6); } catch(e) { return; }
+            journalScrollRaf = requestAnimationFrame(tick);
           }
+          journalScrollRaf = requestAnimationFrame(tick);
         }, 1500);
       }
 
       let s7done = false;
       function enter7() {
         setLetterbox(false);
+        // Activate mosaic Ken Burns effect
+        document.querySelectorAll('.mos-cell').forEach(c => c.classList.add('is-active'));
+
         if (s7done) return; s7done = true;
         const burst = document.getElementById('burst');
+
+        // First wave: quick burst at 0.8s
         setTimeout(() => {
-          for (let i = 0; i < 80; i++) {
+          for (let i = 0; i < 55; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
             const ang = Math.random() * Math.PI * 2;
-            const dist = 80 + Math.random() * 350;
-            const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 180;
-            const sz = 2 + Math.random() * 7;
-            const del = Math.random() * 0.9, dur = 1.5 + Math.random() * 2.5;
-            const cols = ['rgba(255,107,91,0.9)', 'rgba(255,140,66,0.85)', 'rgba(240,192,64,0.9)', 'rgba(255,220,100,0.8)', 'rgba(255,255,255,0.7)'];
-            const col = cols[Math.floor(Math.random() * cols.length)];
-            p.style.cssText = `width:${sz}px;height:${sz}px;left:50%;top:42%;background:${col};--pdx:${dx}px;--pdy:${dy}px;animation-duration:${dur}s;animation-delay:${del}s;animation-fill-mode:both;`;
+            const dist = 60 + Math.random() * 280;
+            const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 160;
+            const sz = 2 + Math.random() * 6;
+            const del = Math.random() * 0.6, dur = 1.2 + Math.random() * 2;
+            const cols = ['rgba(255,107,91,0.9)', 'rgba(255,140,66,0.85)', 'rgba(240,192,64,0.9)', 'rgba(255,220,100,0.8)', 'rgba(255,255,255,0.75)'];
+            p.style.cssText = `width:${sz}px;height:${sz}px;left:50%;top:45%;background:${cols[Math.floor(Math.random()*cols.length)]};--pdx:${dx}px;--pdy:${dy}px;animation-duration:${dur}s;animation-delay:${del}s;animation-fill-mode:both;`;
             burst.appendChild(p);
           }
-        }, 900);
+        }, 800);
+
+        // Second wave: slower sparkles at 1.6s
+        setTimeout(() => {
+          for (let i = 0; i < 35; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const ang = Math.random() * Math.PI * 2;
+            const dist = 120 + Math.random() * 380;
+            const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 200;
+            const sz = 1.5 + Math.random() * 4;
+            const dur = 2 + Math.random() * 3;
+            const cols = ['rgba(255,107,91,0.7)', 'rgba(240,192,64,0.8)', 'rgba(255,255,255,0.6)'];
+            p.style.cssText = `width:${sz}px;height:${sz}px;left:50%;top:45%;background:${cols[Math.floor(Math.random()*cols.length)]};--pdx:${dx}px;--pdy:${dy}px;animation-duration:${dur}s;animation-delay:${Math.random()*0.5}s;animation-fill-mode:both;`;
+            burst.appendChild(p);
+          }
+        }, 1600);
       }
 
       document.getElementById('ctrl-play').addEventListener('click', () => {
@@ -3949,6 +4959,9 @@
 
       function init() {
         sceneEls.forEach((s, i) => { if (i !== 0) s.classList.remove('is-active'); });
+        // Mặc định tắt auto-advance: hiện nút Play (đang tạm dừng)
+        icPause.style.display = 'none';
+        icPlay.style.display = 'block';
         go(0, true);
       }
 
@@ -3958,13 +4971,34 @@
         restart() {
           s7done = false;
           document.getElementById('burst').innerHTML = '';
+
           const p0 = document.getElementById('p0');
           p0.innerHTML = ''; p0._done = false;
+
           const rain = document.getElementById('s3rain');
           rain.innerHTML = ''; rain._done = false;
-          playing = true;
-          icPause.style.display = 'block';
-          icPlay.style.display = 'none';
+
+          // Reset mosaic Ken Burns
+          document.querySelectorAll('.mos-cell').forEach(c => c.classList.remove('is-active'));
+
+          // Reset stats counters
+          document.querySelectorAll('#s_stats .ss-num').forEach(n => { n.textContent = '0'; });
+
+          // Reset emotion scene
+          const spans = document.querySelectorAll('#s_emotion .se-headline span');
+          spans.forEach(s => { s.style.transition = 'none'; s.style.opacity = '0'; s.style.transform = 'translateY(24px)'; });
+          const rule = document.querySelector('#s_emotion .se-rule');
+          if (rule) rule.classList.remove('open');
+
+          // Reset s1 chaos
+          const notif = document.querySelector('#s1 .s1-notif');
+          const counter = document.querySelector('#s1 .s1-counter');
+          if (notif) { notif.style.transition = 'none'; notif.style.opacity = '0'; notif.style.transform = 'translateX(130%)'; }
+          if (counter) { counter.style.transition = 'none'; counter.style.opacity = '0'; }
+
+          playing = false;
+          icPause.style.display = 'none';
+          icPlay.style.display = 'block';
           go(0);
         }
       };

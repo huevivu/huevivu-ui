@@ -158,18 +158,26 @@ document.addEventListener('DOMContentLoaded', () => {
     this.classList.toggle('saved');
     this.style.transform = 'scale(1.2)';
     setTimeout(() => { this.style.transform = ''; }, 300);
+    const saved = this.classList.contains('saved');
+    if (typeof API !== 'undefined') API.trackEvent(saved ? 'save' : 'unsave', { context: { experience: expId } });
+    if (window.toast) toast(saved ? 'Đã lưu trải nghiệm 🔖' : 'Đã bỏ lưu', saved ? 'success' : '');
   });
 
-  // Book CTA
+  // Share
+  const expShare = document.getElementById('btn-share');
+  if (expShare) {
+    expShare.addEventListener('click', () => {
+      if (typeof API !== 'undefined') API.trackEvent('share', { context: { experience: expId } });
+      if (window.hvShare) window.hvShare(exp.name || 'Trải nghiệm ở Huế', `${exp.name} — khám phá cùng HueViVu`);
+    });
+  }
+
+  // Book CTA → đưa trải nghiệm vào lịch trình AI
   document.getElementById('btn-book').addEventListener('click', function() {
-    this.innerHTML = '<span>✅</span> Đã đặt thành công!';
-    this.style.background = '#22C55E';
-    this.style.boxShadow = '0 8px 24px rgba(34,197,94,0.3)';
-    setTimeout(() => {
-      this.innerHTML = '<span>✨</span> Đặt trải nghiệm';
-      this.style.background = '';
-      this.style.boxShadow = '';
-    }, 2000);
+    if (typeof API !== 'undefined') API.trackEvent('add_trip', { context: { experience: expId } });
+    this.innerHTML = '<span>✨</span> Đang mở trình lập lịch...';
+    if (window.toast) toast('Thêm trải nghiệm này vào lịch trình AI nhé ✨', 'success');
+    setTimeout(() => { window.location.href = 'flow.html'; }, 700);
   });
 
   console.log(`🎯 Experience detail loaded: ${exp.name}`);
