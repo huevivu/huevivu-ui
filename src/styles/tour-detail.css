@@ -1,0 +1,285 @@
+/* ========================================
+   HueViVu — Tour Detail Styles
+   ======================================== */
+
+/* Reuse hero pattern */
+.detail-hero { position: relative; width: 100%; height: 280px; flex-shrink: 0; overflow: hidden; align-self: stretch; }
+.detail-hero-img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s ease; }
+.detail-hero:hover .detail-hero-img { transform: scale(1.05); }
+.detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,29,59,0.3) 0%, transparent 40%, transparent 60%, rgba(255,249,247,0.8) 90%, var(--soft-white) 100%); pointer-events: none; }
+.detail-hero-nav { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top, 12px)); z-index: 10; }
+.detail-back { width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(255,255,255,0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--ease-out); }
+.detail-back:hover { background: rgba(255,255,255,0.4); } .detail-back:active { transform: scale(0.9); }
+.detail-hero-actions { display: flex; gap: 8px; }
+.detail-action-btn { width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(255,255,255,0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s var(--ease-out); }
+.detail-action-btn:hover { background: rgba(255,255,255,0.4); } .detail-action-btn:active { transform: scale(0.9); }
+.detail-action-btn.saved { background: var(--coral); }
+.detail-hero-badges { position: absolute; bottom: 60px; left: 20px; display: flex; gap: 6px; z-index: 10; }
+.hero-badge-tag { padding: 5px 12px; border-radius: var(--radius-full); background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); font-size: 0.6875rem; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.04em; }
+.detail-scroll { flex: 1; width: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; margin-top: -40px; position: relative; z-index: 5; align-self: stretch; }
+.detail-title-section { padding: 0 20px; margin-bottom: 8px; }
+.detail-name { font-size: 1.5rem; font-weight: 800; color: var(--navy); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+
+/* --- Tour Meta Grid --- */
+.tour-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.tmg-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px;
+  background: white;
+  border: 1px solid rgba(26,29,59,0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.tmg-icon { font-size: 1.125rem; }
+.tmg-val { font-size: 0.75rem; font-weight: 700; color: var(--navy); text-align: center; }
+
+/* --- AI Match --- */
+.tour-ai-match {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(255,127,107,0.08), rgba(255,154,92,0.04));
+  border: 1px solid rgba(255,127,107,0.15);
+  border-radius: var(--radius-lg);
+}
+
+.tam-left { display: flex; gap: 12px; flex: 1; }
+
+.tam-icon {
+  width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; box-shadow: 0 4px 12px rgba(255,127,107,0.3);
+}
+
+.tam-body { flex: 1; }
+.tam-label { font-size: 0.75rem; font-weight: 800; color: var(--coral); display: block; margin-bottom: 3px; }
+.tam-text { font-size: 0.75rem; font-weight: 400; color: var(--navy); line-height: 1.4; }
+
+.tam-customize {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1.5px solid rgba(255,127,107,0.2);
+  border-radius: var(--radius-full);
+  background: white;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--coral);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  white-space: nowrap;
+}
+
+.tam-customize:hover { background: rgba(255,127,107,0.06); border-color: var(--coral); }
+.tam-customize:active { transform: scale(0.95); }
+
+/* --- Day Cards --- */
+.tour-days {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.day-card {
+  background: white;
+  border: 1px solid rgba(26,29,59,0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out);
+}
+
+.day-card.expanded {
+  box-shadow: var(--shadow-md);
+  border-color: var(--peach);
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.day-header:hover { background: rgba(255,127,107,0.02); }
+
+.day-num {
+  width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 800; color: white;
+  box-shadow: 0 4px 12px rgba(255,127,107,0.3);
+}
+
+.day-info { flex: 1; }
+.day-title { font-size: 0.9375rem; font-weight: 700; color: var(--navy); display: block; }
+.day-subtitle { font-size: 0.6875rem; font-weight: 400; color: var(--gray-soft); }
+
+.day-toggle {
+  font-size: 1.125rem;
+  color: var(--gray-soft);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.day-card.expanded .day-toggle {
+  transform: rotate(180deg);
+}
+
+.day-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease-out);
+}
+
+.day-card.expanded .day-body {
+  max-height: 600px;
+}
+
+.day-activities {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.day-activity {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(255,127,107,0.03), rgba(255,154,92,0.02));
+}
+
+.da-emoji { font-size: 1.125rem; flex-shrink: 0; }
+
+.da-content { flex: 1; }
+.da-name { font-size: 0.8125rem; font-weight: 600; color: var(--navy); display: block; }
+.da-time { font-size: 0.625rem; font-weight: 500; color: var(--gray-soft); }
+
+/* --- Tour Included --- */
+.tour-included {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tour-inc-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tour-inc-yes {
+  background: rgba(34,197,94,0.08);
+  color: var(--navy);
+  border: 1px solid rgba(34,197,94,0.15);
+}
+
+.tour-inc-no {
+  background: rgba(26,29,59,0.03);
+  color: var(--gray-soft);
+  border: 1px solid rgba(26,29,59,0.04);
+  text-decoration: line-through;
+}
+
+/* --- Pricing --- */
+.tour-pricing {
+  margin-top: 12px;
+  padding: 16px;
+  background: white;
+  border: 1px solid rgba(26,29,59,0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.8125rem;
+}
+
+.price-label { font-weight: 500; color: var(--navy-muted); }
+.price-value { font-weight: 700; color: var(--navy); }
+
+.price-divider {
+  height: 1px;
+  background: var(--peach-light);
+  margin: 4px 0;
+}
+
+.price-total {
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.price-total .price-value {
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.125rem;
+}
+
+/* --- Reviews (reuse pattern) --- */
+.tour-reviews { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.review-card { padding: 16px; background: white; border: 1px solid rgba(26,29,59,0.05); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.review-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,127,107,0.1), rgba(255,154,92,0.06)); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.review-author { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.review-name { font-size: 0.8125rem; font-weight: 700; color: var(--navy); }
+.review-date { font-size: 0.625rem; font-weight: 500; color: var(--gray-soft); }
+.review-stars { font-size: 0.625rem; flex-shrink: 0; }
+.review-text { font-size: 0.8125rem; font-weight: 400; color: var(--navy-muted); line-height: 1.5; font-style: italic; }
+
+/* --- CTA Bar --- */
+.detail-cta-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 100;
+  width: 100%; max-width: 430px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(26,29,59,0.06);
+  box-shadow: 0 -4px 20px rgba(26,29,59,0.06);
+}
+
+.tour-cta-price { display: flex; flex-direction: column; align-items: flex-start; }
+.tcp-label { font-size: 0.625rem; font-weight: 500; color: var(--gray-soft); }
+.tcp-value { font-size: 1.25rem; font-weight: 800; color: var(--navy); }
+.tcp-unit { font-size: 0.625rem; font-weight: 500; color: var(--gray-soft); }
+
+.detail-cta-primary {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 20px; border: none; border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  color: white; font-family: var(--font); font-size: 0.9375rem; font-weight: 700;
+  cursor: pointer; box-shadow: var(--shadow-glow);
+  transition: all 0.3s var(--ease-out);
+}
+
+.detail-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,127,107,0.45); }
+.detail-cta-primary:active { transform: scale(0.97); }

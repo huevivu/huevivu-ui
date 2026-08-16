@@ -1,0 +1,416 @@
+/* ========================================
+   HueViVu — Community Feed Styles
+   ======================================== */
+
+/* --- AI Banner --- */
+.cm-ai-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(255,127,107,0.10), rgba(255,154,92,0.06));
+  border: 1px solid rgba(255,127,107,0.15);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.cm-ai-glow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(255,127,107,0.15), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cm-ai-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cm-ai-body { flex: 1; }
+
+.cm-ai-label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--coral);
+  margin-bottom: 4px;
+}
+
+.cm-ai-text {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cm-ai-btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  color: white;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  box-shadow: 0 4px 12px rgba(255,127,107,0.3);
+}
+
+.cm-ai-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,127,107,0.4);
+}
+
+.cm-ai-btn:active { transform: scale(0.95); }
+
+/* --- Filter Tabs --- */
+.cm-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 0;
+}
+
+.cm-filters::-webkit-scrollbar { display: none; }
+
+.cm-filter {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: 1.5px solid rgba(26,29,59,0.08);
+  border-radius: var(--radius-full);
+  background: white;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--navy-muted);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  white-space: nowrap;
+}
+
+.cm-filter:hover {
+  border-color: var(--coral-light);
+  color: var(--coral);
+}
+
+.cm-filter.active {
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(255,127,107,0.25);
+}
+
+/* --- Trending Scroll --- */
+.cm-trending-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 12px 0 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cm-trending-scroll::-webkit-scrollbar { display: none; }
+
+.cm-trending-card {
+  flex-shrink: 0;
+  position: relative;
+  width: 160px;
+  height: 110px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.cm-trending-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cm-trending-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.cm-trending-card:hover .cm-trending-img { transform: scale(1.08); }
+
+.cm-trending-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(26,29,59,0.7) 100%);
+}
+
+.cm-trending-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cm-trending-rank {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--warm-orange);
+  text-transform: uppercase;
+}
+
+.cm-trending-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.cm-trending-stat {
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+}
+
+/* --- Trip Card --- */
+.cm-trip-card {
+  background: white;
+  border: 1px solid rgba(26,29,59,0.05);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out);
+}
+
+.cm-trip-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.cm-trip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 10px;
+}
+
+.cm-trip-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--warm-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.cm-trip-user { flex: 1; }
+
+.cm-trip-username {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.cm-trip-time {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--gray-soft);
+}
+
+.cm-trip-ai-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(255,127,107,0.08), rgba(255,154,92,0.04));
+}
+
+.cm-match-val {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--coral);
+  line-height: 1;
+}
+
+.cm-match-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--gray-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Card Cover */
+.cm-trip-cover {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.cm-trip-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.cm-trip-card:hover .cm-trip-img { transform: scale(1.04); }
+
+.cm-trip-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(26,29,59,0.4) 100%);
+  pointer-events: none;
+}
+
+.cm-trip-cover-tags {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.cm-cover-tag {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* Card Body */
+.cm-trip-body {
+  padding: 14px 16px 12px;
+}
+
+.cm-trip-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.cm-trip-desc {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--navy-muted);
+  line-height: 1.5;
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cm-trip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.cm-meta-item {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--gray-soft);
+}
+
+.cm-trip-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cm-tag {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--coral);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(255,127,107,0.08), rgba(255,154,92,0.04));
+}
+
+/* Card Actions */
+.cm-trip-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-top: 1px solid rgba(26,29,59,0.05);
+  padding: 8px 8px;
+}
+
+.cm-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px;
+  border: none;
+  background: none;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray-soft);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-out);
+}
+
+.cm-action-btn:hover {
+  background: rgba(255,127,107,0.06);
+  color: var(--coral);
+}
+
+.cm-action-btn:active { transform: scale(0.93); }
+
+.cm-action-btn.liked .cm-action-icon { color: #EF4444; }
+.cm-action-btn.liked { color: #EF4444; }
+
+.cm-action-btn.saved .cm-action-icon { color: var(--coral); }
+.cm-action-btn.saved { color: var(--coral); }
+
+.cm-action-icon {
+  font-size: 1rem;
+}
+
+.cm-clone-btn {
+  background: linear-gradient(135deg, rgba(255,127,107,0.08), rgba(255,154,92,0.04));
+  color: var(--coral);
+  font-weight: 700;
+}
+
+.cm-clone-btn:hover {
+  background: linear-gradient(135deg, rgba(255,127,107,0.15), rgba(255,154,92,0.08));
+}
