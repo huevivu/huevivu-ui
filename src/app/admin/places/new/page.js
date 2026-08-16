@@ -48,6 +48,45 @@ export default function NewPlaceForm() {
   const vibeOptions = ['historic', 'romantic', 'peaceful', 'bustling', 'local', 'scenic', 'retro', 'modern'];
   const tasteOptions = ['spicy', 'savory', 'sweet', 'sour', 'bitter', 'rich', 'light'];
 
+  const [mapUrl, setMapUrl] = useState('');
+
+  const handleExtractLocation = () => {
+    if (!mapUrl) {
+      showToast('Vui lòng nhập Link Google Maps trước!', 'error');
+      return;
+    }
+    // Parse URL Google Maps: https://www.google.com/maps/place/xyz/@16.4637,107.5909,15z
+    const match = mapUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (match && match.length === 3) {
+      setFormData(prev => ({ ...prev, lat: parseFloat(match[1]), lng: parseFloat(match[2]) }));
+      showToast('Đã trích xuất tọa độ thành công!', 'success');
+      setMapUrl('');
+    } else {
+      showToast('Không tìm thấy tọa độ trong link này!', 'error');
+    }
+  };
+
+  const handleGetCurrentLocation = () => {
+    if ("geolocation" in navigator) {
+      showToast('Đang lấy vị trí...', 'success');
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          setFormData(prev => ({ 
+            ...prev, 
+            lat: position.coords.latitude, 
+            lng: position.coords.longitude 
+          }));
+          showToast('Đã lấy vị trí hiện tại!', 'success');
+        },
+        function(error) {
+          showToast('Lỗi lấy vị trí: ' + error.message, 'error');
+        }
+      );
+    } else {
+      showToast('Trình duyệt của bạn không hỗ trợ định vị!', 'error');
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -165,6 +204,27 @@ export default function NewPlaceForm() {
 
         <div className="form-section">
           <h3 className="form-section-title">2. Hình ảnh & Bản đồ</h3>
+          
+          <div className="form-group full" style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f3f4f6', borderRadius: '8px', border: '1px dashed #9ca3af' }}>
+            <label style={{ color: '#111827' }}>⚡ Công cụ lấy tọa độ nhanh</label>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+              <input 
+                type="text" 
+                placeholder="Dán link Google Maps vào đây..." 
+                value={mapUrl}
+                onChange={(e) => setMapUrl(e.target.value)}
+                style={{ flex: 1 }}
+              />
+              <button type="button" className="btn-helper" onClick={handleExtractLocation}>
+                🔍 Trích xuất
+              </button>
+              <button type="button" className="btn-helper" onClick={handleGetCurrentLocation}>
+                📍 Lấy vị trí của bạn
+              </button>
+            </div>
+            <small style={{ color: '#6b7280', marginTop: '0.5rem', display: 'block' }}>Cách 1: Mở Google Maps, chọn điểm, copy URL dán vào đây. Cách 2: Đứng tại quán và bấm Lấy vị trí.</small>
+          </div>
+
           <div className="form-grid">
             <div className="form-group full">
               <label>URL Hình ảnh (Unsplash / Cloudinary)</label>
