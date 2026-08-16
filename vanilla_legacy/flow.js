@@ -6,13 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- State ---
   const state = {
     currentStep: 1,
-    totalSteps: 5,
+    totalSteps: 9,
     answers: {
       duration: null,
-      styles: [],
       companion: null,
       budget: null,
-      food: []
+      pacing: null,
+      exploration: null,
+      energy: null,
+      physical: null,
+      taste: [],
+      styles: []
     }
   };
 
@@ -35,10 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const step = state.currentStep;
     let enabled = false;
     if (step === 1) enabled = !!state.answers.duration;
-    else if (step === 2) enabled = state.answers.styles.length > 0;
-    else if (step === 3) enabled = !!state.answers.companion;
-    else if (step === 4) enabled = !!state.answers.budget;
-    else if (step === 5) enabled = state.answers.food.length > 0;
+    else if (step === 2) enabled = !!state.answers.companion;
+    else if (step === 3) enabled = !!state.answers.budget;
+    else if (step === 4) enabled = !!state.answers.pacing;
+    else if (step === 5) enabled = !!state.answers.exploration;
+    else if (step === 6) enabled = !!state.answers.energy;
+    else if (step === 7) enabled = !!state.answers.physical;
+    else if (step === 8) enabled = state.answers.taste.length > 0;
+    else if (step === 9) enabled = state.answers.styles.length > 0;
     btnNext.disabled = !enabled;
   }
 
@@ -65,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateNextButton();
 
       // Show/hide footer
-      if (target >= 6) {
+      if (target >= 10) {
         footer.classList.add('hidden');
       } else {
         footer.classList.remove('hidden');
@@ -74,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show/hide back & skip
       btnBack.style.visibility = target === 1 ? 'hidden' : 'visible';
 
-      // Trigger AI thinking if step 6
-      if (target === 6) runAIThinking();
+      // Trigger AI thinking if step 10
+      if (target === 10) runAIThinking();
     }, 350);
   }
 
@@ -101,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Auto-advance for single-select after short delay
           updateNextButton();
           setTimeout(() => {
-            if (state.currentStep < 6) {
+            if (state.currentStep < 10) {
               goToStep(state.currentStep + 1, 'forward');
             }
           }, 400);
@@ -126,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateNextButton();
         // Auto-advance
         setTimeout(() => {
-          if (state.currentStep < 6) {
+          if (state.currentStep < 10) {
             goToStep(state.currentStep + 1, 'forward');
           }
         }, 400);
@@ -147,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.answers.budget = val;
         updateNextButton();
         setTimeout(() => {
-          if (state.currentStep < 6) {
+          if (state.currentStep < 10) {
             goToStep(state.currentStep + 1, 'forward');
           }
         }, 400);
@@ -157,23 +165,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Initialize selections ---
   setupGridCards('options-duration', 'duration', false);
-  setupGridCards('options-style', 'styles', true);
   setupRowList('options-companion', 'companion');
   setupBudgetCards();
-  setupGridCards('options-food', 'food', true);
+  setupRowList('options-pacing', 'pacing');
+  setupRowList('options-exploration', 'exploration');
+  setupGridCards('options-energy', 'energy', false);
+  setupGridCards('options-physical', 'physical', false);
+  setupGridCards('options-taste', 'taste', true);
+  setupGridCards('options-style', 'styles', true);
 
   // --- Continue button ---
   btnNext.addEventListener('click', () => {
-    if (state.currentStep < 6) {
+    if (state.currentStep < 10) {
       goToStep(state.currentStep + 1, 'forward');
     }
   });
 
   // --- Back button ---
   btnBack.addEventListener('click', () => {
-    if (state.currentStep === 7) {
-      // From results, go back to step 5
-      goToStep(5, 'back');
+    if (state.currentStep === 11) {
+      // From results, go back to step 9
+      goToStep(9, 'back');
     } else if (state.currentStep > 1) {
       goToStep(state.currentStep - 1, 'back');
     } else {
@@ -184,10 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Skip button ---
   btnSkip.addEventListener('click', () => {
-    if (state.currentStep < 5) {
+    if (state.currentStep < 9) {
       goToStep(state.currentStep + 1, 'forward');
-    } else if (state.currentStep === 5) {
-      goToStep(6, 'forward');
+    } else if (state.currentStep === 9) {
+      goToStep(10, 'forward');
     }
   });
 
@@ -225,7 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
           styles: state.answers.styles,
           companion: state.answers.companion,
           budget: budgetMap[state.answers.budget] || 2500000,
-          food: state.answers.food,
+          taste: state.answers.taste,
+          pacing: state.answers.pacing,
+          exploration: state.answers.exploration,
+          energy: state.answers.energy,
+          physical: state.answers.physical,
           sessionId,
         }).then(data => {
           _generatedTripId = data.tripId;
@@ -245,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (title) title.textContent = "Lịch trình của bạn đã sẵn sàng! ✨";
           if (sub) sub.textContent = "Được tạo riêng cho bạn";
           setTimeout(() => {
-            goToStep(7, 'forward');
+            goToStep(11, 'forward');
             updateResultMeta();
           }, 800);
         });
@@ -332,15 +348,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRegen = document.getElementById('btn-regenerate');
   if (btnRegen) {
     btnRegen.addEventListener('click', () => {
-      goToStep(6, 'forward');
+      goToStep(10, 'forward');
     });
   }
 
   // --- Initial state ---
   if (window.location.hash === '#analyzing') {
-    state.currentStep = 6;
+    state.currentStep = 10;
     document.querySelector('.flow-step.active').classList.remove('active');
-    const targetEl = document.getElementById('step-6');
+    const targetEl = document.getElementById('step-10');
     targetEl.style.display = '';
     targetEl.classList.add('active');
     footer.classList.add('hidden');

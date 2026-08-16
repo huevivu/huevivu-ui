@@ -1,0 +1,16 @@
+{
+  "name": "HueViVu — AI Cultural Travel Companion",
+  "short_name": "HueViVu",
+  "description": "An AI-powered cultural travel companion for exploring Hue emotionally and intelligently.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1C1412",
+  "theme_color": "#D4A373",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

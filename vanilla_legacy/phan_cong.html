@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy Trình Cộng Tác Nhóm</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 60px;
+            color: #2c3e50;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .workflow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px;
+            /* Khoảng cách rất rộng giữa các bước */
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .role-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 45px 40px;
+            /* Tối đa hóa không gian trống bên trong thẻ */
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            box-sizing: border-box;
+            border-top: 5px solid #3498db;
+        }
+
+        .role-card.pm {
+            border-color: #e74c3c;
+        }
+
+        .role-card.ba {
+            border-color: #9b59b6;
+        }
+
+        .role-card.dev {
+            border-color: #3498db;
+        }
+
+        .role-card.qa {
+            border-color: #2ecc71;
+        }
+
+        .role-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 1px solid #dce4ec;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #f9fbfd;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+            background-color: #ffffff;
+        }
+
+        .role-desc {
+            font-size: 1em;
+            color: #555;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .role-desc span {
+            display: block;
+            margin-bottom: 8px;
+            /* Tạo khoảng trống giữa các dòng chữ */
+        }
+
+        .arrow {
+            font-size: 2.5em;
+            color: #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Quy Trình Nhóm (5 Thành Viên)</h1>
+
+    <div class="workflow-container">
+
+        <!-- Bước 1: PM -->
+        <div class="role-card pm">
+            <div class="role-title">Quản lý Dự án (PM)</div>
+            <div class="input-group">
+                <input type="text" placeholder="Nhập tên PM...">
+            </div>
+            <div class="role-desc">
+                <span>• Lên kế hoạch & Điều phối</span>
+                <span>• Gỡ vướng mắc & Đánh giá</span>
+            </div>
+        </div>
+
+        <div class="arrow">↓</div>
+
+        <!-- Bước 2: BA -->
+        <div class="role-card ba">
+            <div class="role-title">Nhóm Phân tích (BA)</div>
+            <div class="input-group">
+                <input type="text" placeholder="Nhập tên BA 1..." style="margin-bottom: 20px;">
+                <input type="text" placeholder="Nhập tên BA 2...">
+            </div>
+            <div class="role-desc">
+                <span>• Nghiên cứu & Tìm giải pháp</span>
+                <span>• Làm tài liệu & Dọn đường</span>
+            </div>
+        </div>
+
+        <div class="arrow">↓</div>
+
+        <!-- Bước 3: Thực thi -->
+        <div class="role-card dev">
+            <div class="role-title">Thực thi (Implementer)</div>
+            <div class="input-group">
+                <input type="text" placeholder="Nhập tên người Thực thi...">
+            </div>
+            <div class="role-desc">
+                <span>• Triển khai chính & Sản xuất</span>
+                <span>• Báo cáo tức thời</span>
+            </div>
+        </div>
+
+        <div class="arrow">↓</div>
+
+        <!-- Bước 4: QA -->
+        <div class="role-card qa">
+            <div class="role-title">Kiểm thử (QA)</div>
+            <div class="input-group">
+                <input type="text" placeholder="Nhập tên QA...">
+            </div>
+            <div class="role-desc">
+                <span>• Kiểm tra liên tục & Phát hiện lỗi</span>
+                <span>• Hỗ trợ phụ</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

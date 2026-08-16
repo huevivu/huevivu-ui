@@ -24,6 +24,51 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, version: '1.0.0', service: 'HueViVu API' });
 });
 
+// ── SYSTEM STATS & OVERVIEW ──────────────────────────────────────────────────
+app.get('/api/stats/overview', (req, res) => {
+  const db = getDb();
+  const placesCount = db.prepare('SELECT COUNT(*) as cnt FROM places').get().cnt;
+  const tripsCount = db.prepare('SELECT COUNT(*) as cnt FROM trips').get().cnt;
+  const reviewsCount = db.prepare('SELECT COUNT(*) as cnt FROM trip_feedback').get().cnt;
+  const usersCount = db.prepare('SELECT COUNT(*) as cnt FROM users').get().cnt;
+
+  res.json({
+    total_places: placesCount,
+    total_trips_generated: tripsCount,
+    total_reviews: reviewsCount,
+    total_users: usersCount,
+    service_status: 'operational',
+    ai_mode: process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here' ? 'Gemini AI Native' : 'MVP Local Engine (Offline-Ready)'
+  });
+});
+
+// ── CULTURAL & SEASONAL TRAVEL GUIDE ─────────────────────────────────────────
+app.get('/api/hue/travel-guide', (req, res) => {
+  const month = new Date().getMonth() + 1;
+  const isRainySeason = month >= 9 && month <= 12;
+
+  res.json({
+    current_month: month,
+    season_name: isRainySeason ? 'Mùa mưa xứ Huế (Tháng 9 - Tháng 12)' : 'Mùa nắng đẹp (Tháng 1 - Tháng 8)',
+    weather_advice: isRainySeason
+      ? 'Huế đang vào mùa mưa lãng mạn. Nên chuẩn bị ô/áo mưa nhẹ, ưu tiên tham quan bảo tàng, lăng tẩm và thưởng thức trà cung đình ấm cúng.'
+      : 'Thời tiết nắng ráo lý tưởng để dạo quanh Đại Nội, đạp xe ven sông Hương và ghé đồi Vọng Cảnh ngắm hoàng hôn.',
+    top_seasonal_foods: isRainySeason
+      ? ['Bún bò Huế nóng hổi', 'Bánh canh cá lóc', 'Chè khoai tía ấm', 'Cơm hến cay nồng']
+      : ['Chè hẻm mát lạnh', 'Bánh bèo nậm lọc chay', 'Bún thịt nướng', 'Vả trộn bò kho'],
+    cultural_etiquette: [
+      { title: 'Trang phục lăng tẩm', tip: 'Mặc trang phục lịch sự, qua đầu gối và có tay áo khi tham quan Đại Nội, đền chùa.' },
+      { title: 'Giao tiếp nhẹ nhàng', tip: 'Người Huế ưa sự từ tốn, giọng nói nhẹ nhàng và trân trọng sự kính nhường.' },
+      { title: 'Ẩm thực cay', tip: 'Món Huế gốc thường có vị cay đậm đà, nên dặn trước quán nếu bạn không ăn được cay.' }
+    ],
+    transport_tips: [
+      { mode: 'Xe đạp ven sông', desc: 'Phương tiện lãng mạn nhất để ngắm cầu Trường Tiền và đường Lê Lợi.' },
+      { mode: 'Xích lô du lịch', desc: 'Phù hợp đi dạo phố cổ xung quanh Đại Nội, nhớ trao đổi giá và lộ trình trước.' },
+      { mode: 'Taxi / Xe công nghệ', desc: 'Phổ biến, nhanh chóng để đi các lăng tẩm cách xa trung tâm.' }
+    ]
+  });
+});
+
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -290,6 +335,24 @@ app.get('/api/chat/:tripId', authMiddleware, (req, res) => {
 });
 
 // ── PLACES ───────────────────────────────────────────────────────────────────
+app.get('/api/places/categories', (req, res) => {
+  const db = getDb();
+  const rows = db.prepare('SELECT category, COUNT(*) as count FROM places GROUP BY category').all();
+  const countMap = Object.fromEntries(rows.map(r => [r.category, r.count]));
+
+  const categories = [
+    { id: 'all', name: 'Tất cả địa điểm', count: rows.reduce((s, r) => s + r.count, 0), icon: '🌸' },
+    { id: 'heritage', name: 'Di tích & Hoàng cung', count: countMap.heritage || 0, icon: '🏛️', description: 'Đại Nội, lăng tẩm, cung điện hoàng gia Cố đô' },
+    { id: 'food', name: 'Ẩm thực & Quán ăn', count: countMap.food || 0, icon: '🍜', description: 'Bún bò, cơm hến, bánh bèo và món ngon đường phố' },
+    { id: 'cafe', name: 'Cà phê & Trà quán', count: countMap.cafe || 0, icon: '☕', description: 'Quán cà phê cổ kính, ngắm sông Hương thơ mộng' },
+    { id: 'nature', name: 'Thiên nhiên & Cảnh quan', count: countMap.nature || 0, icon: '🌿', description: 'Đồi Vọng Cảnh, sông Hương, biển Thuận An' },
+    { id: 'temple', name: 'Đền chùa & Tâm linh', count: countMap.temple || 0, icon: 'pagoda', description: 'Chùa Thiên Mụ, Huyền Không Sơn Thượng' },
+    { id: 'market', name: 'Chợ & Làng nghề', count: (countMap.market || 0) + (countMap.craft_village || 0), icon: '🛍️', description: 'Chợ Đông Ba, làng hương Thủy Xuân' },
+  ];
+
+  res.json(categories);
+});
+
 app.get('/api/places', (req, res) => {
   const db = getDb();
   const { category, q } = req.query;

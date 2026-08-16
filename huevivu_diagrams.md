@@ -1,0 +1,781 @@
+# 🌸 HueViVu — Sơ Đồ Hệ Thống Toàn Diện
+
+> **Dự án**: HueViVu — AI-Powered Cultural Travel Companion for Huế
+> **Kiến trúc**: Express.js API + SQLite (better-sqlite3) + Vanilla JS Frontend + Gemini/Anthropic AI
+
+---
+
+## 1. ERD — Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    USERS {
+        TEXT id PK "user_xxx"
+        TEXT name "NOT NULL"
+        TEXT email "UNIQUE, NOT NULL"
+        TEXT password_hash "NOT NULL"
+        INTEGER level "DEFAULT 1"
+        INTEGER total_trips "DEFAULT 0"
+        INTEGER total_places "DEFAULT 0"
+        TEXT created_at "datetime('now')"
+    }
+
+    TRIPS {
+        TEXT id PK "trip_xxx"
+        TEXT user_id FK "REFERENCES users(id)"
+        TEXT title "NOT NULL"
+        TEXT summary
+        INTEGER duration "NOT NULL (số ngày)"
+        TEXT style "NOT NULL (cultural,foodie,...)"
+        TEXT companion "NOT NULL (solo,couple,family,...)"
+        INTEGER budget "NOT NULL (VNĐ)"
+        TEXT food_prefs "JSON array"
+        TEXT itinerary "JSON (days/activities)"
+        TEXT highlights "JSON array"
+        TEXT ai_insight
+        TEXT total_cost_estimate
+        TEXT status "active|upcoming|past"
+        INTEGER is_shared "0|1"
+        INTEGER like_count "DEFAULT 0"
+        INTEGER save_count "DEFAULT 0"
+        INTEGER clone_count "DEFAULT 0"
+        INTEGER ai_match_score "DEFAULT 85"
+        TEXT created_at
+    }
+
+    PLACES {
+        TEXT id PK "citadel, pagoda,..."
+        TEXT name "NOT NULL"
+        TEXT category "NOT NULL (heritage,food,cafe,...)"
+        TEXT description
+        TEXT address
+        REAL rating "DEFAULT 4.5"
+        INTEGER rating_count "DEFAULT 100"
+        TEXT price "DEFAULT Miễn phí"
+        TEXT duration "DEFAULT 1-2 giờ"
+        TEXT distance
+        REAL lat "DEFAULT 16.4637"
+        REAL lng "DEFAULT 107.5909"
+        TEXT img
+        TEXT ai_insight
+        TEXT hours
+        TEXT hours_time
+        TEXT hours_note
+        TEXT highlights "JSON array"
+        TEXT tips "JSON array"
+        INTEGER indoor "0|1"
+        TEXT best_time "morning|afternoon|evening|all"
+        TEXT crowd_level "low|medium|high"
+        TEXT physical_level "easy|moderate|hard"
+        TEXT tags "JSON array"
+        INTEGER avg_visit_min "DEFAULT 90"
+        REAL popularity "0.0 - 1.0"
+    }
+
+    JOURNAL_ENTRIES {
+        TEXT id PK "je_xxx"
+        TEXT trip_id FK
+        TEXT user_id FK "REFERENCES users(id)"
+        TEXT time_str
+        TEXT place_name
+        TEXT content "NOT NULL"
+        TEXT mood "happy|wonder|love|..."
+        INTEGER is_private "0|1"
+        TEXT created_at
+    }
+
+    TRIP_LIKES {
+        TEXT trip_id PK_FK
+        TEXT user_id PK_FK
+        TEXT created_at
+    }
+
+    TRIP_SAVES {
+        TEXT trip_id PK_FK
+        TEXT user_id PK_FK
+        TEXT created_at
+    }
+
+    CHAT_MESSAGES {
+        TEXT id PK
+        TEXT trip_id FK
+        TEXT user_id "NOT NULL"
+        TEXT role "user|assistant"
+        TEXT content "NOT NULL"
+        TEXT created_at
+    }
+
+    USER_EVENTS {
+        TEXT id PK "UUID"
+        TEXT user_id FK "nullable"
+        TEXT session_id "NOT NULL"
+        TEXT event_type "NOT NULL (view,save,skip,add_trip,rate)"
+        TEXT place_id FK "nullable"
+        TEXT trip_id FK "nullable"
+        REAL value "nullable"
+        TEXT context "JSON"
+        TEXT created_at
+    }
+
+    TRIP_FEEDBACK {
+        TEXT id PK "fb_xxx"
+        TEXT trip_id FK "NOT NULL"
+        TEXT user_id FK "nullable"
+        TEXT session_id "nullable"
+        REAL overall_rating
+        REAL ai_rating
+        TEXT places_visited "JSON array"
+        TEXT places_skipped "JSON array"
+        INTEGER duration_actual
+        TEXT notes
+        TEXT created_at
+    }
+
+    TRAINING_EXAMPLES {
+        TEXT id PK "UUID"
+        TEXT user_profile "JSON (styles, companion, duration, budget, food_prefs)"
+        TEXT context "JSON (season, timestamp)"
+        TEXT output "JSON (trip_id, places_visited, places_skipped)"
+        REAL reward "0.0 - 1.0"
+        TEXT source "generated|feedback"
+        TEXT created_at
+    }
+
+    USERS ||--o{ TRIPS : "creates"
+    USERS ||--o{ JOURNAL_ENTRIES : "writes"
+    USERS ||--o{ CHAT_MESSAGES : "sends"
+    USERS ||--o{ USER_EVENTS : "generates"
+    USERS ||--o{ TRIP_FEEDBACK : "submits"
+    USERS ||--o{ TRIP_LIKES : "likes"
+    USERS ||--o{ TRIP_SAVES : "saves"
+
+    TRIPS ||--o{ JOURNAL_ENTRIES : "has"
+    TRIPS ||--o{ TRIP_LIKES : "receives"
+    TRIPS ||--o{ TRIP_SAVES : "receives"
+    TRIPS ||--o{ CHAT_MESSAGES : "context for"
+    TRIPS ||--o{ TRIP_FEEDBACK : "evaluated by"
+
+    PLACES ||--o{ USER_EVENTS : "tracked in"
+    TRIPS ||--o{ USER_EVENTS : "tracked in"
+
+    TRIP_FEEDBACK ||--o{ TRAINING_EXAMPLES : "generates"
+```
+
+> [!NOTE]
+> - `TRIPS.itinerary` chứa JSON phức tạp: `{ days: [{ day, theme, day_tip, activities: [{ time, name, type, duration, cost, description, ai_tip, location }] }] }`
+> - `PLACES.tags` chứa array metadata cho ML recommendation (heritage, photo, romantic, solo, couple, family, ...)
+> - `TRAINING_EXAMPLES` được tạo tự động từ `TRIP_FEEDBACK` — dùng cho future model fine-tuning
+
+---
+
+## 2. Sơ Đồ Luồng (Flow Diagrams)
+
+### 2.1. Luồng Tổng Quan Ứng Dụng
+
+```mermaid
+flowchart TB
+    START(("🌸 Mở App")) --> LANDING["index.html<br/>Landing Page"]
+
+    LANDING -->|"Start Planning"| FLOW["flow.html<br/>AI Question Flow"]
+    LANDING -->|"Explore Manually"| HOME["home.html<br/>Home Screen"]
+
+    FLOW --> Q1["Chọn thời gian<br/>(1-5 ngày)"]
+    Q1 --> Q2["Chọn phong cách<br/>(cultural, foodie, relaxed,...)"]
+    Q2 --> Q3["Đi cùng ai<br/>(solo, couple, family,...)"]
+    Q3 --> Q4["Ngân sách<br/>(VNĐ)"]
+    Q4 --> Q5["Ẩm thực ưa thích"]
+    Q5 --> GENERATE["🤖 AI Generate Trip"]
+    GENERATE --> TRIP_DETAIL["tour-detail.html<br/>Xem lịch trình AI"]
+
+    HOME --> EXPLORE["explore.html<br/>Khám Phá Địa Điểm"]
+    HOME --> TRIPS_LIST["trips.html<br/>Các Chuyến Đi"]
+    HOME --> PROFILE["profile.html<br/>Cá Nhân"]
+    HOME --> HUB["hub.html<br/>Experience Hub"]
+    HOME --> COMMUNITY["community.html<br/>Cộng Đồng"]
+
+    EXPLORE --> PLACE_DETAIL["place-detail.html<br/>Chi Tiết Địa Điểm"]
+    EXPLORE --> COLLECTION["collection-detail.html<br/>Bộ Sưu Tập"]
+
+    TRIPS_LIST --> TRIP_DETAIL
+    TRIP_DETAIL -->|"Chat AI"| CHAT["💬 AI Chat<br/>Trợ lý đồng hành"]
+    TRIP_DETAIL -->|"Customize"| CUSTOMIZE["✨ AI Customize<br/>Điều chỉnh lịch trình"]
+    TRIP_DETAIL -->|"Share"| SHARE["📤 Chia sẻ<br/>Community Feed"]
+    TRIP_DETAIL -->|"Journal"| JOURNAL["journal.html<br/>Nhật Ký"]
+
+    COMMUNITY --> SHARED_TRIP["shared-trip-detail.html<br/>Chi tiết trip chia sẻ"]
+    SHARED_TRIP -->|"Clone"| CLONE["📋 Clone Trip<br/>→ My Trips"]
+
+    PROFILE --> MEMORY["travel-memory.html<br/>Travel Memory Recap"]
+
+    HUB --> EXPERIENCE["experience-detail.html<br/>Chi Tiết Trải Nghiệm"]
+
+    style START fill:#FF7F6B,color:#fff
+    style GENERATE fill:#6366F1,color:#fff
+    style CHAT fill:#6366F1,color:#fff
+    style CUSTOMIZE fill:#6366F1,color:#fff
+    style CLONE fill:#22C55E,color:#fff
+```
+
+### 2.2. Luồng Authentication
+
+```mermaid
+flowchart TB
+    USER(("👤 User")) --> CHECK{"Có token<br/>trong localStorage?"}
+
+    CHECK -->|"Có"| VERIFY["Gửi request với<br/>Authorization: Bearer token"]
+    CHECK -->|"Không"| AUTO_DEMO["Tự động đăng nhập<br/>Demo User"]
+
+    AUTO_DEMO --> DEMO_API["POST /api/auth/demo"]
+    DEMO_API --> SAVE_TOKEN["Lưu token + user<br/>vào localStorage"]
+    SAVE_TOKEN --> VERIFY
+
+    VERIFY --> MIDDLEWARE{"authMiddleware /<br/>optionalAuth"}
+
+    MIDDLEWARE -->|"authMiddleware<br/>(bắt buộc)"| JWT_VERIFY["jwt.verify(token)"]
+    MIDDLEWARE -->|"optionalAuth<br/>(không bắt buộc)"| JWT_TRY["Thử verify,<br/>inject userId nếu có"]
+
+    JWT_VERIFY -->|"Hợp lệ"| SUCCESS["✅ req.userId = payload.userId<br/>→ Tiếp tục xử lý"]
+    JWT_VERIFY -->|"Không hợp lệ"| ERROR["❌ 401 Unauthorized"]
+
+    JWT_TRY --> SUCCESS_OPT["✅ Tiếp tục<br/>(có hoặc không userId)"]
+
+    subgraph "Đăng ký / Đăng nhập"
+        REGISTER["POST /api/auth/register<br/>(name, email, password)"] --> HASH["bcrypt.hash(password, 10)"]
+        HASH --> INSERT_USER["INSERT INTO users"]
+        INSERT_USER --> GEN_TOKEN["generateToken(userId)<br/>JWT 30 ngày"]
+
+        LOGIN["POST /api/auth/login<br/>(email, password)"] --> FIND["SELECT * FROM users<br/>WHERE email = ?"]
+        FIND --> COMPARE["bcrypt.compare(password, hash)"]
+        COMPARE -->|"Đúng"| GEN_TOKEN
+        COMPARE -->|"Sai"| LOGIN_ERROR["❌ 401 Mật khẩu sai"]
+    end
+
+    style SUCCESS fill:#22C55E,color:#fff
+    style ERROR fill:#EF4444,color:#fff
+    style LOGIN_ERROR fill:#EF4444,color:#fff
+    style GEN_TOKEN fill:#6366F1,color:#fff
+```
+
+### 2.3. Luồng Tạo Lịch Trình AI
+
+```mermaid
+flowchart TB
+    INPUT["🧳 User nhập preferences<br/>(duration, styles, companion, budget, food)"] --> API_CALL["POST /api/trips/generate"]
+
+    API_CALL --> AUTH_CHECK{"optionalAuth<br/>userId có?"}
+    AUTH_CHECK -->|"Có userId / sessionId"| CONTEXT["Truy vấn User Context<br/>từ user_events + trip_feedback"]
+    AUTH_CHECK -->|"Không"| BUILD_PROMPT["Xây dựng Prompt"]
+
+    CONTEXT --> VISITED["SELECT visited place_ids<br/>(view, add_trip)"]
+    CONTEXT --> SKIPPED["SELECT skipped place_ids"]
+    CONTEXT --> TOP_VIEWED["SELECT top viewed places<br/>(GROUP BY, ORDER BY cnt)"]
+    CONTEXT --> AVG_SAT["SELECT AVG(overall_rating)<br/>FROM trip_feedback"]
+
+    VISITED --> PERSONALIZE["Tạo personalizationSection<br/>trong prompt"]
+    SKIPPED --> PERSONALIZE
+    TOP_VIEWED --> PERSONALIZE
+    AVG_SAT --> PERSONALIZE
+
+    PERSONALIZE --> BUILD_PROMPT
+    BUILD_PROMPT --> AI_CALL{"Gọi AI API"}
+
+    AI_CALL -->|"GEMINI_API_KEY<br/>+ không proxy"| GEMINI["🔷 callGeminiNative()<br/>generativelanguage.googleapis.com"]
+    AI_CALL -->|"Có proxy /<br/>Anthropic config"| ANTHROPIC["🟣 /v1/messages<br/>Anthropic-compatible"]
+
+    GEMINI --> PARSE["extractJSON(response)<br/>Parse + clean JSON"]
+    ANTHROPIC --> PARSE
+
+    PARSE -->|"Thành công"| SAVE_DB["INSERT INTO trips<br/>(itinerary JSON)"]
+    PARSE -->|"Lỗi / Timeout"| FALLBACK["🔄 generateLocalFallbackTrip()<br/>Tạo từ DB places"]
+    FALLBACK --> SAVE_DB
+
+    SAVE_DB --> UPDATE_USER["UPDATE users<br/>SET total_trips + 1"]
+    UPDATE_USER --> RESPONSE["✅ Trả về { tripId, trip }"]
+
+    style INPUT fill:#FF7F6B,color:#fff
+    style GEMINI fill:#4285F4,color:#fff
+    style ANTHROPIC fill:#7C3AED,color:#fff
+    style FALLBACK fill:#F59E0B,color:#fff
+    style RESPONSE fill:#22C55E,color:#fff
+```
+
+### 2.4. Luồng AI Chat
+
+```mermaid
+flowchart TB
+    USER_MSG["💬 User gửi tin nhắn<br/>(+ tripId nếu đang xem trip)"] --> CHAT_API["POST /api/chat"]
+
+    CHAT_API --> TRIP_CTX{"Có tripId?"}
+    TRIP_CTX -->|"Có"| LOAD_TRIP["SELECT trip từ DB<br/>Parse itinerary JSON"]
+    TRIP_CTX -->|"Không"| BUILD_PROMPT
+
+    LOAD_TRIP --> BUILD_CTX["Xây dựng context:<br/>- Tên trip, duration, companion<br/>- Chi tiết từng ngày/activities<br/>- Lịch sử hội thoại (6 tin cuối)"]
+    BUILD_CTX --> GROUNDING{"hasItinerary?"}
+    GROUNDING -->|"Có"| GROUNDED["Grounding: Bám sát<br/>lịch trình cụ thể"]
+    GROUNDING -->|"Không"| GENERAL["General: Trợ lý<br/>du lịch Huế chung"]
+
+    GROUNDED --> BUILD_PROMPT["Xây prompt (≤130 từ, tiếng Việt,<br/>thân thiện, gợi ý cụ thể)"]
+    GENERAL --> BUILD_PROMPT
+
+    BUILD_PROMPT --> AI["🤖 callMessages()<br/>(max_tokens: 512)"]
+
+    AI -->|"Thành công"| SAVE_CHAT{"userId có?<br/>+ tripId có?"}
+    AI -->|"Lỗi"| FALLBACK_REPLY["🔄 Fallback reply:<br/>Giới thiệu chung về Huế"]
+
+    SAVE_CHAT -->|"Có"| SAVE_DB["INSERT vào chat_messages<br/>(user message + assistant reply)"]
+    SAVE_CHAT -->|"Không"| RETURN
+    SAVE_DB --> RETURN["✅ Trả về { reply }"]
+    FALLBACK_REPLY --> RETURN
+
+    style USER_MSG fill:#FF7F6B,color:#fff
+    style AI fill:#6366F1,color:#fff
+    style FALLBACK_REPLY fill:#F59E0B,color:#fff
+    style RETURN fill:#22C55E,color:#fff
+```
+
+### 2.5. Luồng Community & Social
+
+```mermaid
+flowchart TB
+    subgraph "Chia sẻ Trip"
+        OWNER["Chủ trip"] --> SHARE_BTN["Nhấn Share"]
+        SHARE_BTN --> SHARE_API["PUT /api/trips/:id/share<br/>SET is_shared = 1"]
+    end
+
+    subgraph "Community Feed"
+        VISITOR["User khác"] --> FEED_API["GET /api/feed<br/>(is_shared = 1, ORDER BY like_count)"]
+        FEED_API --> FEED_LIST["Hiển thị danh sách trips<br/>+ owner_name, like/save status"]
+
+        FEED_LIST --> LIKE["❤️ Like<br/>POST /api/feed/:id/like"]
+        FEED_LIST --> SAVE["🔖 Save<br/>POST /api/feed/:id/save"]
+        FEED_LIST --> VIEW_DETAIL["👁️ Xem chi tiết<br/>shared-trip-detail.html"]
+
+        LIKE --> TOGGLE_LIKE{"Đã like?"}
+        TOGGLE_LIKE -->|"Chưa"| ADD_LIKE["INSERT trip_likes<br/>like_count + 1"]
+        TOGGLE_LIKE -->|"Rồi"| REMOVE_LIKE["DELETE trip_likes<br/>like_count - 1"]
+
+        VIEW_DETAIL --> CLONE_BTN["📋 Clone Trip"]
+        CLONE_BTN --> CLONE_API["POST /api/feed/:id/clone"]
+        CLONE_API --> NEW_TRIP["Tạo trip mới cho user<br/>(title: [Clone] original)<br/>clone_count + 1"]
+    end
+
+    style SHARE_BTN fill:#6366F1,color:#fff
+    style LIKE fill:#EF4444,color:#fff
+    style SAVE fill:#F59E0B,color:#fff
+    style CLONE_BTN fill:#22C55E,color:#fff
+```
+
+### 2.6. Luồng Event Tracking & Personalization
+
+```mermaid
+flowchart TB
+    INTERACTION["User tương tác<br/>(view, save, skip, rate, add_trip)"] --> TRACK["API.trackEvent(eventType, data)<br/>POST /api/events"]
+
+    TRACK --> INSERT["INSERT INTO user_events<br/>(user_id, session_id, event_type, place_id, ...)"]
+
+    INSERT --> POP_CHECK{"place_id có?<br/>+ event_type phù hợp?"}
+    POP_CHECK -->|"Có"| UPDATE_POP["UPDATE places<br/>SET popularity += weight<br/>(view: 0.001, save: 0.005,<br/>add_trip: 0.01, rate: 0.008)"]
+
+    subgraph "Khi tạo Trip mới"
+        GENERATE["POST /api/trips/generate"] --> QUERY_CTX["Truy vấn user_events<br/>+ trip_feedback"]
+        QUERY_CTX --> PERSONALIZE["Thêm vào AI prompt:<br/>- Đã ghé (không gợi ý lại)<br/>- Đã bỏ qua (tránh)<br/>- Quan tâm nhiều (ưu tiên)<br/>- Avg satisfaction → chiến lược"]
+    end
+
+    subgraph "Feedback Loop"
+        FEEDBACK["POST /api/feedback/trip<br/>(overall_rating, ai_rating,<br/>places_visited, places_skipped)"] --> CALC_REWARD["reward = rating/5 × 0.7<br/>+ ai_rating/5 × 0.3"]
+        CALC_REWARD --> TRAINING["INSERT INTO training_examples<br/>(user_profile, context, output, reward)"]
+        TRAINING --> FUTURE["📊 Future: Fine-tune model<br/>khi high_quality >= 100"]
+    end
+
+    style INTERACTION fill:#FF7F6B,color:#fff
+    style PERSONALIZE fill:#6366F1,color:#fff
+    style FUTURE fill:#7C3AED,color:#fff
+```
+
+---
+
+## 3. Sơ Đồ Tuần Tự (Sequence Diagrams)
+
+### 3.1. Luồng Tạo Lịch Trình AI (Toàn Bộ)
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend<br/>(flow.html)
+    participant Client as api-client.js
+    participant API as Express API<br/>(/api/trips/generate)
+    participant Auth as auth.js<br/>(optionalAuth)
+    participant DB as SQLite<br/>(better-sqlite3)
+    participant AI as AI Service<br/>(Gemini / Anthropic)
+
+    User->>FE: Chọn duration, styles,<br/>companion, budget, food
+    FE->>Client: API.generateTrip(data)
+    Client->>Client: ensureAuth() →<br/>lấy/tạo token
+    Client->>API: POST /api/trips/generate<br/>Authorization: Bearer token
+
+    API->>Auth: optionalAuth(req)
+    Auth->>Auth: verifyToken(token)
+    Auth-->>API: req.userId (nếu có)
+
+    Note over API,DB: Personalization Context
+    API->>DB: SELECT visited place_ids<br/>FROM user_events
+    DB-->>API: visited_place_ids[]
+    API->>DB: SELECT skipped place_ids
+    DB-->>API: skipped_place_ids[]
+    API->>DB: SELECT top viewed places<br/>(GROUP BY, COUNT)
+    DB-->>API: top_viewed_places[]
+    API->>DB: SELECT AVG(overall_rating)<br/>FROM trip_feedback
+    DB-->>API: avg_satisfaction
+
+    Note over API,AI: AI Trip Generation
+    API->>API: Xây dựng prompt<br/>+ personalizationSection
+    API->>AI: callMessages({prompt})<br/>max_tokens: 8192
+
+    alt Gemini Native (GEMINI_API_KEY, no proxy)
+        AI->>AI: POST generativelanguage.googleapis.com<br/>/v1beta/models/gemini-2.5-flash:generateContent
+    else Anthropic-compatible (proxy)
+        AI->>AI: POST {baseURL}/v1/messages<br/>model: claude-sonnet-4-6
+    end
+
+    AI-->>API: JSON response (raw text)
+    API->>API: extractJSON(text)<br/>→ Parse + clean
+
+    alt AI thành công
+        API->>DB: INSERT INTO trips<br/>(id, user_id, itinerary JSON...)
+        API->>DB: UPDATE users<br/>SET total_trips + 1
+        API-->>Client: { tripId, trip }
+    else AI lỗi / timeout
+        API->>API: generateLocalFallbackTrip()<br/>→ Tạo từ DB places
+        API->>DB: INSERT INTO trips
+        API-->>Client: { tripId, trip } (fallback)
+    end
+
+    Client-->>FE: trip data
+    FE->>User: Hiển thị lịch trình<br/>(tour-detail.html)
+```
+
+### 3.2. Luồng AI Chat
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend<br/>(tour-detail.html)
+    participant Client as api-client.js
+    participant API as Express API<br/>(/api/chat)
+    participant DB as SQLite
+    participant AI as AI Service
+
+    User->>FE: Gõ tin nhắn<br/>(+ đang xem tripId)
+    FE->>Client: API.sendChat(message, tripId, history)
+    Client->>API: POST /api/chat<br/>{message, tripId, history}
+
+    opt Có tripId
+        API->>DB: SELECT title, summary, duration,<br/>itinerary FROM trips WHERE id = ?
+        DB-->>API: trip data
+        API->>API: Parse itinerary JSON<br/>→ Xây context chi tiết<br/>(từng ngày, địa điểm, giờ)
+    end
+
+    API->>API: Xây dựng prompt:<br/>- Grounding (bám lịch trình)<br/>- History (6 tin cuối)<br/>- Giới hạn 130 từ, tiếng Việt
+
+    API->>AI: callMessages({prompt})<br/>max_tokens: 512
+    AI-->>API: reply text
+
+    opt userId + tripId có
+        API->>DB: INSERT chat_messages<br/>(user message)
+        API->>DB: INSERT chat_messages<br/>(assistant reply)
+    end
+
+    API-->>Client: { reply }
+    Client-->>FE: reply text
+    FE->>User: Hiển thị tin nhắn AI
+```
+
+### 3.3. Luồng Customize Trip bằng AI
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend
+    participant Client as api-client.js
+    participant API as Express API<br/>(/api/trips/:id/customize)
+    participant DB as SQLite
+    participant AI as AI Service
+
+    User->>FE: Nhập chỉ dẫn tự nhiên<br/>("ít đi bộ hơn",<br/>"thêm ăn uống",<br/>"thư giãn hơn")
+    FE->>Client: API.customizeTrip(tripId, instruction)
+    Client->>API: POST /api/trips/:id/customize<br/>{instruction}
+
+    API->>DB: SELECT * FROM trips WHERE id = ?
+    DB-->>API: current trip data
+
+    API->>API: Kiểm tra quyền sở hữu<br/>(trip.user_id === req.userId)
+
+    API->>API: Xây prompt với:<br/>- Lịch trình hiện tại (JSON)<br/>- instruction của user<br/>- Yêu cầu giữ cấu trúc,<br/>  chỉ thay đổi cần thiết
+
+    API->>AI: callMessages({prompt})<br/>max_tokens: 8192
+    AI-->>API: New itinerary JSON
+
+    API->>API: extractJSON(response)
+
+    API->>DB: UPDATE trips SET<br/>title, summary, itinerary,<br/>highlights, ai_insight,<br/>total_cost_estimate
+    DB-->>API: OK
+
+    API-->>Client: { tripId, trip (updated) }
+    Client-->>FE: Updated trip
+    FE->>User: Hiển thị lịch trình<br/>đã điều chỉnh ✨
+```
+
+### 3.4. Luồng Community Feed & Clone
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend<br/>(community.html)
+    participant Client as api-client.js
+    participant API as Express API
+    participant DB as SQLite
+
+    Note over User,DB: Xem Community Feed
+    User->>FE: Mở Community
+    FE->>Client: API.getFeed()
+    Client->>API: GET /api/feed<br/>(optionalAuth)
+
+    API->>DB: SELECT trips JOIN users<br/>WHERE is_shared = 1<br/>ORDER BY like_count DESC
+    DB-->>API: shared trips[]
+
+    loop Mỗi trip
+        API->>API: Parse highlights, food_prefs, itinerary
+        opt User đã login
+            API->>DB: SELECT FROM trip_likes<br/>WHERE trip_id AND user_id
+            API->>DB: SELECT FROM trip_saves<br/>WHERE trip_id AND user_id
+        end
+    end
+
+    API-->>Client: trips[] (enriched)
+    Client-->>FE: Render feed cards
+
+    Note over User,DB: Like Trip
+    User->>FE: Nhấn ❤️ Like
+    FE->>Client: API.likeTrip(tripId)
+    Client->>API: POST /api/feed/:id/like
+
+    alt Chưa like
+        API->>DB: INSERT trip_likes
+        API->>DB: UPDATE trips SET like_count + 1
+        API-->>Client: { liked: true }
+    else Đã like (toggle off)
+        API->>DB: DELETE trip_likes
+        API->>DB: UPDATE trips SET like_count - 1
+        API-->>Client: { liked: false }
+    end
+
+    Note over User,DB: Clone Trip
+    User->>FE: Nhấn 📋 Clone
+    FE->>Client: API.cloneTrip(tripId)
+    Client->>API: POST /api/feed/:id/clone
+
+    API->>DB: SELECT * FROM trips WHERE id = ?
+    DB-->>API: original trip
+
+    API->>DB: INSERT INTO trips<br/>(new id, user's id,<br/>"[Clone] " + title, ...)
+    API->>DB: UPDATE original trip<br/>SET clone_count + 1
+
+    API-->>Client: { tripId: newId }
+    Client-->>FE: "Đã clone lịch trình! 🎉"
+    FE->>User: Toast notification
+```
+
+### 3.5. Luồng Event Tracking & Feedback
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend
+    participant Client as api-client.js
+    participant API as Express API
+    participant DB as SQLite
+
+    Note over User,DB: Event Tracking (fire-and-forget)
+    User->>FE: Xem địa điểm / Save / Rate
+    FE->>Client: API.trackEvent('view', {place_id})
+    Client->>API: POST /api/events<br/>{event_type, session_id, place_id}
+
+    API->>DB: INSERT INTO user_events
+
+    opt place_id + event_type phù hợp
+        API->>DB: UPDATE places SET<br/>popularity += weight<br/>(view: 0.001, save: 0.005,<br/>add_trip: 0.01, rate: 0.008)
+    end
+
+    API-->>Client: { ok: true }
+
+    Note over User,DB: Trip Feedback (sau chuyến đi)
+    User->>FE: Đánh giá chuyến đi<br/>(overall, ai, places visited/skipped)
+    FE->>Client: API.submitFeedback(data)
+    Client->>API: POST /api/feedback/trip
+
+    API->>DB: INSERT INTO trip_feedback
+
+    API->>DB: SELECT * FROM trips WHERE id = ?
+    DB-->>API: trip data
+
+    API->>API: Tính reward score:<br/>= (overall/5 × 0.7)<br/>+ (ai_rating/5 × 0.3)
+
+    API->>API: Tạo training example:<br/>{user_profile, context, output}
+
+    API->>DB: INSERT INTO training_examples<br/>(reward, source: 'feedback')
+
+    API-->>Client: { ok: true }
+```
+
+### 3.6. Luồng Journal / Nhật Ký
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend<br/>(journal.html)
+    participant Client as api-client.js
+    participant API as Express API
+    participant Auth as authMiddleware
+    participant DB as SQLite
+
+    Note over User,DB: Xem Nhật Ký
+    User->>FE: Mở Journal
+    FE->>Client: API.getJournal(tripId?)
+    Client->>API: GET /api/journal?tripId=xxx
+
+    API->>Auth: authMiddleware
+    Auth->>Auth: Verify JWT token
+    Auth-->>API: req.userId ✅
+
+    API->>DB: SELECT * FROM journal_entries<br/>WHERE user_id = ?<br/>(+ trip_id filter nếu có)<br/>ORDER BY created_at DESC
+    DB-->>API: entries[]
+    API-->>Client: entries[]
+    Client-->>FE: Render timeline
+
+    Note over User,DB: Thêm Nhật Ký
+    User->>FE: Viết nội dung, chọn mood
+    FE->>Client: API.addJournalEntry({<br/>tripId, time_str, place_name,<br/>content, mood, is_private})
+    Client->>API: POST /api/journal
+
+    API->>Auth: authMiddleware ✅
+    API->>DB: INSERT INTO journal_entries
+    DB-->>API: new entry
+    API-->>Client: entry (201 Created)
+    Client-->>FE: Thêm vào timeline
+
+    Note over User,DB: Sửa / Xóa Nhật Ký
+    User->>FE: Sửa nội dung
+    FE->>Client: API.updateJournalEntry(id, data)
+    Client->>API: PUT /api/journal/:id
+    API->>DB: UPDATE journal_entries<br/>WHERE id AND user_id
+    API-->>Client: updated entry
+
+    User->>FE: Xóa
+    FE->>Client: API.deleteJournalEntry(id)
+    Client->>API: DELETE /api/journal/:id
+    API->>DB: DELETE FROM journal_entries<br/>WHERE id AND user_id
+    API-->>Client: { success: true }
+```
+
+---
+
+## 4. Kiến Trúc Tổng Thể
+
+```mermaid
+flowchart LR
+    subgraph "Frontend (Vanilla JS + HTML/CSS)"
+        INDEX["index.html<br/>Landing"]
+        HOME["home.html"]
+        FLOW["flow.html<br/>AI Q&A Flow"]
+        EXPLORE["explore.html"]
+        TRIPS["trips.html"]
+        TOUR["tour-detail.html"]
+        PLACE["place-detail.html"]
+        PROFILE["profile.html"]
+        JOURNAL["journal.html"]
+        COMMUNITY["community.html"]
+        SHARED["shared-trip-detail.html"]
+        MEMORY["travel-memory.html"]
+        HUB["hub.html"]
+        EXP["experience-detail.html"]
+        COLLECTION["collection-detail.html"]
+    end
+
+    subgraph "API Client Layer"
+        AC["api-client.js<br/>(API singleton,<br/>token mgmt,<br/>toast, share)"]
+    end
+
+    subgraph "Backend (Express.js)"
+        SERVER["api/index.js<br/>773 lines<br/>REST endpoints"]
+    end
+
+    subgraph "Lib Modules"
+        DB_MOD["lib/db.js<br/>Schema, Seed,<br/>Migration"]
+        AI_MOD["lib/ai.js<br/>Gemini Native,<br/>Anthropic,<br/>Local Fallback"]
+        AUTH_MOD["lib/auth.js<br/>JWT, Middleware"]
+    end
+
+    subgraph "Data Layer"
+        SQLITE[("SQLite<br/>data/huevivu.db<br/>10 tables")]
+    end
+
+    subgraph "External AI"
+        GEMINI["☁️ Google Gemini<br/>2.5 Flash"]
+        CLAUDE["☁️ Claude<br/>Sonnet 4.6"]
+    end
+
+    INDEX & HOME & FLOW & EXPLORE & TRIPS & TOUR & PLACE & PROFILE & JOURNAL & COMMUNITY & SHARED & MEMORY & HUB & EXP & COLLECTION --> AC
+    AC -->|"HTTP REST"| SERVER
+    SERVER --> DB_MOD & AI_MOD & AUTH_MOD
+    DB_MOD --> SQLITE
+    AI_MOD -->|"Native API"| GEMINI
+    AI_MOD -->|"Proxy/Compat"| CLAUDE
+
+    style SQLITE fill:#059669,color:#fff
+    style GEMINI fill:#4285F4,color:#fff
+    style CLAUDE fill:#7C3AED,color:#fff
+    style SERVER fill:#FF7F6B,color:#fff
+```
+
+---
+
+## 5. Bảng Tóm Tắt API Endpoints
+
+| Method | Endpoint | Auth | Mô tả |
+|--------|----------|------|--------|
+| `GET` | `/api/health` | ❌ | Health check |
+| `GET` | `/api/stats/overview` | ❌ | Thống kê tổng quan |
+| `GET` | `/api/hue/travel-guide` | ❌ | Guide theo mùa |
+| `POST` | `/api/auth/register` | ❌ | Đăng ký |
+| `POST` | `/api/auth/login` | ❌ | Đăng nhập |
+| `POST` | `/api/auth/demo` | ❌ | Auto-login demo |
+| `GET` | `/api/auth/me` | ✅ | Thông tin user |
+| `POST` | `/api/trips/generate` | 🔓 | Tạo trip AI |
+| `GET` | `/api/trips` | ✅ | List trips của user |
+| `GET` | `/api/trips/:id` | 🔓 | Chi tiết trip |
+| `PUT` | `/api/trips/:id/share` | ✅ | Chia sẻ trip |
+| `PUT` | `/api/trips/:id/status` | ✅ | Cập nhật trạng thái |
+| `POST` | `/api/trips/:id/customize` | 🔓 | AI customize trip |
+| `POST` | `/api/chat` | 🔓 | Chat với AI |
+| `GET` | `/api/chat/:tripId` | ✅ | Lịch sử chat |
+| `GET` | `/api/places/categories` | ❌ | Danh mục địa điểm |
+| `GET` | `/api/places` | ❌ | List địa điểm |
+| `GET` | `/api/places/:id` | ❌ | Chi tiết địa điểm |
+| `GET` | `/api/feed` | 🔓 | Community feed |
+| `POST` | `/api/feed/:id/like` | 🔓 | Like/unlike trip |
+| `POST` | `/api/feed/:id/save` | 🔓 | Save/unsave trip |
+| `POST` | `/api/feed/:id/clone` | 🔓 | Clone trip |
+| `GET` | `/api/journal` | ✅ | List nhật ký |
+| `POST` | `/api/journal` | ✅ | Tạo nhật ký |
+| `PUT` | `/api/journal/:id` | ✅ | Sửa nhật ký |
+| `DELETE` | `/api/journal/:id` | ✅ | Xóa nhật ký |
+| `GET` | `/api/weather` | ❌ | Thời tiết Huế |
+| `POST` | `/api/events` | 🔓 | Track event |
+| `GET` | `/api/user/context` | 🔓 | User context (cho AI) |
+| `POST` | `/api/feedback/trip` | 🔓 | Đánh giá trip |
+| `GET` | `/api/feedback/trip/:tripId` | 🔓 | Xem feedback |
+| `GET` | `/api/admin/training-stats` | ❌ | Thống kê training |
+| `GET` | `/api/user/profile` | ✅ | Profile user |
+| `PUT` | `/api/user/profile` | ✅ | Cập nhật profile |
+
+> ✅ = `authMiddleware` (bắt buộc đăng nhập) · 🔓 = `optionalAuth` (inject userId nếu có) · ❌ = public
