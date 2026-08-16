@@ -51,3 +51,34 @@ export async function GET(request) {
     );
   }
 }
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    
+    // Nếu không truyền id, tự sinh 1 id
+    if (!body.id) {
+      body.id = body.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '') + '_' + Date.now().toString().slice(-4);
+    }
+
+    const { data, error } = await supabase
+      .from('places')
+      .insert([body])
+      .select();
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json({
+      status: 'success',
+      data: data[0],
+    });
+  } catch (error) {
+    console.error('API POST /places error:', error);
+    return NextResponse.json(
+      { status: 'error', message: error.message },
+      { status: 500 }
+    );
+  }
+}
