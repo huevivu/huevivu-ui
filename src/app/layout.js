@@ -11,6 +11,9 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata = {
   title: "HueViVu — Plan Your Journey",
   description: "Tell us your travel style and let AI create your perfect Huế itinerary.",
+};
+
+export const viewport = {
   themeColor: "#FF7F6B",
 };
 

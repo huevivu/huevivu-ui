@@ -7,6 +7,17 @@ const apiClient = axios.create({
 });
 
 export const API = {
+  // Lấy danh sách địa điểm từ Database
+  getPlaces: async (params = {}) => {
+    try {
+      const { data } = await apiClient.get('/places', { params });
+      return data.data; // Trả về mảng places
+    } catch (error) {
+      console.error('Error fetching places:', error);
+      throw error;
+    }
+  },
+
   /**
    * Tạo lịch trình dựa trên answers từ Zustand store
    */
