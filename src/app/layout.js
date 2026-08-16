@@ -5,6 +5,7 @@ import "../styles/shared.css";
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
+  variable: '--font-jakarta',
 });
 
 export const metadata = {
@@ -15,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={jakarta.className}>
+    <html lang="en" className={`${jakarta.variable} ${jakarta.className}`}>
       <body>{children}</body>
     </html>
   );

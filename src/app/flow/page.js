@@ -1,6 +1,7 @@
 import FlowHeader from '@/components/flow/FlowHeader';
 import Navigation from '@/components/flow/Navigation';
 import StepDuration from '@/components/flow/steps/StepDuration';
+import '@/styles/flow.css';
 // Import các step khác ở đây khi tạo xong...
 
 export default function FlowPage() {
