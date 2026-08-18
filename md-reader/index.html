@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD Reader</title>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="highlight-theme">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- html2pdf for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Toolbar -->
+        <header class="toolbar">
+            <div class="logo">MD Reader</div>
+            <div class="actions">
+                <label class="btn" for="file-input">Open File</label>
+                <input type="file" id="file-input" accept=".md,.markdown" style="display: none;">
+                
+                <button class="btn" id="btn-export">Export PDF</button>
+                <button class="btn btn-icon" id="btn-theme" title="Toggle Theme">🌓</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="drop-zone" class="drop-zone">
+                <p style="font-size: 1.2rem; margin-bottom: 10px;">Drag & Drop your Markdown file here</p>
+                <p class="small">or click <strong>Open File</strong></p>
+            </div>
+            
+            <div class="reader-container" id="reader-container" style="display: none;">
+                <div class="markdown-body" id="content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
