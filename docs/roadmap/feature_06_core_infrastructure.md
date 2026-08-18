@@ -7,7 +7,7 @@
 - **Frontend Framework**: Next.js (App Router) hoặc Vite (React). Next.js được ưu tiên để hỗ trợ SEO và Server-side Rendering (SSR) cho các trang public (Home, Explore).
 - **Styling**: Vanilla CSS (như hiện tại) kết hợp CSS Variables để hỗ trợ Dark/Light mode và Theming.
 - **State Management**: Zustand (nhỏ gọn, không boilerplate như Redux).
-- **Backend / Database**: Supabase (PostgreSQL + Auth + Storage). Rất phù hợp với cấu trúc Database Schema hiện tại và hỗ trợ Realtime, Row Level Security (RLS).
+- **Backend / Database**: Supabase (PostgreSQL + Auth + Storage). Rất phù hợp với cấu trúc Database Schema hiện tại và hỗ trợ Realtime, Row Level Security (RLS). Đề xuất: NestJS hoặc FastAPI
 - **AI Integration**: OpenAI API (GPT-4o-mini) cho Matching Engine.
 
 ## 3. Kiến trúc Xác thực (Authentication)

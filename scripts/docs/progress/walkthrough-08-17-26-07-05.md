@@ -1,5 +1,5 @@
 # Hoàn tất Phase 4 (Trang Chủ) & Phase 5 (Database Setup)
-
+    
 Chúng ta đã tiến thêm một bước rất dài! Dưới đây là những gì đã hoàn thành và đẩy lên GitHub:
 
 ## 1. Phase 4: Chuyển đổi Trang Chủ (Home)
