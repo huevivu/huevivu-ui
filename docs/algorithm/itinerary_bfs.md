@@ -81,3 +81,49 @@ Kích thước ô quyết định trực tiếp đến sự cân bằng giữa *
 ### 4.3. Nâng cấp tương lai: Lưới Đa cấp (QuadTree / H3)
 - **Khu Trung tâm (Đại Nội, phố đi bộ):** Các điểm tham quan nằm sát vách nhau, du khách chủ yếu đi bộ -> Có thể chia ô nhỏ (100m x 100m).
 - **Khu Ngoại ô (Các Lăng tẩm xa):** Các điểm thưa thớt cách xa nhau, du khách di chuyển bằng xe máy/taxi -> Gộp ô lớn (1km x 1km hoặc 2km x 2km).
+
+---
+
+## 5. Kiến trúc Đa ngày (Multi-Day) & Điểm Neo (Anchor Points)
+
+Để xử lý bài toán lịch trình nhiều ngày với các điểm xuất phát/kết thúc thay đổi (Ví dụ: Ngày 1 từ Sân bay -> Khách sạn, Ngày 2 từ Khách sạn -> Ga tàu), hệ thống sử dụng chiến lược **Chia để trị (Divide and Conquer)** thông qua các **Key Locations (Anchor Points)**.
+
+### 5.1. Khái niệm Anchor Points (Điểm Neo)
+Điểm neo là các địa điểm mang tính "bắt buộc" và cố định về thời gian/không gian trong lịch trình của khách:
+- Sân bay (Lúc đến/đi)
+- Khách sạn (Check-in/Check-out/Ngủ qua đêm)
+- Nhà ga, Bến xe...
+
+### 5.2. Thuật toán Chia chặng (Segmentation)
+Thay vì chạy một vòng lặp BFS khổng lồ cho toàn bộ chuyến đi 3 ngày (gây bùng nổ tổ hợp), thuật toán sẽ cắt nhỏ chuyến đi:
+1. **Xác định các Khung thời gian (Time Envelopes):** Dựa vào các Anchor Points, chuyến đi được cắt thành các chặng nhỏ.
+   - *Chặng 1 (Sáng Ngày 1):* `Start (Sân bay 9:00)` ➔ `End (Khách sạn 14:00)`.
+   - *Chặng 2 (Chiều Ngày 1):* `Start (Khách sạn 15:00)` ➔ `End (Khách sạn 21:00)`.
+2. **Gom cụm địa lý (Clustering):** Nhóm các địa điểm POI thành từng cụm. Phân bổ các cụm này vào các Chặng có quỹ đạo đường đi phù hợp (VD: Chặng Sân bay -> Khách sạn sẽ được phân bổ các POI nằm trên tuyến đường đó).
+3. **Thực thi BFS Độc lập:** Chạy thuật toán BFS cho *từng chặng riêng biệt*. Vì mỗi chặng giờ đây chỉ còn 3-5 POI và quỹ thời gian ngắn, BFS sẽ chạy với tốc độ cực nhanh và không bị bùng nổ trạng thái.
+
+### 5.3. Ý nghĩa kiến trúc
+Việc sử dụng các cặp "Key Locations" đóng vai trò như các chốt chặn, giúp ngắt nhỏ không gian tìm kiếm. Đây là mảnh ghép quan trọng nhất để biến BFS thành một thuật toán chạy thực tế (Production-ready) trên hệ thống HueViVu.
+
+---
+
+## 6. Chiến lược Thu thập Dữ liệu Đầu vào (User Input Strategy)
+
+Để thuật toán có đủ "nguyên liệu" (Anchor Points & Tiêu chí) mà không vi phạm nguyên tắc thiết kế cốt lõi của HueViVu (tránh các form nhập liệu khô khan, ép buộc), hệ thống áp dụng các giải pháp thu thập dữ liệu khéo léo sau:
+
+### 6.1. Thuật toán cần gì? (Data Requirements)
+- **Không gian & Thời gian (Neo):** Địa điểm/Giờ đến (Sân bay/Ga), Vị trí Khách sạn, Địa điểm/Giờ rời đi.
+- **Tiêu chí lọc thô (Pre-filtering):** Cảm xúc/Sở thích (Vibe), Ngân sách, Nhịp độ (Relaxed hay Năng động).
+
+### 6.2. Giải pháp thu thập theo chuẩn UX của HueViVu
+1. **Trích xuất thông minh bằng AI (NLP Extraction):**
+   - Giao diện không dùng form "Dropdown / Date Picker" truyền thống. Cho phép người dùng nhập/nói một câu tự nhiên.
+   - *Ví dụ:* "Sáng mai mình bay chuyến 9h tới Phú Bài, ở KS Melia, mình muốn đi kiểu nhẹ nhàng."
+   - AI (LLM) đằng sau sẽ tự động bóc tách thành data có cấu trúc: `[Anchor_Start: Phú Bài (09:00)]`, `[Anchor_Hotel: Melia]`, `[Vibe: Relaxed]` và bơm vào thuật toán.
+2. **Khởi tạo với "Neo Ảo" (Smart Defaults & Lazy Input):**
+   - Nếu người dùng chưa có vé máy bay hoặc chưa chốt khách sạn -> **Tuyệt đối không chặn flow**.
+   - Thuật toán sẽ tự động thiết lập một "Neo Ảo" (Virtual Anchor) nằm ở lõi trung tâm thành phố (VD: Ngã 6 hoặc Phố đi bộ) làm điểm Start/End mặc định, với khung giờ tiêu chuẩn (Sáng 8:00 - Tối 21:00).
+   - AI Companion sẽ hiện một thông điệp bối cảnh tinh tế: *"Mình tạm chọn điểm xuất phát từ trung tâm thành phố. Khi nào bạn chốt được khách sạn, cứ nhắn mình để tinh chỉnh lại đường đi cho tiện nhất nhé ✨"*
+3. **Tinh chỉnh qua Hội thoại (Conversational Refinement):**
+   - Việc điều chỉnh các Điểm Neo (Anchor) có thể diễn ra "on-the-fly" khi đang xem lịch trình.
+   - *Ví dụ:* User chat *"Chiều mai 5h mình phải ra bến xe rồi"*. Ngay lập tức, AI cập nhật `Anchor_End` của Ngày 2 thành "Bến Xe lúc 17:00", và thuật toán BFS chỉ chạy lại đúng chặng của Chiều Ngày 2 để vẽ đường về bến xe, giữ nguyên các chặng khác.
