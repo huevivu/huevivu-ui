@@ -16,7 +16,6 @@ export default function NewPlaceForm() {
     rating_count: 100,
     price: 'Miễn phí',
     duration: '1-2 giờ',
-    distance: '',
     lat: 16.4637,
     lng: 107.5909,
     img: '',
@@ -42,11 +41,46 @@ export default function NewPlaceForm() {
     tags: '',
     vibe: [],
     taste_profile: [],
+    accessibility: [],
+    best_time_of_day: [],
     specialties: '',
   });
 
-  const vibeOptions = ['historic', 'romantic', 'peaceful', 'bustling', 'local', 'scenic', 'retro', 'modern'];
-  const tasteOptions = ['spicy', 'savory', 'sweet', 'sour', 'bitter', 'rich', 'light'];
+  const [imageFile, setImageFile] = useState(null);
+
+  const vibeOptions = [
+    { value: 'historic', label: 'Lịch sử (Historic)' },
+    { value: 'romantic', label: 'Lãng mạn (Romantic)' },
+    { value: 'peaceful', label: 'Yên bình (Peaceful)' },
+    { value: 'bustling', label: 'Sầm uất (Bustling)' },
+    { value: 'local', label: 'Chuẩn địa phương (Local)' },
+    { value: 'scenic', label: 'Phong cảnh đẹp (Scenic)' },
+    { value: 'retro', label: 'Hoài cổ (Retro)' },
+    { value: 'modern', label: 'Hiện đại (Modern)' }
+  ];
+  const tasteOptions = [
+    { value: 'spicy', label: 'Cay (Spicy)' },
+    { value: 'savory', label: 'Mặn mòi (Savory)' },
+    { value: 'sweet', label: 'Ngọt (Sweet)' },
+    { value: 'sour', label: 'Chua (Sour)' },
+    { value: 'bitter', label: 'Đắng (Bitter)' },
+    { value: 'rich', label: 'Béo ngậy (Rich)' },
+    { value: 'light', label: 'Thanh đạm (Light)' }
+  ];
+  const accessibilityOptions = [
+    { value: 'wheelchair', label: 'Xe lăn (Toàn diện)' },
+    { value: 'wheelchair_partial', label: 'Xe lăn (Một phần)' },
+    { value: 'stroller_friendly', label: 'Thân thiện xe đẩy trẻ em' },
+    { value: 'elderly_friendly', label: 'Thân thiện người lớn tuổi' }
+  ];
+  const bestTimeOfDayOptions = [
+    { value: 'early_morning', label: 'Sáng sớm (Early Morning)' },
+    { value: 'morning', label: 'Sáng (Morning)' },
+    { value: 'afternoon', label: 'Chiều (Afternoon)' },
+    { value: 'late_afternoon', label: 'Chiều muộn (Late Afternoon)' },
+    { value: 'evening', label: 'Tối (Evening)' },
+    { value: 'night', label: 'Đêm (Night)' }
+  ];
 
   const [mapUrl, setMapUrl] = useState('');
 
@@ -117,28 +151,45 @@ export default function NewPlaceForm() {
     setIsSubmitting(true);
 
     try {
-      // Chuẩn bị payload
-      const payload = { ...formData };
+      const payload = new FormData();
       
-      // Chuyển string comma-separated thành mảng JSON
-      payload.highlights = payload.highlights ? payload.highlights.split(',').map(s => s.trim()) : [];
-      payload.tips = payload.tips ? payload.tips.split(',').map(s => s.trim()) : [];
-      payload.tags = payload.tags ? payload.tags.split(',').map(s => s.trim()) : [];
-      payload.specialties = payload.specialties ? payload.specialties.split(',').map(s => s.trim()) : [];
+      // Chuyển string comma-separated thành chuỗi JSON
+      const highlightsArr = formData.highlights ? formData.highlights.split(',').map(s => s.trim()) : [];
+      const tipsArr = formData.tips ? formData.tips.split(',').map(s => s.trim()) : [];
+      const tagsArr = formData.tags ? formData.tags.split(',').map(s => s.trim()) : [];
+      const specialtiesArr = formData.specialties ? formData.specialties.split(',').map(s => s.trim()) : [];
       
-      // Đảm bảo số là số
-      payload.lat = parseFloat(payload.lat);
-      payload.lng = parseFloat(payload.lng);
-      payload.rating = parseFloat(payload.rating);
-      payload.rating_count = parseInt(payload.rating_count);
-      payload.avg_visit_min = parseInt(payload.avg_visit_min);
-      payload.authenticity = parseInt(payload.authenticity);
-      payload.popularity = parseFloat(payload.popularity);
+      const prepareData = {
+        ...formData,
+        highlights: JSON.stringify(highlightsArr),
+        tips: JSON.stringify(tipsArr),
+        tags: JSON.stringify(tagsArr),
+        specialties: JSON.stringify(specialtiesArr),
+        vibe: JSON.stringify(formData.vibe),
+        taste_profile: JSON.stringify(formData.taste_profile),
+        accessibility: JSON.stringify(formData.accessibility),
+        best_time_of_day: JSON.stringify(formData.best_time_of_day),
+        lat: parseFloat(formData.lat),
+        lng: parseFloat(formData.lng),
+        rating: parseFloat(formData.rating),
+        rating_count: parseInt(formData.rating_count),
+        avg_visit_min: parseInt(formData.avg_visit_min),
+        authenticity: parseInt(formData.authenticity),
+        popularity: parseFloat(formData.popularity),
+        weather_dependent: parseInt(formData.weather_dependent),
+      };
+
+      for (const key in prepareData) {
+        payload.append(key, prepareData[key]);
+      }
+
+      if (imageFile) {
+        payload.append('image', imageFile);
+      }
 
       const res = await fetch('/api/places', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       const result = await res.json();
@@ -195,10 +246,6 @@ export default function NewPlaceForm() {
               <label>Giá cả (Text)</label>
               <input type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Ví dụ: 150,000 VNĐ" />
             </div>
-            <div className="form-group">
-              <label>Khoảng cách (Text)</label>
-              <input type="text" name="distance" value={formData.distance} onChange={handleChange} placeholder="Ví dụ: Trung tâm" />
-            </div>
           </div>
         </div>
 
@@ -227,8 +274,8 @@ export default function NewPlaceForm() {
 
           <div className="form-grid">
             <div className="form-group full">
-              <label>URL Hình ảnh (Unsplash / Cloudinary)</label>
-              <input type="url" name="img" value={formData.img} onChange={handleChange} />
+              <label>Tải lên Hình ảnh (Image Upload)</label>
+              <input type="file" name="image" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
             </div>
             <div className="form-group">
               <label>Vĩ độ (Latitude)</label>
@@ -257,7 +304,7 @@ export default function NewPlaceForm() {
               </select>
             </div>
             <div className="form-group">
-              <label>Thể lực yêu cầu</label>
+              <label>Thể lực yêu cầu <small style={{display:'block', color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>VD: Leo dốc chọn "Nhiều thể lực", đi phẳng chọn "Dễ dàng"</small></label>
               <select name="physical_level" value={formData.physical_level} onChange={handleChange}>
                 <option value="easy">Dễ dàng (Easy)</option>
                 <option value="moderate">Vừa phải (Moderate)</option>
@@ -274,40 +321,120 @@ export default function NewPlaceForm() {
               </select>
             </div>
             <div className="form-group">
-              <label>Độ chuẩn vị/Local (1-5)</label>
+              <label>Độ chuẩn vị/Local (1-5) <small style={{display:'block', color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>1: Du lịch công nghiệp - 5: Rặt local</small></label>
               <input type="number" min="1" max="5" name="authenticity" value={formData.authenticity} onChange={handleChange} />
             </div>
             
             <div className="form-group full">
-              <label>Vibe (Không khí) - Chọn nhiều</label>
+              <label>Vibe (Không khí) - Chọn nhiều <small style={{color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>(Gợi ý: Phù hợp mọi danh mục)</small></label>
               <div className="checkbox-group">
-                {vibeOptions.map(vibe => (
-                  <label key={vibe} className="checkbox-label">
+                {vibeOptions.map(opt => (
+                  <label key={opt.value} className="checkbox-label">
                     <input 
                       type="checkbox" 
-                      checked={formData.vibe.includes(vibe)}
-                      onChange={() => handleArrayChange('vibe', vibe)}
+                      checked={formData.vibe.includes(opt.value)}
+                      onChange={() => handleArrayChange('vibe', opt.value)}
                     />
-                    {vibe}
+                    {opt.label}
                   </label>
                 ))}
               </div>
             </div>
 
             <div className="form-group full">
-              <label>Taste Profile (Hương vị) - Dành cho món ăn</label>
+              <label>Taste Profile (Hương vị) - Chọn nhiều <small style={{color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>(Gợi ý: Dành cho danh mục Food, Cafe & Chill)</small></label>
               <div className="checkbox-group">
-                {tasteOptions.map(taste => (
-                  <label key={taste} className="checkbox-label">
+                {tasteOptions.map(opt => (
+                  <label key={opt.value} className="checkbox-label">
                     <input 
                       type="checkbox" 
-                      checked={formData.taste_profile.includes(taste)}
-                      onChange={() => handleArrayChange('taste_profile', taste)}
+                      checked={formData.taste_profile.includes(opt.value)}
+                      onChange={() => handleArrayChange('taste_profile', opt.value)}
                     />
-                    {taste}
+                    {opt.label}
                   </label>
                 ))}
               </div>
+            </div>
+
+            <div className="form-group full">
+              <label>Tiếp cận (Accessibility) - Chọn nhiều <small style={{color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>(Gợi ý: Phù hợp với Heritage, Nature, Activity)</small></label>
+              <div className="checkbox-group">
+                {accessibilityOptions.map(opt => (
+                  <label key={opt.value} className="checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      checked={formData.accessibility.includes(opt.value)}
+                      onChange={() => handleArrayChange('accessibility', opt.value)}
+                    />
+                    {opt.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-group full">
+              <label>Thời điểm tốt nhất trong ngày - Chọn nhiều <small style={{color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>(Gợi ý: Phù hợp với Heritage, Nature, Cafe & Chill)</small></label>
+              <div className="checkbox-group">
+                {bestTimeOfDayOptions.map(opt => (
+                  <label key={opt.value} className="checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      checked={formData.best_time_of_day.includes(opt.value)}
+                      onChange={() => handleArrayChange('best_time_of_day', opt.value)}
+                    />
+                    {opt.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Độ ồn (Noise Level)</label>
+              <select name="noise_level" value={formData.noise_level} onChange={handleChange}>
+                <option value="quiet">Yên tĩnh (Quiet)</option>
+                <option value="moderate">Vừa phải (Moderate)</option>
+                <option value="loud">Ồn ào (Loud)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Khoảng cách đi bộ (Walking Distance)</label>
+              <select name="walking_distance" value={formData.walking_distance} onChange={handleChange}>
+                <option value="minimal">Tối thiểu (Minimal)</option>
+                <option value="moderate">Vừa phải (Moderate)</option>
+                <option value="extensive">Nhiều (Extensive)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Nhịp điệu tham quan (Ideal Pacing)</label>
+              <select name="ideal_pacing" value={formData.ideal_pacing} onChange={handleChange}>
+                <option value="quick_stop">Ghé ngang (Quick stop)</option>
+                <option value="immersive">Thong thả (Immersive)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Phong cách ăn uống (Dining Style) <small style={{display:'block', color:'#6b7280', fontSize:'0.8em', fontWeight:'normal'}}>(Gợi ý: Dành cho Food)</small></label>
+              <select name="dining_style" value={formData.dining_style} onChange={handleChange}>
+                <option value="">(Không có)</option>
+                <option value="street_food">Lề đường (Street food)</option>
+                <option value="casual">Bình dân (Casual)</option>
+                <option value="fine_dining">Cao cấp (Fine dining)</option>
+              </select>
+            </div>
+
+            <div className="form-group full" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
+              <input 
+                type="checkbox" 
+                name="weather_dependent" 
+                id="weather_dependent"
+                checked={formData.weather_dependent === 1}
+                onChange={handleChange}
+                style={{ width: 'auto' }}
+              />
+              <label htmlFor="weather_dependent" style={{ marginBottom: 0 }}>Phụ thuộc vào thời tiết (Ví dụ: ngoài trời)</label>
             </div>
 
             <div className="form-group full">
@@ -317,6 +444,10 @@ export default function NewPlaceForm() {
             <div className="form-group full">
               <label>Tips (Mẹo vặt) - Ngăn cách bằng dấu phẩy</label>
               <input type="text" name="tips" value={formData.tips} onChange={handleChange} placeholder="Nên đi sớm, Nhớ mang ô..." />
+            </div>
+            <div className="form-group full">
+              <label>Specialties (Đặc sản/Món chính) - Ngăn cách bằng dấu phẩy</label>
+              <input type="text" name="specialties" value={formData.specialties} onChange={handleChange} placeholder="Bún bò, Bánh bèo..." />
             </div>
           </div>
         </div>
